@@ -46,13 +46,13 @@ configuration PlatformLedsC {
 }
 implementation {
 	components HplAtm128GeneralIOC as IO;
+	components new NoPinC();
 	components PlatformP;
 
 	Init = PlatformP.MoteInit;
 
 	// platform has no real led on atmega1284p (routed to pinheader)
-	Led0 = IO.PortA2;
-	Led1 = IO.PortA1;
-	Led2 = IO.PortA0;
-
+	Led0 = IO.PortD5;
+	Led1 = IO.PortD7;
+	Led2 = NoPinC;
 }
