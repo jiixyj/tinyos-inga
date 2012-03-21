@@ -31,7 +31,7 @@
  */
 
 /**
- * Implementation for BlinkRaven application.  Toggle the red LED when a
+ * Implementation for BlinkInga application.  Toggle the red LED when a
  * Timer fires and send some infos to LCD.
  *
  * @author: Martin Cerveny
@@ -39,14 +39,14 @@
 
 #include "Timer.h"
 
-module BlinkRavenC @safe()
+module BlinkIngaC @safe()
 {
   uses interface Timer<TMilli> as Timer0;
   uses interface Timer<TMilli> as Timer1;
   uses interface Timer<TMilli> as Timer2;
   uses interface Leds;
   uses interface Boot;
-  uses interface Raven;
+  uses interface Inga;
   uses interface LocalIeeeEui64 as Eui64;
 }
 implementation
@@ -56,7 +56,7 @@ implementation
     eui = call Eui64.getId();
 
     if (eui.data[0] | eui.data[1] | eui.data[2] | eui.data[3] | eui.data[4] | eui.data[5] | eui.data[6]) 
-      call Raven.hex(eui.data[7]+(eui.data[6] << 8), SIPC_HEXALL);
+      call Inga.hex(eui.data[7]+(eui.data[6] << 8), SIPC_HEXALL);
     else post waitforeui();
   }
 
@@ -66,9 +66,9 @@ implementation
     call Timer1.startPeriodic( 500 );
     call Timer2.startPeriodic( 1000 );
 
-    call Raven.msg("Hello World");
-    call Raven.cmd(SIPC_CMD_ID_LCD_SYMB_RAVEN_ON);
-    call Raven.cmd(SIPC_CMD_ID_LED_ON);
+    call Inga.msg("Hello World");
+    call Inga.cmd(SIPC_CMD_ID_LCD_SYMB_INGA_ON);
+    call Inga.cmd(SIPC_CMD_ID_LED_ON);
 
     post waitforeui(); // eui is prepared during Boot.booted() due to disabled interrupt in SofwareInit()
   }
@@ -88,10 +88,10 @@ implementation
     call Leds.led2Toggle();
   }
 
-  event void Raven.battery(uint16_t voltage) {
+  event void Inga.battery(uint16_t voltage) {
   }
 
-  event void Raven.temperature(int16_t celsius) {
+  event void Inga.temperature(int16_t celsius) {
   }
 
 }

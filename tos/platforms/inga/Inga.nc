@@ -48,9 +48,9 @@
  * @author Martin Cerveny
  */ 
 
-#include "raven.h"
+#include "inga.h"
 
-interface Raven {
+interface Inga {
 
 	/**
 	 * Command to coprocessor 

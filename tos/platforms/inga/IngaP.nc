@@ -35,10 +35,10 @@
  *  @author Martin Cerveny
  */ 
 
-#include "raven.h"
+#include "inga.h"
 
-module RavenP @safe() {
-	provides interface Raven;
+module IngaP @safe() {
+	provides interface Inga;
 	provides interface Init as SoftwareInit;
 
 	uses interface UartStream;
@@ -133,10 +133,10 @@ implementation {
 			}
 			switch(pop()) {
 				case SIPC_ANSWER_ID_TEMPERATURE : value = pop() + 256 * pop();
-				signal Raven.temperature((int16_t) value);
+				signal Inga.temperature((int16_t) value);
 				break;
 				case SIPC_ANSWER_ID_BATTERY : value = pop() + 256 * pop();
-				signal Raven.battery(value);
+				signal Inga.battery(value);
 				break;
 			}
 			if(pop_raw() != SIPC_EOF) {
@@ -196,7 +196,7 @@ implementation {
 	async event void UartStream.receiveDone(uint8_t * buf, uint16_t len, error_t error) {
 	}
 
-	command error_t Raven.cmd(uint8_t cmd) {
+	command error_t Inga.cmd(uint8_t cmd) {
 		if((cmd >= SIPC_CMD_ID_LCD_MAX)&&(cmd <= SIPC_CMD_WITH_ANSWER)) 
 			return FAIL;
 		atomic {
@@ -213,7 +213,7 @@ implementation {
 		}
 	}
 
-	command error_t Raven.msg(const char * msg) {
+	command error_t Inga.msg(const char * msg) {
 		uint16_t len = getlength((const uint8_t * ) msg, strlen(msg) + 1) + 2 + 1 + 4;
 		char * ptr = (char * ) msg;
 
@@ -237,7 +237,7 @@ implementation {
 		}
 	}
 
-	command error_t Raven.hex(const uint16_t n, const uint8_t mask) {
+	command error_t Inga.hex(const uint16_t n, const uint8_t mask) {
 		// TODO: mask not implemented
 		atomic {
 			if(getlength((const uint8_t * )&n, 2) + 2 + 1 >= (sizeof(txbuf) - diff(txt, txh))) 

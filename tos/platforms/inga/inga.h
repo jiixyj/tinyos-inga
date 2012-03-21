@@ -35,15 +35,15 @@
  *
  *  @author Martin Cerveny
  *
- */ 
+ */
 
-#ifndef RAVEN_H
-#define RAVEN_H
+#ifndef INGA_H
+#define INGA_H
 
 typedef enum {
 	// Symbols
-	SIPC_CMD_ID_LCD_SYMB_RAVEN_ON = 0x00,
-	SIPC_CMD_ID_LCD_SYMB_RAVEN_OFF = 0x01,
+	SIPC_CMD_ID_LCD_SYMB_INGA_ON = 0x00,
+	SIPC_CMD_ID_LCD_SYMB_INGA_OFF = 0x01,
 
 	SIPC_CMD_ID_LCD_SYMB_BELL_ON = 0x02,
 	SIPC_CMD_ID_LCD_SYMB_BELL_OFF = 0x03,
@@ -92,7 +92,7 @@ typedef enum {
 	SIPC_CMD_ID_LCD_SYMB_ANTENNA_LEVEL_2 = 0x21,
 	SIPC_CMD_ID_LCD_SYMB_ANTENNA_OFF = 0x22,
 
-	//SIPC_CMD_ID_LCD_SYMB_BAT // bettery symbol is controlled by ATMega3290... 
+	//SIPC_CMD_ID_LCD_SYMB_BAT // bettery symbol is controlled by ATMega3290...
 
 	SIPC_CMD_ID_LCD_SYMB_ENV_OPEN = 0x23,
 	SIPC_CMD_ID_LCD_SYMB_ENV_CLOSE = 0x24,
@@ -121,12 +121,12 @@ typedef enum {
 
 	// Messages
 	SIPC_CMD_ID_MSG = 0x33,		// print text message
-	SIPC_CMD_ID_HEX = 0x34,		// print hex number (experimental, TODO: not fully implemented) 
+	SIPC_CMD_ID_HEX = 0x34,		// print hex number (experimental, TODO: not fully implemented)
 
 	SIPC_CMD_WITH_ANSWER = 0x7f,
 
 	//Sensor read commands
-	SIPC_CMD_ID_READ_TEMPERATURE = 0x80, 
+	SIPC_CMD_ID_READ_TEMPERATURE = 0x80,
 	SIPC_CMD_ID_READ_BATTERY = 0x81,
 } SipcCmdId_t;
 
@@ -154,4 +154,4 @@ typedef enum {			// TODO: not implemented
 
 #define SIPC_PACKET_SIZE (256) //!< Maximum packet size that SIPC can handle.
 
-#endif //RAVEN_H
+#endif //INGA_H

@@ -1,6 +1,6 @@
 #-*-Makefile-*- vim:syntax=make
 
-PLATFORM = raven
+PLATFORM = inga
 SENSORBOARD ?= 
 PROGRAMMER ?= avarice
 
@@ -29,5 +29,5 @@ endif
 
 $(call TOSMake_include_platform,avr)
 
-raven: $(BUILD_DEPS)
+inga: $(BUILD_DEPS)
 	@:

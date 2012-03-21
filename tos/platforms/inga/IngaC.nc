@@ -37,19 +37,19 @@
  *
  */ 
 
-#include "raven.h"
+#include "inga.h"
 
-configuration RavenC @safe() {
-	provides interface Raven;
+configuration IngaC @safe() {
+	provides interface Inga;
 }
 
 implementation {
-	components RavenP;
+	components IngaP;
 	components Atm128Uart0C as Uart0;
 	components MainC;
 
-	Raven = RavenP;
-	RavenP.UartStream->Uart0;
-	RavenP.UartCtl->Uart0;
-	MainC.SoftwareInit->RavenP;
+	Inga = IngaP;
+	IngaP.UartStream->Uart0;
+	IngaP.UartCtl->Uart0;
+	MainC.SoftwareInit->IngaP;
 }

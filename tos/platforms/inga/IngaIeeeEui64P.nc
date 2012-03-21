@@ -38,7 +38,7 @@
  * @author Martin Cerveny
  */ 
 
-module RavenIeeeEui64P {
+module IngaIeeeEui64P {
 	provides interface LocalIeeeEui64;
 	provides interface Init as SoftwareInit;
 

@@ -38,14 +38,14 @@ configuration LocalIeeeEui64C {
 }
 
 implementation {
-	components RavenIeeeEui64P, MainC;
+	components IngaIeeeEui64P, MainC;
 	components new Atm128I2CMasterC();
 
-	LocalIeeeEui64 = RavenIeeeEui64P;
+	LocalIeeeEui64 = IngaIeeeEui64P;
 
-	RavenIeeeEui64P.Resource->Atm128I2CMasterC;
-	RavenIeeeEui64P.I2CPacket->Atm128I2CMasterC;
+	IngaIeeeEui64P.Resource->Atm128I2CMasterC;
+	IngaIeeeEui64P.I2CPacket->Atm128I2CMasterC;
 
-	MainC.SoftwareInit->RavenIeeeEui64P;
-	MainC.Boot<-RavenIeeeEui64P;
+	MainC.SoftwareInit->IngaIeeeEui64P;
+	MainC.Boot<-IngaIeeeEui64P;
 }

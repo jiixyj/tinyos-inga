@@ -42,24 +42,24 @@
  *
  **/
 
-configuration BlinkRavenAppC
+configuration BlinkIngaAppC
 {
 }
 implementation
 {
-  components MainC, BlinkRavenC, LedsC, RavenC;
+  components MainC, BlinkIngaC, LedsC, IngaC;
   components new TimerMilliC() as Timer0;
   components new TimerMilliC() as Timer1;
   components new TimerMilliC() as Timer2;
   components LocalIeeeEui64C as Eui64;
 
-  BlinkRavenC -> MainC.Boot;
+  BlinkIngaC -> MainC.Boot;
 
-  BlinkRavenC.Timer0 -> Timer0;
-  BlinkRavenC.Timer1 -> Timer1;
-  BlinkRavenC.Timer2 -> Timer2;
-  BlinkRavenC.Leds -> LedsC;
-  BlinkRavenC.Raven -> RavenC;
-  BlinkRavenC.Eui64 -> Eui64;
+  BlinkIngaC.Timer0 -> Timer0;
+  BlinkIngaC.Timer1 -> Timer1;
+  BlinkIngaC.Timer2 -> Timer2;
+  BlinkIngaC.Leds -> LedsC;
+  BlinkIngaC.Inga -> IngaC;
+  BlinkIngaC.Eui64 -> Eui64;
 }
 
