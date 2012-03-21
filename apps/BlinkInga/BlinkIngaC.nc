@@ -43,7 +43,6 @@ module BlinkIngaC @safe()
 {
   uses interface Timer<TMilli> as Timer0;
   uses interface Timer<TMilli> as Timer1;
-  uses interface Timer<TMilli> as Timer2;
   uses interface Leds;
   uses interface Boot;
   uses interface Inga;
@@ -64,7 +63,6 @@ implementation
   {
     call Timer0.startPeriodic( 250 );
     call Timer1.startPeriodic( 500 );
-    call Timer2.startPeriodic( 1000 );
 
     call Inga.msg("Hello World");
     call Inga.cmd(SIPC_CMD_ID_LCD_SYMB_INGA_ON);
@@ -83,11 +81,6 @@ implementation
     call Leds.led1Toggle();
   }
   
-  event void Timer2.fired()
-  {
-    call Leds.led2Toggle();
-  }
-
   event void Inga.battery(uint16_t voltage) {
   }
 

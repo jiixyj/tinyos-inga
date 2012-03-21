@@ -50,14 +50,12 @@ implementation
   components MainC, BlinkIngaC, LedsC, IngaC;
   components new TimerMilliC() as Timer0;
   components new TimerMilliC() as Timer1;
-  components new TimerMilliC() as Timer2;
   components LocalIeeeEui64C as Eui64;
 
   BlinkIngaC -> MainC.Boot;
 
   BlinkIngaC.Timer0 -> Timer0;
   BlinkIngaC.Timer1 -> Timer1;
-  BlinkIngaC.Timer2 -> Timer2;
   BlinkIngaC.Leds -> LedsC;
   BlinkIngaC.Inga -> IngaC;
   BlinkIngaC.Eui64 -> Eui64;
