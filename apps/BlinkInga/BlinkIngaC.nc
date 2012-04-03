@@ -38,6 +38,7 @@
  **/
 
 #include "Timer.h"
+#include "printf.h"
 
 module BlinkIngaC @safe()
 {
@@ -50,37 +51,26 @@ module BlinkIngaC @safe()
 }
 implementation
 {
-  task void waitforeui() {
-    ieee_eui64_t eui;
-    eui = call Eui64.getId();
-
-    if (eui.data[0] | eui.data[1] | eui.data[2] | eui.data[3] | eui.data[4] | eui.data[5] | eui.data[6]) 
-      call Inga.hex(eui.data[7]+(eui.data[6] << 8), SIPC_HEXALL);
-    else post waitforeui();
-  }
-
   event void Boot.booted()
   {
-    call Timer0.startPeriodic( 250 );
-    call Timer1.startPeriodic( 500 );
-
-    call Inga.msg("Hello World");
-    call Inga.cmd(SIPC_CMD_ID_LCD_SYMB_INGA_ON);
-    call Inga.cmd(SIPC_CMD_ID_LED_ON);
-
-    post waitforeui(); // eui is prepared during Boot.booted() due to disabled interrupt in SofwareInit()
+    call Timer0.startPeriodic( 100 );
+    // call Timer1.startPeriodic( 500 );
   }
 
   event void Timer0.fired()
   {
+    printf("timer fired!\n");
+    printfflush();
+    // uart_putchar('\x00', stdout);
+    // printf("AA\n");
     call Leds.led0Toggle();
   }
-  
+
   event void Timer1.fired()
   {
     call Leds.led1Toggle();
   }
-  
+
   event void Inga.battery(uint16_t voltage) {
   }
 

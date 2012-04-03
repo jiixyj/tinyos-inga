@@ -52,7 +52,7 @@ implementation
   components new TimerMilliC() as Timer1;
   components LocalIeeeEui64C as Eui64;
 
-  BlinkIngaC -> MainC.Boot;
+  BlinkIngaC.Boot -> MainC;
 
   BlinkIngaC.Timer0 -> Timer0;
   BlinkIngaC.Timer1 -> Timer1;

@@ -52,33 +52,7 @@
 
 interface Inga {
 
-	/**
-	 * Command to coprocessor 
-	 * 
-	 * @param 'uint8_t cmd' - command (SIPC_CMD* < SIPC_CMD_ID_LCD_MAX and SIPC_CMD_ID_READ_* with answer)
-	 * @return SUCCESS if the command was enqueued successfully, FAIL
-	 *                 if it was not enqueued.
-	 */
-	command error_t cmd(uint8_t cmd);
-
-	/**
-	 * Message to LCD
-	 * 
-	 * @param 'const char * msg' - string to display on LCD text area
-	 * @return SUCCESS if the command and string was enqueued successfully, FAIL
-	 *                 if it was not enqueued.
-	 */
 	command error_t msg(const char * msg);
-
-	/**
-	 * Hex data to LCD
-	 * 
-	 * @param 'const uint16_t n' - number to display on LCD hex area
-	 * @param 'const uint8_t mask' - bitmask to separate digits (SIPC_HEX*)
-	 * @return SUCCESS if the command and number was enqueued successfully, FAIL
-	 *                 if it was not enqueued.
-	 */
-	command error_t hex(const uint16_t n, const uint8_t mask);
 
 	/**
 	 * Signal answer to SIPC_CMD_ID_READ_BATTERY
