@@ -1,5 +1,5 @@
 
-/*                                                                     
+/*
  *  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.  By
  *  downloading, copying, installing or using the software you agree to
  *  this license.  If you do not agree to this license, do not download,
@@ -7,7 +7,7 @@
  *
  *  Copyright (c) 2004-2005 Crossbow Technology, Inc.
  *  Copyright (c) 2002-2003 Intel Corporation.
- *  Copyright (c) 2000-2003 The Regents of the University  of California.    
+ *  Copyright (c) 2000-2003 The Regents of the University  of California.
  *  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
- 
+
  /**
  * @author Jason Hill, Philip Levis, Nelson Lee, David Gay
  * @author Alan Broad <abroad@xbow.com>
@@ -51,7 +51,7 @@
 #define HARDWARE_H
 
 #ifndef MHZ
-/* Clock rate is ~8MHz except if specified by user 
+/* Clock rate is ~8MHz except if specified by user
    (this value must be a power of 2, see MicaTimer.h and MeasureClockC.nc) */
 #define MHZ 8
 #endif
@@ -68,7 +68,7 @@ enum {
 
 #ifndef PLATFORM_BAUDRATE
 enum {
-  PLATFORM_BAUDRATE = 38400L
+  PLATFORM_BAUDRATE = 19200L
 };
 #endif
 
