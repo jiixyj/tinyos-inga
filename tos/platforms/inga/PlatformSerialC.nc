@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2012 Martin Cerveny
+ * Copyright (c) 2006 Arch Rock Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,56 +11,45 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the
  *   distribution.
- * - Neither the name of INSERT_AFFILIATION_NAME_HERE nor the names of
+ * - Neither the name of the Arch Rock Corporation nor the names of
  *   its contributors may be used to endorse or promote products derived
  *   from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL STANFORD
- * UNIVERSITY OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * ARCH ROCK OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THE POSSIBILITY OF SUCH DAMAGE
  */
 
 /**
- * Blink is a basic application that toggles a mote's LED periodically.
- * It does so by starting a Timer that fires every second. It uses the
- * OSKI TimerMilli service to achieve this goal.
- *
- * Also it sends last two bytes to hex LCD, lit on Raven symbol
- * and display "Hello world" on alfanumeric LCD.
- *
- * @author: Martin Cerveny
- *
- **/
+ * @author Alec Woo <awoo@archrock.com>
+ * @author Jonathan Hui <jhui@archrock.com>
+ * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:42 $
+ */
 
-configuration BlinkIngaAppC
-{
+configuration PlatformSerialC {
+  
+  provides interface StdControl;
+  provides interface UartStream;
+  provides interface UartByte;
+  
 }
-implementation
-{
-  components MainC, BlinkIngaC, LedsC, IngaC;
-  components new TimerMilliC() as Timer0;
-  components new TimerMilliC() as Timer1;
-  components LocalIeeeEui64C as Eui64;
+implementation {
 
-  components UserButtonC;
-  BlinkIngaC.UserButtonGet -> UserButtonC;
-  BlinkIngaC.UserButtonNotify -> UserButtonC;
-
-  BlinkIngaC.Boot -> MainC;
-
-  BlinkIngaC.Timer0 -> Timer0;
-  BlinkIngaC.Timer1 -> Timer1;
-  BlinkIngaC.Leds -> LedsC;
-  BlinkIngaC.Inga -> IngaC;
-  BlinkIngaC.Eui64 -> Eui64;
+  components Atm128Uart0C as Uart0;
+  StdControl = Uart0;
+  UartStream = Uart0;
+  UartByte = Uart0;
+  
+  components CounterMicro32C;
+  Uart0.Counter -> CounterMicro32C;
+  
 }
-

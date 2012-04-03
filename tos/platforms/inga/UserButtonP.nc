@@ -1,6 +1,5 @@
-
-/*
- * Copyright (c) 2012 Martin Cerveny
+/**
+ * Copyright (c) 2007 Arch Rock Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,56 +11,66 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the
  *   distribution.
- * - Neither the name of INSERT_AFFILIATION_NAME_HERE nor the names of
+ * - Neither the name of the Arch Rock Corporation nor the names of
  *   its contributors may be used to endorse or promote products derived
  *   from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL STANFORD
- * UNIVERSITY OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * ARCHED ROCK OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THE POSSIBILITY OF SUCH DAMAGE
  */
 
 /**
- * Blink is a basic application that toggles a mote's LED periodically.
- * It does so by starting a Timer that fires every second. It uses the
- * OSKI TimerMilli service to achieve this goal.
+ * Implementation of the user button for the telosb platform
  *
- * Also it sends last two bytes to hex LCD, lit on Raven symbol
- * and display "Hello world" on alfanumeric LCD.
- *
- * @author: Martin Cerveny
- *
- **/
+ * @author Gilman Tolle <gtolle@archrock.com>
+ * @version $Revision: 1.2 $
+ */
 
-configuration BlinkIngaAppC
-{
+#include <UserButton.h>
+
+module UserButtonP {
+  provides interface Get<button_state_t>;
+  provides interface Notify<button_state_t>;
+
+  uses interface Get<bool> as GetLower;
+  uses interface Notify<bool> as NotifyLower;
 }
-implementation
-{
-  components MainC, BlinkIngaC, LedsC, IngaC;
-  components new TimerMilliC() as Timer0;
-  components new TimerMilliC() as Timer1;
-  components LocalIeeeEui64C as Eui64;
+implementation {
+  
+  command button_state_t Get.get() { 
+    // telosb user button pin is high when released - invert state
+    if ( call GetLower.get() ) {
+      return BUTTON_RELEASED;
+    } else {
+      return BUTTON_PRESSED;
+    }
+  }
 
-  components UserButtonC;
-  BlinkIngaC.UserButtonGet -> UserButtonC;
-  BlinkIngaC.UserButtonNotify -> UserButtonC;
+  command error_t Notify.enable() {
+    return call NotifyLower.enable();
+  }
 
-  BlinkIngaC.Boot -> MainC;
+  command error_t Notify.disable() {
+    return call NotifyLower.disable();
+  }
 
-  BlinkIngaC.Timer0 -> Timer0;
-  BlinkIngaC.Timer1 -> Timer1;
-  BlinkIngaC.Leds -> LedsC;
-  BlinkIngaC.Inga -> IngaC;
-  BlinkIngaC.Eui64 -> Eui64;
+  event void NotifyLower.notify( bool val ) {
+    // telosb user button pin is high when released - invert state
+    if ( val ) {
+      signal Notify.notify( BUTTON_RELEASED );
+    } else {
+      signal Notify.notify( BUTTON_PRESSED );
+    }
+  }
+  
 }
-

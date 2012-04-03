@@ -40,6 +40,8 @@
 #include "Timer.h"
 #include "printf.h"
 
+#include <UserButton.h>
+
 module BlinkIngaC @safe()
 {
   uses interface Timer<TMilli> as Timer0;
@@ -48,18 +50,22 @@ module BlinkIngaC @safe()
   uses interface Boot;
   uses interface Inga;
   uses interface LocalIeeeEui64 as Eui64;
+
+  uses interface Get<button_state_t> as UserButtonGet;
+  uses interface Notify<button_state_t> as UserButtonNotify;
 }
 implementation
 {
   event void Boot.booted()
   {
     call Timer0.startPeriodic( 100 );
+    call UserButtonNotify.enable( );
     // call Timer1.startPeriodic( 500 );
   }
 
   event void Timer0.fired()
   {
-    printf("timer fired!\n");
+    printf("timer fired %d!\n", call UserButtonGet.get());
     printfflush();
     // uart_putchar('\x00', stdout);
     // printf("AA\n");
@@ -75,6 +81,11 @@ implementation
   }
 
   event void Inga.temperature(int16_t celsius) {
+  }
+
+  event void UserButtonNotify.notify(button_state_t state) {
+    printf("button pressed! %d\n", state);
+    printfflush();
   }
 
 }
