@@ -50,6 +50,8 @@
 #include <Timer.h>
 #include "BlinkToRadio.h"
 
+#include "printf.h"
+
 module BlinkToRadioC {
   uses interface Boot;
   uses interface Leds;
@@ -65,6 +67,7 @@ implementation {
   uint16_t counter;
   message_t pkt;
   bool busy = FALSE;
+  int errcode;
 
   void setLeds(uint16_t val) {
     if (val & 0x01)
@@ -75,17 +78,23 @@ implementation {
       call Leds.led1On();
     else
       call Leds.led1Off();
-    if (val & 0x04)
-      call Leds.led2On();
-    else
-      call Leds.led2Off();
+    // if (val & 0x04)
+    //   call Leds.led2On();
+    // else
+    //   call Leds.led2Off();
   }
 
   event void Boot.booted() {
-    call AMControl.start();
+    // call AMControl.start();
+    errcode = call AMControl.start();
+    printf("booted! radio errcode %d\n", errcode);
+    printfflush();
+    // call Timer0.startPeriodic(TIMER_PERIOD_MILLI);
   }
 
   event void AMControl.startDone(error_t err) {
+    printf("amcontrol: %d\n", err);
+    printfflush();
     if (err == SUCCESS) {
       call Timer0.startPeriodic(TIMER_PERIOD_MILLI);
     }
@@ -99,6 +108,8 @@ implementation {
 
   event void Timer0.fired() {
     counter++;
+    printf("counter: %d\n", counter);
+    printfflush();
     if (!busy) {
       BlinkToRadioMsg* btrpkt = 
 	(BlinkToRadioMsg*)(call Packet.getPayload(&pkt, sizeof(BlinkToRadioMsg)));
@@ -107,20 +118,29 @@ implementation {
       }
       btrpkt->nodeid = TOS_NODE_ID;
       btrpkt->counter = counter;
-      if (call AMSend.send(AM_BROADCAST_ADDR, 
-          &pkt, sizeof(BlinkToRadioMsg)) == SUCCESS) {
+      if ((errcode = call AMSend.send(AM_BROADCAST_ADDR, 
+          &pkt, sizeof(BlinkToRadioMsg))) == SUCCESS) {
+        printf("send success!\n");
+        printfflush();
         busy = TRUE;
+      } else {
+        printf("send failed! %d\n", errcode);
+        printfflush();
       }
     }
   }
 
   event void AMSend.sendDone(message_t* msg, error_t err) {
+    printf("send done!\n");
+    printfflush();
     if (&pkt == msg) {
       busy = FALSE;
     }
   }
 
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
+    printf("message received!\n");
+    printfflush();
     if (len == sizeof(BlinkToRadioMsg)) {
       BlinkToRadioMsg* btrpkt = (BlinkToRadioMsg*)payload;
       setLeds(btrpkt->counter);

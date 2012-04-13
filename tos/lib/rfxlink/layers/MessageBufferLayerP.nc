@@ -76,20 +76,29 @@ implementation
 	command error_t SplitControl.start()
 	{
 		error_t error;
+        printf("splitcontrol state %d\n", state);
+        printfflush();
 
 		call Tasklet.suspend();
+        printf("splitcontrol state %d\n", state);
+        printfflush();
 
 		if( state != STATE_READY )
 			error = EBUSY;
 		else
 		{
 			error = call RadioState.turnOn();
+        printf("splitcontrol state %d\n", state);
+        printfflush();
 
 			if( error == SUCCESS )
 				state = STATE_TURN_ON;
 		}
 
 		call Tasklet.resume();
+
+        printf("splitcontrol state %d\n", state);
+        printfflush();
 
 		return error;
 	}

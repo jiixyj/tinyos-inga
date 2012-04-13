@@ -10,8 +10,11 @@
 #
 push( @includes, qw(
 
-  %T/platforms/raven
-  %T/platforms/raven/chips/rf230
+  %T/platforms/inga
+  %T/platforms/inga/chips/rf230
+  %T/chips/rf2xx/rf230
+  %T/chips/rf2xx/layers
+  %T/chips/rf2xx/util
   %T/chips/rf230
   %T/chips/atm1284
   %T/chips/atm1284/adc
