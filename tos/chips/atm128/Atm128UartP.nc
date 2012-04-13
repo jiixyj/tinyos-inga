@@ -33,7 +33,7 @@
  * @author Alec Woo <awoo@archrock.com>
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Philip Levis <pal@cs.stanford.edu> (maintainer)
- * @version $Revision: 1.7 $ $Date: 2008/06/23 20:25:15 $
+ * @version $Revision: 1.7 $ $Date: 2008-06-23 20:25:15 $
  *
  * Modification @ 11/27 (pal): Folded in Alec's reimplementation
  * from the -devel branch. Fixed bug in RX interrupts, where

@@ -43,5 +43,5 @@ Known bugs/limitations:
   62.500 Hz, +-40 ppm in the 2.4 GHz band); in this case the MAC timing 
   is not standard compliant
 
-$Id: README.txt,v 1.3 2010/01/05 17:12:56 janhauer Exp $o
+$Id: README.txt,v 1.3 2010-01-05 17:12:56 janhauer Exp $o
 

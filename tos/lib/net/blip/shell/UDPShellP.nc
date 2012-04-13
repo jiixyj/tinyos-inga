@@ -1,28 +1,40 @@
 /*
- * "Copyright (c) 2008 The Regents of the University  of California.
- * All rights reserved."
+ * Copyright (c) 2008 The Regents of the University  of California.
+ * All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written agreement is
- * hereby granted, provided that the above copyright notice, the following
- * two paragraphs and the author appear in all copies of this software.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
  *
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
- * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
- * CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
  *
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
- * ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
- * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
  *
+ * - Neither the name of the University of California nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ip.h>
+#include <lib6lowpan/ip.h>
 #include <IPDispatch.h>
-#include <ICMP.h>
+#include <icmp6.h>
 #include "Shell.h"
 
 module UDPShellP {
@@ -36,7 +48,7 @@ module UDPShellP {
     interface Leds;
     
     interface ICMPPing;
-#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC)
+#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC) || defined(PLATFORM_Z1)
     interface Counter<TMilli, uint32_t> as Uptime;
 #endif
 
@@ -82,7 +94,7 @@ module UDPShellP {
     int i;
     atomic {
       uptime = 0;
-#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC)
+#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC) || defined(PLATFORM_Z1)
       boot_time = call Uptime.get();
 #endif
     }
@@ -92,6 +104,7 @@ module UDPShellP {
       externals[i].c_len = strlen(externals[i].c_name);
     }
     call UDP.bind(2000);
+
   }
 
 
@@ -169,12 +182,12 @@ module UDPShellP {
 
     if (argc < 2) return;
         inet_pton6(argv[1], &dest);
-    call ICMPPing.ping(&dest, 1024, 10);
+        call ICMPPing.ping(&dest, 1024, 10);
   }
 
 
   void action_uptime(int argc, char **argv) {
-#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC)
+#if defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC) || defined(PLATFORM_Z1)
     int len;
     uint64_t tval = call Uptime.get();
     atomic
@@ -234,7 +247,7 @@ module UDPShellP {
   }
 
   event void UDP.recvfrom(struct sockaddr_in6 *from, void *data, 
-                          uint16_t len, struct ip_metadata *meta) {
+                          uint16_t len, struct ip6_metadata *meta) {
     char *argv[N_ARGS];
     int argc, cmd;
 
@@ -265,6 +278,7 @@ module UDPShellP {
     if (len > 0) {
       len += snprintf(reply_buf + len - 1, MAX_REPLY_LEN - len + 1, ping_fmt,
                       stats->seq, stats->ttl, stats->rtt);
+      reply_buf[len] = '\0';
       call UDP.sendto(&session_endpoint, reply_buf, len);
     }
   }
@@ -275,7 +289,7 @@ module UDPShellP {
     call UDP.sendto(&session_endpoint, reply_buf, len);
   }
 
-#if  defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC)
+#if  defined(PLATFORM_TELOSB) || defined(PLATFORM_EPIC) || defined(PLATFORM_Z1)
   async event void Uptime.overflow() {
     atomic
       uptime += 0xffffffff;

@@ -1,4 +1,4 @@
-/* $Id: AdcStreamP.nc,v 1.12 2008/06/23 23:38:28 idgay Exp $
+/* $Id: AdcStreamP.nc,v 1.12 2008-06-23 23:38:28 idgay Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

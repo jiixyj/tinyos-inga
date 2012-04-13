@@ -67,7 +67,7 @@
  * @author: Jonathan Hui <jhui@archedrock.com>
  * @author: Vlado Handziski <handzisk@tkn.tu-berlin.de>
  * @author: Joe Polastre
- * @version $Revision: 1.1 $ $Date: 2008/06/12 14:02:26 $
+ * @version $Revision: 1.1 $ $Date: 2008-06-12 14:02:26 $
  */
 
 module HplMsp430Usart1P {

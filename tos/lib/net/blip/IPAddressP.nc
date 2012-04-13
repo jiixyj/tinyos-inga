@@ -20,63 +20,49 @@
  *
  */
 
-#include <6lowpan.h>
-
-// defined in lib6lowpan
-extern struct in6_addr __my_address;
-extern uint8_t globalPrefix;
+#include <lib6lowpan/lib6lowpan.h>
+#include <lib6lowpan/6lowpan.h>
 
 module IPAddressP {
-  provides interface IPAddress;
-
-#ifndef SIM
-  uses interface ActiveMessageAddress;
-#else 
-  uses async command void setAmAddress(am_addr_t a);
-#endif
+  provides {
+    interface IPAddress;
+  }
+  uses {
+    interface Ieee154Address;
+  }
 } implementation {
+  bool m_valid_addr = FALSE, m_short_addr = FALSE;
+  struct in6_addr m_addr;
 
+  command bool IPAddress.getLLAddr(struct in6_addr *addr) {
+    ieee154_panid_t panid = letohs(call Ieee154Address.getPanId());
+    ieee154_saddr_t saddr = letohs(call Ieee154Address.getShortAddr());
+    ieee154_laddr_t laddr = call Ieee154Address.getExtAddr();
 
-  command ieee154_saddr_t IPAddress.getShortAddr() {
-    return TOS_NODE_ID;
+    memclr(addr->s6_addr, 16);
+    addr->s6_addr16[0] = htons(0xfe80);
+    if (m_short_addr) {
+      addr->s6_addr16[4] = htons(panid);
+      addr->s6_addr16[5] = htons(0x00FF);
+      addr->s6_addr16[6] = htons(0xFE00);
+      addr->s6_addr16[7] = htons(saddr);
+      addr->s6_addr[8] &= ~0x2;  /* unset U bit  */
+    } else {
+      int i;
+      for (i = 0; i < 8; i++)
+        addr->s6_addr[8+i] = laddr.data[7-i];
+      addr->s6_addr[8] ^= 0x2;  /* toggle U/L bit */
+    }
+
+    return TRUE;
   }
 
-  command void IPAddress.setShortAddr(ieee154_saddr_t newAddr) {
-    TOS_NODE_ID = newAddr;
-#ifndef SIM
-    call ActiveMessageAddress.setAddress(call ActiveMessageAddress.amGroup(), newAddr);
-#else
-    call setAmAddress(newAddr);
-#endif
+  command bool IPAddress.getGlobalAddr(struct in6_addr *addr) {
+    *addr = m_addr;
+    return m_valid_addr;
   }
 
-  command void IPAddress.getLLAddr(struct in6_addr *addr) {
-    __my_address.s6_addr16[7] = htons(TOS_NODE_ID);
-    memcpy(addr->s6_addr, linklocal_prefix, 8);
-    memcpy(&addr->s6_addr[8], &__my_address.s6_addr[8], 8);
-  }
-
-  command void IPAddress.getIPAddr(struct in6_addr *addr) {
-    __my_address.s6_addr16[7] = htons(TOS_NODE_ID);
-    memcpy(addr, &__my_address, 16);
-  }
-
-  command struct in6_addr *IPAddress.getPublicAddr() {
-    __my_address.s6_addr16[7] = htons(TOS_NODE_ID);
-    return &__my_address;
-  }
-
-  command void IPAddress.setPrefix(uint8_t *pfx) {
-    ip_memclr(__my_address.s6_addr, sizeof(struct in6_addr));
-    ip_memcpy(__my_address.s6_addr, pfx, 8);
-    globalPrefix = 1;
-  }
-
-  command bool IPAddress.haveAddress() {
-    return globalPrefix;
-  }
-
-  command void IPAddress.setSource(struct ip6_hdr *hdr) {
+  command bool IPAddress.setSource(struct ip6_hdr *hdr) {
     enum { LOCAL, GLOBAL } type = GLOBAL;
       
     if (hdr->ip6_dst.s6_addr[0] == 0xff) {
@@ -91,19 +77,92 @@ module IPAddressP {
       }
     }
 
-    if (type == GLOBAL && call IPAddress.haveAddress()) {
-      call IPAddress.getIPAddr(&hdr->ip6_src);
+    if (type == LOCAL) {
+      return call IPAddress.getLLAddr(&hdr->ip6_src);
     } else {
-      call IPAddress.getLLAddr(&hdr->ip6_src);
+      return call IPAddress.getGlobalAddr(&hdr->ip6_src);
     }
-
   }
 
+  command bool IPAddress.isLocalAddress(struct in6_addr *addr) {
+    ieee154_panid_t panid = letohs(call Ieee154Address.getPanId());
+    ieee154_saddr_t saddr = letohs(call Ieee154Address.getShortAddr());
+    ieee154_laddr_t eui = call Ieee154Address.getExtAddr();
 
-#ifndef SIM
-  async event void ActiveMessageAddress.changed() {
+    if (addr->s6_addr16[0] == htons(0xfe80)) {
+      // link-local
+      if (m_short_addr && 
+          addr->s6_addr16[5] == htons(0x00FF) &&
+          addr->s6_addr16[6] == htons(0xFE00)) {
+        if (ntohs(addr->s6_addr16[4]) == (panid & ~0x200) && 
+            ntohs(addr->s6_addr16[7]) == saddr) {
+          return TRUE;
+        } else {
+          return FALSE;
+        }
+      } 
 
+      return (addr->s6_addr[8] == (eui.data[7] ^ 0x2) && /* invert U/L bit */
+              addr->s6_addr[9] == eui.data[6] &&
+              addr->s6_addr[10] == eui.data[5] &&
+              addr->s6_addr[11] == eui.data[4] &&
+              addr->s6_addr[12] == eui.data[3] &&
+              addr->s6_addr[13] == eui.data[2] &&
+              addr->s6_addr[14] == eui.data[1] &&
+              addr->s6_addr[15] == eui.data[0]);
+
+    } else if (addr->s6_addr[0] == 0xff) {
+      // multicast
+      if ((addr->s6_addr[1] & 0x0f) <= 2) {
+        // accept all LL multicast messages
+        return TRUE;
+      }
+    } else if (memcmp(addr->s6_addr, m_addr.s6_addr, 16) == 0) {
+      return TRUE;
+    }
+    return FALSE;
   }
+
+  /* Check if the address needs routing or of it's link local in scope
+   */
+  command bool IPAddress.isLLAddress(struct in6_addr *addr) {
+    if (addr->s6_addr16[0] == htons(0xfe80) ||
+        (addr->s6_addr[0] == 0xff &&
+         (addr->s6_addr[1] & 0x0f) <= 2))
+      return TRUE;
+    return FALSE;
+  }
+
+  command error_t IPAddress.setAddress(struct in6_addr *addr) {
+    m_addr = *addr;
+#ifdef BLIP_DERIVE_SHORTADDRS
+    if (m_addr.s6_addr[8] == 0 &&
+        m_addr.s6_addr[9] == 0 &&
+        m_addr.s6_addr[10] == 0 &&
+        m_addr.s6_addr[11] == 0 &&
+        m_addr.s6_addr[12] == 0 &&
+        m_addr.s6_addr[13] == 0) {
+      call Ieee154Address.setShortAddr(ntohs(m_addr.s6_addr16[7]));
+      m_short_addr = TRUE;
+    } else {
+      call Ieee154Address.setShortAddr(0);
+      m_short_addr = FALSE;
+    }
 #endif
+
+    m_valid_addr = TRUE;
+    signal IPAddress.changed(TRUE);
+    return SUCCESS;
+  }
+
+  command error_t IPAddress.removeAddress() {
+    m_valid_addr = FALSE;
+    m_short_addr = FALSE;
+    call Ieee154Address.setShortAddr(0);
+    signal IPAddress.changed(FALSE);
+    return SUCCESS;
+  }
+
+  event void Ieee154Address.changed() {}
 
 }

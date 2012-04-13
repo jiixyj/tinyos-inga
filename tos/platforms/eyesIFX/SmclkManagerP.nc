@@ -27,7 +27,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * $Revision: 1.2 $
- * $Date: 2007/03/10 22:03:48 $
+ * $Date: 2007-03-10 22:03:48 $
  */
 
 /**

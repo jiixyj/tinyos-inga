@@ -29,33 +29,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.7 $ $Date: 2007/07/04 00:37:14 $
+ * @version $Revision: 1.7 $ $Date: 2007-07-04 00:37:14 $
  */
 
 #ifndef __IEEE802154_H__
 #define __IEEE802154_H__
 
-enum ieee154_fcf_enums {
-  IEEE154_FCF_FRAME_TYPE = 0,
-  IEEE154_FCF_SECURITY_ENABLED = 3,
-  IEEE154_FCF_FRAME_PENDING = 4,
-  IEEE154_FCF_ACK_REQ = 5,
-  IEEE154_FCF_INTRAPAN = 6,
-  IEEE154_FCF_DEST_ADDR_MODE = 10,
-  IEEE154_FCF_SRC_ADDR_MODE = 14,
-};
-
-enum ieee154_fcf_type_enums {
-  IEEE154_TYPE_BEACON = 0,
-  IEEE154_TYPE_DATA = 1,
-  IEEE154_TYPE_ACK = 2,
-  IEEE154_TYPE_MAC_CMD = 3,
-};
-
-enum iee154_fcf_addr_mode_enums {
-  IEEE154_ADDR_NONE = 0,
-  IEEE154_ADDR_SHORT = 2,
-  IEEE154_ADDR_EXT = 3,
-};
+#include <Ieee154.h>
 
 #endif

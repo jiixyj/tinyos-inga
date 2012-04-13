@@ -22,29 +22,21 @@
 #ifndef _IP_H_
 #define _IP_H_
 
+#include <string.h>
+
+#include "lib6lowpan-includes.h"
+
 /*
  * define message structures for internet communication
  *
  */
 
-#ifdef PC
-#include <linux/if_tun.h>
-#include <netinet/in.h>
-#endif
+// HAVE_NETINET_IN_H ifdef removed since it is getting defined in libcoap
+// and breaks CoAPBlip
+// only needed for blip1.0 and ip-driver, because those were run on the
+// host computer
 
-#include "6lowpan.h"
-#include "blip-platform.h"
-
-enum {
-  /*
-   * The time, in binary milliseconds, after which we stop waiting for
-   * fragments and report a failed receive.  We 
-   */
-  FRAG_EXPIRE_TIME = 4096,
-};
-
-
-#ifndef PC
+#if ! PC
 // update to use netinet/in definition of an IPv6 address; this is a
 //  lot more elegent.
 struct in6_addr
@@ -61,36 +53,63 @@ struct in6_addr
   };
 
 struct sockaddr_in6 {
-  uint16_t sin6_port;
+  uint16_t       sin6_port;
   struct in6_addr sin6_addr;
 };
+#else
+#include <netinet/in.h>
 #endif
 
 /*
  * Definition for internet protocol version 6.
  * RFC 2460
+ *      @(#)ip.h        8.1 (Berkeley) 6/10/93
  */
 struct ip6_hdr {
-  uint8_t   vlfc[4];
-  uint16_t  plen;          /* payload length */
-  uint8_t   nxt_hdr;       /* next header */
-  uint8_t   hlim;          /* hop limit */
+  union {
+    struct ip6_hdrctl {
+      uint32_t ip6_un1_flow; /* 20 bits of flow-ID */
+      uint16_t ip6_un1_plen; /* payload length */
+      uint8_t  ip6_un1_nxt;  /* next header */
+      uint8_t  ip6_un1_hlim; /* hop limit */
+    } ip6_un1;
+    uint8_t ip6_un2_vfc;   /* 4 bits version, top 4 bits class */
+  } ip6_ctlun;
   struct in6_addr ip6_src; /* source address */
   struct in6_addr ip6_dst; /* destination address */
 } __attribute__((packed));
 
-#define IPV6_VERSION            0x6
+#define ip6_vfc         ip6_ctlun.ip6_un2_vfc
+#define ip6_flow        ip6_ctlun.ip6_un1.ip6_un1_flow
+#define ip6_plen        ip6_ctlun.ip6_un1.ip6_un1_plen
+#define ip6_nxt         ip6_ctlun.ip6_un1.ip6_un1_nxt
+#define ip6_hlim        ip6_ctlun.ip6_un1.ip6_un1_hlim
+#define ip6_hops        ip6_ctlun.ip6_un1.ip6_un1_hlim
+
+#define IPV6_VERSION            0x60
 #define IPV6_VERSION_MASK       0xf0
 
+#if BYTE_ORDER == BIG_ENDIAN
+#define IPV6_FLOWINFO_MASK      0x0fffffff      /* flow info (28 bits) */
+#define IPV6_FLOWLABEL_MASK     0x000fffff      /* flow label (20 bits) */
+#else
+#if BYTE_ORDER == LITTLE_ENDIAN
+#define IPV6_FLOWINFO_MASK      0xffffff0f      /* flow info (28 bits) */
+#define IPV6_FLOWLABEL_MASK     0xffff0f00      /* flow label (20 bits) */
+#endif /* LITTLE_ENDIAN */
+#endif
+#if 1
+/* ECN bits proposed by Sally Floyd */
+#define IP6TOS_CE               0x01    /* congestion experienced */
+#define IP6TOS_ECT              0x02    /* ECN-capable transport */
+#endif
 
 /*
  * Extension Headers
  */
-
 struct ip6_ext {
-  uint8_t nxt_hdr;
-  uint8_t len;
-  uint8_t data[0];
+  uint8_t ip6e_nxt;
+  uint8_t ip6e_len;
 };
 
 struct tlv_hdr {
@@ -105,66 +124,29 @@ enum {
   IANA_UDP = 17,
   IANA_TCP = 6,
 
+
   // IPV6 defined extention header types.  All other next header
   // values are supposed to be transport protocols, with TLVs used
   IPV6_HOP = 0,
-  IPV6_DEST = 60,
+  IPV6_IPV6 = 41,
   IPV6_ROUTING = 43,
   IPV6_FRAG = 44,
   IPV6_AUTH = 51,
   IPV6_SEC = 50,
-  IPV6_MOBILITY = 135,
   IPV6_NONEXT = 59,
+  IPV6_DEST = 60,
+  IPV6_MOBILITY = 135,
+
+  IPV6_TLV_PAD1 = 0,
+  IPV6_TLV_PADN = 1,
 };
 #define EXTENSION_HEADER(X) ((X) == IPV6_HOP || (X) == IPV6_ROUTING || (X) == IPV6_DEST)
 #define COMPRESSIBLE_TRANSPORT(X) ((X) == IANA_UDP)
 
-/*
- * nonstandard source routing header fields
- */
-enum {
-  IP6ROUTE_TYPE_SOURCE  = 0,
-  IP6ROUTE_TYPE_INVAL   = 1,
-  IP6ROUTE_FLAG_CONTROLLER = 0x8,
-  IP6ROUTE_FLAG_MASK = IP6ROUTE_FLAG_CONTROLLER,
-
-  IP_EXT_SOURCE_DISPATCH    = 0x40,
-  IP_EXT_SOURCE_MASK        = 0xc0,
-
-  // dispatch values
-  IP_EXT_SOURCE_CONTROLLER  = 0x40,
-
-  // dispatch values for route installation if this flag is set, the
-  // source_header must be immediately followed by a
-  // source_install_opt struct.
-  IP_EXT_SOURCE_INSTALL     = 0x10,
-  IP_EXT_SOURCE_INSTALL_MASK= 0x10,
-
-  // indicates weather the forward and reverse paths should be
-  // installed.  Are these needed?  the only case when we don't want
-  // to install the reverse path is when the destination is a
-  // multicast?
-  IP_EXT_SOURCE_INST_SRC    = 0x20,
-  IP_EXT_SOURCE_INST_DST    = 0x40,
-
-  // a topology TLV inside a destination option
-  TLV_TYPE_TOPOLOGY = 0x0a,
-  // a route install message, inside a hop-by-hop or destination
-  // option message.
-  TLV_TYPE_INSTALL  = 0x0b,
-  TLV_TYPE_FLOW     = 0x0c,
-  TLV_TYPE_MCASTSEQ = 0x0d,
+/* interface id */
+struct in6_iid {
+  uint8_t data[8];
 };
-
-struct ip6_route {
-  uint8_t nxt_hdr;
-  uint8_t len;
-  uint8_t type;
-  uint8_t segs_remain;
-  uint16_t hops[0];
-};
-#define ROUTE_NENTRIES(SH)   (((SH)->len - (sizeof(struct ip6_route))) / (sizeof(uint16_t)))
-
 
 /*
  * icmp
@@ -186,6 +168,7 @@ enum {
     ICMP_TYPE_ROUTER_ADV            = 134,
     ICMP_TYPE_NEIGHBOR_SOL          = 135,
     ICMP_TYPE_NEIGHBOR_ADV          = 136,
+    ICMP_TYPE_RPL_CONTROL           = 155,
     ICMP_NEIGHBOR_HOPLIMIT          = 255,
 
     ICMP_CODE_HOPLIMIT_EXCEEDED     = 0,
@@ -230,42 +213,15 @@ struct tcp_hdr {
 
 /*
  * IP metadata and routing structures
+ *
+ * The metadata contains L2 information that upper layers may be
+ * interested in for one reason or another.
  */
-struct ip_metadata {
-  ieee154_saddr_t sender;
+struct ip6_metadata {
+  ieee154_addr_t sender;
+  // platforms commonly provide one or both of these indicators
   uint8_t   lqi;
-  uint8_t   padding[1];
-};
-
-struct flow_match {
-  cmpr_ip6_addr_t src;
-  cmpr_ip6_addr_t dest; // Need to make this more extensible at some point
-};
-
-struct rinstall_header {
-  struct flow_match match;
-  uint8_t flags;
-  uint8_t path_len;
-  cmpr_ip6_addr_t path[0];
-};
-
-enum {
-  // is this a hop-by-hop or source install command
-  HYDRO_INSTALL_METHOD_MASK    = 0x03,
-  HYDRO_METHOD_HOP             = 0x01,
-  HYDRO_METHOD_SOURCE          = 0x02,
-
-  // should we also apply the action to the reverse path?
-  HYDRO_INSTALL_REVERSE        = 0x04,
-
-  // is this an uninstallation?
-  HYDRO_INSTALL_UNINSTALL_MASK = 0x08,
-
-};
-
-enum {
-  T_INVAL_NEIGH =  0xef,
-  T_SET_NEIGH = 0xee,
+  uint8_t   rssi;
 };
 
 
@@ -284,42 +240,13 @@ enum {
  * the current fragmentation code, but is perfectly usable in most
  * cases.
  */
-struct generic_header {
-#ifdef PC
-  int payload_malloced:1;
-#endif
-  uint8_t len;
-  union {
-    // this could be an eumeration of all the valid headers we can have here.
-    struct ip6_ext *ext;
-    struct ip6_route *sh;
-    struct udp_hdr *udp;
-    uint8_t *data;
-  } hdr;
-  struct generic_header *next;
-};
 
-enum {
-  IP_NOHEADERS = 1 << 0,
-  IP_MCAST     = 1 << 1,
-  IP_NOADDRESS = 1 << 2,
+struct ip6_packet {
+  int ip6_inputif;
+  struct ip_iovec  *ip6_data;
+  struct ip6_hdr ip6_hdr;
 };
-
-struct split_ip_msg {
-  struct generic_header *headers;
-  uint16_t data_len;
-  uint8_t *data;
-#ifdef PC
-  uint16_t foo;
-  uint16_t flow_id;
-  uint16_t prev_hop;
-  struct ip_metadata metadata;
-  // this must be last so we can read() straight into the end of the buffer.
-  struct tun_pi pi;
-#endif
-  struct ip6_hdr hdr;
-  uint8_t next[0];
-};
+#define IP6PKT_TRANSPORT 0xff
 
 #ifndef NO_LIB6LOWPAN_ASCII
 /*
@@ -329,4 +256,9 @@ void inet_pton6(char *addr, struct in6_addr *dest);
 int  inet_ntop6(struct in6_addr *addr, char *buf, int cnt);
 #endif
 
+
+#define POINTER_DIFF(AP, BP) (((char *)AP) - ((char *)BP))
+#define POINTER_SUM(AP, B) (((char *)AP) + (B))
+
 #endif
+

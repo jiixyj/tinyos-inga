@@ -33,9 +33,10 @@
  * @author Jonathan Hui <jhui@archrock.com>
  * @author David Moss
  * @author Urs Hunkeler (ReadRssi implementation)
- * @version $Revision: 1.8 $ $Date: 2009/10/28 16:18:44 $
+ * @version $Revision: 1.7 $ $Date: 2008/06/24 04:07:28 $
  */
 
+#include <Ieee154.h>
 #include "Timer.h"
 
 module CC2420ControlP @safe() {
@@ -46,6 +47,8 @@ module CC2420ControlP @safe() {
   provides interface CC2420Power;
   provides interface Read<uint16_t> as ReadRssi;
 
+  uses interface LocalIeeeEui64;
+
   uses interface Alarm<T32khz,uint32_t> as StartupTimer;
   uses interface GeneralIO as CSN;
   uses interface GeneralIO as RSTN;
@@ -53,6 +56,7 @@ module CC2420ControlP @safe() {
   uses interface GpioInterrupt as InterruptCCA;
   uses interface ActiveMessageAddress;
 
+  uses interface CC2420Ram as IEEEADR;
   uses interface CC2420Ram as PANID;
   uses interface CC2420Register as FSCTRL;
   uses interface CC2420Register as IOCFG0;
@@ -61,6 +65,7 @@ module CC2420ControlP @safe() {
   uses interface CC2420Register as MDMCTRL1;
   uses interface CC2420Register as RXCTRL1;
   uses interface CC2420Register as RSSI;
+  uses interface CC2420Register as TXCTRL;
   uses interface CC2420Strobe as SRXON;
   uses interface CC2420Strobe as SRFOFF;
   uses interface CC2420Strobe as SXOSCOFF;
@@ -91,6 +96,8 @@ implementation {
   uint16_t m_pan;
   
   uint16_t m_short_addr;
+
+  ieee_eui64_t m_ext_addr;
   
   bool m_sync_busy;
   
@@ -113,22 +120,32 @@ implementation {
   void writeFsctrl();
   void writeMdmctrl0();
   void writeId();
+  void writeTxctrl();
 
   task void sync();
   task void syncDone();
     
   /***************** Init Commands ****************/
   command error_t Init.init() {
+    int i, t;
     call CSN.makeOutput();
     call RSTN.makeOutput();
     call VREN.makeOutput();
     
     m_short_addr = call ActiveMessageAddress.amAddress();
+    m_ext_addr = call LocalIeeeEui64.getId();
     m_pan = call ActiveMessageAddress.amGroup();
     m_tx_power = CC2420_DEF_RFPOWER;
     m_channel = CC2420_DEF_CHANNEL;
     
-    
+    m_ext_addr = call LocalIeeeEui64.getId();
+    for (i = 0; i < 4; i++) {
+      t = m_ext_addr.data[i];
+      m_ext_addr.data[i] = m_ext_addr.data[7-i];
+      m_ext_addr.data[7-i] = t;
+    }
+
+
 #if defined(CC2420_NO_ADDRESS_RECOGNITION)
     addressRecognition = FALSE;
 #else
@@ -172,7 +189,7 @@ implementation {
     return call SpiResource.request();
   }
 
-  async command uint8_t Resource.isOwner() {
+  async command bool Resource.isOwner() {
     return call SpiResource.isOwner();
   }
 
@@ -230,6 +247,8 @@ implementation {
           ( 1 << CC2420_RXCTRL1_RXMIX_TAIL ) |
           ( 1 << CC2420_RXCTRL1_RXMIX_VCM ) |
           ( 2 << CC2420_RXCTRL1_RXMIX_CURRENT ) );
+
+      writeTxctrl();
     }
     return SUCCESS;
   }
@@ -274,6 +293,10 @@ implementation {
 
   command void CC2420Config.setChannel( uint8_t channel ) {
     atomic m_channel = channel;
+  }
+
+  command ieee_eui64_t CC2420Config.getExtAddr() {
+    return m_ext_addr;
   }
 
   async command uint16_t CC2420Config.getShortAddr() {
@@ -473,7 +496,7 @@ implementation {
   void writeMdmctrl0() {
     atomic {
       call MDMCTRL0.write( ( 1 << CC2420_MDMCTRL0_RESERVED_FRAME_MODE ) |
-          ( (addressRecognition && hwAddressRecognition) << CC2420_MDMCTRL0_ADR_DECODE ) |
+          ( ((addressRecognition && hwAddressRecognition) ? 1 : 0) << CC2420_MDMCTRL0_ADR_DECODE ) |
           ( 2 << CC2420_MDMCTRL0_CCA_HYST ) |
           ( 3 << CC2420_MDMCTRL0_CCA_MOD ) |
           ( 1 << CC2420_MDMCTRL0_AUTOCRC ) |
@@ -490,18 +513,31 @@ implementation {
    * Write the PANID register
    */
   void writeId() {
-    nxle_uint16_t id[ 2 ];
+    nxle_uint16_t id[ 6 ];
 
     atomic {
-      id[ 0 ] = m_pan;
-      id[ 1 ] = m_short_addr;
+      /* Eui-64 is stored in big endian */
+      memcpy((uint8_t *)id, m_ext_addr.data, 8);
+      id[ 4 ] = m_pan;
+      id[ 5 ] = m_short_addr;
     }
-    
-    call PANID.write(0, (uint8_t*)&id, sizeof(id));
+
+    call IEEEADR.write(0, (uint8_t *)&id, 12);
   }
 
+  /* Write the Transmit control register. This
+     is needed so acknowledgments are sent at the
+     correct transmit power even if a node has
+     not sent a packet (Google Code Issue #27) -pal */
 
-  
+  void writeTxctrl() {
+    atomic {
+      call TXCTRL.write( ( 2 << CC2420_TXCTRL_TXMIXBUF_CUR ) |
+			 ( 3 << CC2420_TXCTRL_PA_CURRENT ) |
+			 ( 1 << CC2420_TXCTRL_RESERVED ) |
+			 ( (CC2420_DEF_RFPOWER & 0x1F) << CC2420_TXCTRL_PA_LEVEL ) );
+    }
+  }
   /***************** Defaults ****************/
   default event void CC2420Config.syncDone( error_t error ) {
   }

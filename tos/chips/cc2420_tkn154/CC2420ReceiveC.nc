@@ -34,7 +34,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
- * @version $Revision: 1.2 $ $Date: 2009/03/04 18:31:04 $
+ * @version $Revision: 1.2 $ $Date: 2009-03-04 18:31:04 $
  */
 
 configuration CC2420ReceiveC {
@@ -42,7 +42,6 @@ configuration CC2420ReceiveC {
   provides interface CC2420AsyncSplitControl;
   provides interface CC2420Receive; // to CC2420TransmitP for ACK
   provides interface CC2420Rx;      // to the driver
-  uses interface ReferenceTime;
   uses interface FrameUtility;
   uses interface CC2420Config;
 }
@@ -58,7 +57,6 @@ implementation {
   CC2420AsyncSplitControl = CC2420ReceiveP;
   CC2420Receive = CC2420ReceiveP;
   CC2420Rx = CC2420ReceiveP;
-  ReferenceTime = CC2420ReceiveP;
   FrameUtility = CC2420ReceiveP;
   CC2420Config = CC2420ReceiveP;
 

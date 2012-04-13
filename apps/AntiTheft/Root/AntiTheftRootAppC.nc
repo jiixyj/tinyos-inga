@@ -1,4 +1,4 @@
-// $Id: AntiTheftRootAppC.nc,v 1.6 2008/04/24 21:15:51 mmaroti Exp $
+// $Id: AntiTheftRootAppC.nc,v 1.6 2008-04-24 21:15:51 mmaroti Exp $
 /*
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.

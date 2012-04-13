@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.1 $
- * $Date: 2009/06/10 09:23:45 $
+ * $Date: 2009-06-10 09:23:45 $
  * @author: Jasper Buesch <buesch@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -136,7 +136,7 @@ module TestIndirectDataCoordC
       call Leds.led0On();
       call Led0Timer.startOneShot(125000U);
       sendIndirectData();
-    }else if(status == SUCCESS){
+    }else if (status == IEEE154_SUCCESS){
       call DataTimer.startOneShot(125000U);
     }
   }

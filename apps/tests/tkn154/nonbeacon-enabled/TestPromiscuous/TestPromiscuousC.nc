@@ -28,11 +28,14 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.1 $
- * $Date: 2009/10/29 17:42:56 $
+ * $Date: 2009-10-29 17:42:56 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
+
+#include "printf.h"
 #include "TKN154.h"
+
 module TestPromiscuousC
 {
   uses {

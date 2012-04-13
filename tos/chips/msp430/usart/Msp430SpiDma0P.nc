@@ -32,7 +32,7 @@
 /**
  * @author Jonathan Hui <jhui@archedrock.com>
  * @author Mark Hays
- * @version $Revision: 1.5 $ $Date: 2007/11/08 21:34:42 $
+ * @version $Revision: 1.5 $ $Date: 2007-11-08 21:34:42 $
  */
 
 configuration Msp430SpiDma0P {

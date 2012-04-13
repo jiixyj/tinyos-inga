@@ -67,6 +67,8 @@ configuration CC2420TinyosNetworkC {
 
     interface Send as ActiveSend;
     interface Receive as ActiveReceive;
+
+    interface Packet as BarePacket;
   }
   
   uses {
@@ -88,6 +90,7 @@ implementation {
 
   CC2420TinyosNetworkP.BareSend = Send;
   CC2420TinyosNetworkP.BareReceive = Receive;
+  CC2420TinyosNetworkP.BarePacket = BarePacket;
   CC2420TinyosNetworkP.SubSend = SubSend;
   CC2420TinyosNetworkP.SubReceive = SubReceive;
   CC2420TinyosNetworkP.Resource = Resource;

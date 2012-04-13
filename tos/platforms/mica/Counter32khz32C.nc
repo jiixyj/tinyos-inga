@@ -1,4 +1,4 @@
-// $Id: Counter32khz32C.nc,v 1.5 2008/09/01 17:44:02 devdj Exp $
+// $Id: Counter32khz32C.nc,v 1.5 2008-09-01 17:44:02 devdj Exp $
 /*
  * Copyright (c) 2005-2006 Intel Corporation
  * All rights reserved.

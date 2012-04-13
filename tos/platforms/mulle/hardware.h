@@ -42,13 +42,21 @@
 #define __HARDWARE_H__
 
 #define MAIN_CRYSTAL_SPEED 10 /*MHz*/
-#define PLL_MULTIPLIER M16C62P_PLL_2
+#define PLL_MULTIPLIER M16C60_PLL_2
 
-#ifndef PLL_ON
-#define RF230_SLOW_SPI
+#define RF230_SLOW_SPI_MULLE
+
+#ifdef RF230_SLOW_SPI_MULLE
+#warning You are using the RF230 driver with a Mulle specific software fix. If you are using some very timecritical network protocols these may not work as intended! \
+You should not remove this fix unless you are totaly sure of what you are doing!
 #endif
 
-#include "m16c62phardware.h" // Header file for the MCU
+#ifdef ENABLE_STOP_MODE
+#warning Stop mode enabled!
+#include "pin_configuration.h"
+#endif
+
+#include "m16c60hardware.h" // Header file for the MCU
 
 #endif  // __HARDWARE_H__
 

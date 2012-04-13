@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: avrisp.extra,v 1.8 2008/09/22 15:41:35 sallai Exp $
+#$Id: avrisp.extra,v 1.8 2008-09-22 15:41:35 sallai Exp $
 
 ifeq ($(AVRISP),)
 $(error AVRISP must be defined, try "make $(TARGETS) help")

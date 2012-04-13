@@ -32,7 +32,7 @@
 /**
  * @author Jonathan Hui <jhui@archedrock.com>
  * @author Maxime Muller
- * @version $Revision: 1.1 $ $Date: 2007/07/13 15:54:09 $
+ * @version $Revision: 1.1 $ $Date: 2007-07-13 15:54:09 $
  *
  * nss_data toggling for each rx byte
  */
@@ -76,7 +76,7 @@ implementation {
     return call UsartResource.request[ id ]();
   }
 
-  async command uint8_t Resource.isOwner[ uint8_t id ]() {
+  async command bool Resource.isOwner[ uint8_t id ]() {
     return call UsartResource.isOwner[ id ]();
   }
 
@@ -110,7 +110,7 @@ implementation {
     return byte;
   }
 
-  default async command error_t UsartResource.isOwner[ uint8_t id ]() { return FAIL; }
+  default async command bool UsartResource.isOwner[ uint8_t id ]() { return FALSE; }
   default async command error_t UsartResource.request[ uint8_t id ]() { return FAIL; }
   default async command error_t UsartResource.immediateRequest[ uint8_t id ]() { return FAIL; }
   default async command error_t UsartResource.release[ uint8_t id ]() { return FAIL; }

@@ -1,26 +1,37 @@
 #include <Timer.h>
 #include <TreeRouting.h>
 #include <CollectionDebugMsg.h>
-/* $Id: CtpRoutingEngineP.nc,v 1.23 2010/02/04 07:31:46 gnawali Exp $ */
+/* $Id: CtpRoutingEngineP.nc,v 1.25 2010-06-29 22:07:49 scipio Exp $ */
 /*
- * "Copyright (c) 2005 The Regents of the University  of California.  
+ * Copyright (c) 2005 The Regents of the University  of California.  
  * All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written agreement is
- * hereby granted, provided that the above copyright notice, the following
- * two paragraphs and the author appear in all copies of this software.
- * 
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
- * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
- * CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
- * ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
- * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the University of California nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
@@ -89,7 +100,7 @@
  *  @author Philip Levis (added trickle-like updates)
  *  Acknowledgment: based on MintRoute, MultiHopLQI, BVR tree construction, Berkeley's MTree
  *                           
- *  @date   $Date: 2010/02/04 07:31:46 $
+ *  @date   $Date: 2010-06-29 22:07:49 $
  *  @see Net2-WG
  */
 
@@ -157,6 +168,16 @@ implementation {
     error_t routingTableUpdateEntry(am_addr_t, am_addr_t , uint16_t);
     error_t routingTableEvict(am_addr_t neighbor);
 
+
+
+  /* 
+     For each interval t, you set a timer to fire between t/2 and t
+     (chooseAdvertiseTime), and you wait until t (remainingInterval). Once
+     you are at t, you double the interval (decayInterval) if you haven't
+     reached the max. For reasons such as topological inconsistency, you
+     reset the timer to a small value (resetInterval).
+  */
+
     uint32_t currentInterval = minInterval;
     uint32_t t; 
     bool tHasPassed;
@@ -166,7 +187,6 @@ implementation {
        t /= 2;
        t += call Random.rand32() % t;
        tHasPassed = FALSE;
-       call BeaconTimer.stop();
        call BeaconTimer.startOneShot(t);
     }
 
@@ -198,7 +218,6 @@ implementation {
         state_is_root = 0;
         routeInfoInit(&routeInfo);
         routingTableInit();
-        my_ll_addr = call AMPacket.address();
         beaconMsg = call BeaconSend.getPayload(&beaconMsgBuffer, call BeaconSend.maxPayloadLength());
         maxLength = call BeaconSend.maxPayloadLength();
         dbg("TreeRoutingCtl","TreeRouting initialized. (used payload:%d max payload:%d!\n", 
@@ -207,6 +226,7 @@ implementation {
     }
 
     command error_t StdControl.start() {
+      my_ll_addr = call AMPacket.address();
       //start will (re)start the sending of messages
       if (!running) {
 	running = TRUE;
@@ -230,7 +250,6 @@ implementation {
             uint16_t nextInt;
             nextInt = call Random.rand16() % BEACON_INTERVAL;
             nextInt += BEACON_INTERVAL >> 1;
-            call BeaconTimer.startOneShot(nextInt);
         }
     } 
 
@@ -290,10 +309,8 @@ implementation {
                 dbg("TreeRouting", "   already parent.\n");
                 currentEtx = pathEtx;
                 /* update routeInfo with parent's current info */
-                atomic {
-                    routeInfo.etx = entry->info.etx;
-                    routeInfo.congested = entry->info.congested;
-                }
+		routeInfo.etx = entry->info.etx;
+		routeInfo.congested = entry->info.congested;
                 continue;
             }
             /* Ignore links that are congested */
@@ -341,11 +358,9 @@ implementation {
                 call LinkEstimator.pinNeighbor(best->neighbor);
                 call LinkEstimator.clearDLQ(best->neighbor);
 
-		atomic {
-                    routeInfo.parent = best->neighbor;
-                    routeInfo.etx = best->info.etx;
-                    routeInfo.congested = best->info.congested;
-                }
+		routeInfo.parent = best->neighbor;
+		routeInfo.etx = best->info.etx;
+		routeInfo.congested = best->info.congested;
 		if (currentEtx - minEtx > 20) {
 		  call CtpInfo.triggerRouteUpdate();
 		}
@@ -586,11 +601,10 @@ implementation {
     command error_t RootControl.setRoot() {
         bool route_found = FALSE;
         route_found = (routeInfo.parent == INVALID_ADDR);
-        atomic {
-            state_is_root = 1;
-            routeInfo.parent = my_ll_addr; //myself
-            routeInfo.etx = 0;
-        }
+	state_is_root = 1;
+	routeInfo.parent = my_ll_addr; //myself
+	routeInfo.etx = 0;
+
         if (route_found) 
             signal Routing.routeFound();
         dbg("TreeRouting","%s I'm a root now!\n",__FUNCTION__);
@@ -599,13 +613,12 @@ implementation {
     }
 
     command error_t RootControl.unsetRoot() {
-        atomic {
-            state_is_root = 0;
-            routeInfoInit(&routeInfo);
-        }
-        dbg("TreeRouting","%s I'm not a root now!\n",__FUNCTION__);
-        post updateRouteTask();
-        return SUCCESS;
+      state_is_root = 0;
+      routeInfoInit(&routeInfo);
+
+      dbg("TreeRouting","%s I'm not a root now!\n",__FUNCTION__);
+      post updateRouteTask();
+      return SUCCESS;
     }
 
     command bool RootControl.isRoot() {
@@ -713,27 +726,23 @@ implementation {
         else if (idx == routingTableActive) {
             //not found and there is space
             if (passLinkEtxThreshold(linkEtx)) {
-                atomic {
-                    routingTable[idx].neighbor = from;
-                    routingTable[idx].info.parent = parent;
-                    routingTable[idx].info.etx = etx;
-                    routingTable[idx].info.haveHeard = 1;
-                    routingTable[idx].info.congested = FALSE;
-                    routingTableActive++;
-                }
-                dbg("TreeRouting", "%s OK, new entry\n", __FUNCTION__);
+	      routingTable[idx].neighbor = from;
+	      routingTable[idx].info.parent = parent;
+	      routingTable[idx].info.etx = etx;
+	      routingTable[idx].info.haveHeard = 1;
+	      routingTable[idx].info.congested = FALSE;
+	      routingTableActive++;
+	      dbg("TreeRouting", "%s OK, new entry\n", __FUNCTION__);
             } else {
                 dbg("TreeRouting", "%s Fail, link quality (%hu) below threshold\n", __FUNCTION__, linkEtx);
             }
         } else {
             //found, just update
-            atomic {
-                routingTable[idx].neighbor = from;
-                routingTable[idx].info.parent = parent;
-                routingTable[idx].info.etx = etx;
-		        routingTable[idx].info.haveHeard = 1;
-            }
-            dbg("TreeRouting", "%s OK, updated entry\n", __FUNCTION__);
+	  routingTable[idx].neighbor = from;
+	  routingTable[idx].info.parent = parent;
+	  routingTable[idx].info.etx = etx;
+	  routingTable[idx].info.haveHeard = 1;
+	  dbg("TreeRouting", "%s OK, updated entry\n", __FUNCTION__);
         }
         return SUCCESS;
     }

@@ -49,4 +49,4 @@ Known bugs/limitations:
 None.
 
 
-$Id: README.txt,v 1.7 2010/01/06 18:57:20 ayer1 Exp $
+$Id: README.txt,v 1.7 2010-01-06 18:57:20 ayer1 Exp $

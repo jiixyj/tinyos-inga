@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2008/06/26 04:39:08 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-26 04:39:08 $
  */
 
 generic module Msp430UsartShareP() @safe() {

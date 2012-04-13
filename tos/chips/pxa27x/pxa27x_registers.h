@@ -1,4 +1,4 @@
-// $Id: pxa27x_registers.h,v 1.5 2008/06/11 00:46:23 razvanm Exp $ 
+// $Id: pxa27x_registers.h,v 1.5 2008-06-11 00:46:23 razvanm Exp $ 
 
 /*
  *  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.  By

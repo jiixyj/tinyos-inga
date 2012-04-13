@@ -1,4 +1,4 @@
-/* $Id: Queue.nc,v 1.5 2008/06/04 03:00:31 regehr Exp $ */
+/* $Id: Queue.nc,v 1.5 2008-06-04 03:00:31 regehr Exp $ */
 /*
  * Copyright (c) 2006 Stanford University.
  * All rights reserved.
@@ -36,7 +36,7 @@
  *
  *  @author Philip Levis
  *  @author Kyle Jamieson
- *  @date   $Date: 2008/06/04 03:00:31 $
+ *  @date   $Date: 2008-06-04 03:00:31 $
  */
 
    

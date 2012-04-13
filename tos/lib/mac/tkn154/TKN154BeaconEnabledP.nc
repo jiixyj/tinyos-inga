@@ -26,11 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * - Revision -------------------------------------------------------------
- * $Revision: 1.11 $
- * $Date: 2009/12/14 16:46:49 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
- * ========================================================================
  */
 
 #include "TKN154_PHY.h"
@@ -54,7 +50,7 @@ configuration TKN154BeaconEnabledP
     interface MLME_COMM_STATUS;
     interface MLME_DISASSOCIATE;
     interface MLME_GET;
-/*    interface MLME_GTS;*/
+    interface MLME_GTS;
     interface MLME_ORPHAN;
     interface MLME_POLL;
     interface MLME_RESET;
@@ -95,6 +91,8 @@ configuration TKN154BeaconEnabledP
     interface Alarm<TSymbolIEEE802154,uint32_t> as Alarm9;
     interface Alarm<TSymbolIEEE802154,uint32_t> as Alarm10;
     interface Alarm<TSymbolIEEE802154,uint32_t> as Alarm11;
+    interface Alarm<TSymbolIEEE802154,uint32_t> as Alarm12;
+    interface Alarm<TSymbolIEEE802154,uint32_t> as Alarm13;
 
     interface Timer<TSymbolIEEE802154> as Timer1;
     interface Timer<TSymbolIEEE802154> as Timer2;
@@ -112,8 +110,14 @@ implementation
   components DataP,
              PibP,
              RadioControlP,
+
+#ifndef IEEE154_INDIRECT_TX_DISABLED
              IndirectTxP,
              PollP,
+#else
+             NoIndirectTxP as IndirectTxP,
+             NoPollP as PollP,
+#endif
 
 #ifndef IEEE154_SCAN_DISABLED
              ScanP,
@@ -142,7 +146,6 @@ implementation
              new NoDispatchQueueP() as DeviceCapQueue,
              new NoDispatchSlottedCsmaP(INCOMING_SUPERFRAME) as DeviceCap,
 #endif
-             NoDeviceCfpP as DeviceCfp,
 
 #ifndef IEEE154_BEACON_TX_DISABLED
              BeaconTransmitP,
@@ -153,14 +156,15 @@ implementation
              new NoDispatchQueueP() as CoordCapQueue,
              new NoDispatchSlottedCsmaP(OUTGOING_SUPERFRAME) as CoordCap,
 #endif
-             NoCoordCfpP as CoordCfp,
+
+             new InactivePeriodP(INCOMING_SUPERFRAME) as DeviceInactivePeriod,
+             new InactivePeriodP(OUTGOING_SUPERFRAME) as CoordInactivePeriod,
 
 #ifndef IEEE154_RXENABLE_DISABLED
              RxEnableP,
 #else
              NoRxEnableP as RxEnableP,
 #endif
-
 
 #ifndef IEEE154_PROMISCUOUS_MODE_DISABLED
              PromiscuousModeP,
@@ -178,6 +182,22 @@ implementation
              CoordBroadcastP,
 #else
              NoCoordBroadcastP as CoordBroadcastP,
+#endif
+
+#if defined(IEEE154_GTS_COORD_ENABLED) && defined(IEEE154_GTS_DEVICE_ENABLED)
+#error "You must not define both IEEE154_GTS_COORD_ENABLED and IEEE154_GTS_DEVICE_ENABLED!"
+#endif
+
+#ifdef IEEE154_GTS_COORD_ENABLED
+             CoordCfpP as CoordCfp,
+#else
+             NoCoordCfpP as CoordCfp,
+#endif
+
+#ifdef IEEE154_GTS_DEVICE_ENABLED
+             DeviceCfpP as DeviceCfp,
+#else
+             NoDeviceCfpP as DeviceCfp,
 #endif
 
              new PoolC(ieee154_txframe_t, TXFRAME_POOL_SIZE) as TxFramePoolP,
@@ -202,7 +222,6 @@ implementation
   MLME_COMM_STATUS = CoordRealignmentP;
   MLME_GET = PibP;
   MLME_ORPHAN = CoordRealignmentP;
-  /* MLME_GTS = CfpTransmitP;*/
   MLME_POLL = PollP;
   MLME_RESET = PibP;
   MLME_RX_ENABLE = RxEnableP;
@@ -210,6 +229,13 @@ implementation
   MLME_SET = PibP;
   MLME_SYNC = BeaconSynchronizeP;
   MLME_SYNC_LOSS = BeaconSynchronizeP;
+
+#ifdef IEEE154_GTS_COORD_ENABLED
+  MLME_GTS = CoordCfp;
+#else
+  MLME_GTS = DeviceCfp;
+#endif
+
   IEEE154Frame = PibP;
   IEEE154BeaconFrame = PibP;
   PromiscuousMode = PromiscuousModeP;
@@ -218,7 +244,7 @@ implementation
   Packet = PibP; 
   TimeCalc = PibP;
   FrameUtility = PibP;
-  
+
   /* ----------------------- Scanning (MLME-SCAN) ----------------------- */
 
   components new RadioClientC(RADIO_CLIENT_SCAN) as ScanRadioClient;
@@ -239,7 +265,7 @@ implementation
   ScanP.FrameUtility -> PibP;
 
   /* ----------------- Beacon Transmission (MLME-START) ----------------- */
-  
+
   components new RadioClientC(RADIO_CLIENT_BEACONTRANSMIT) as BeaconTxRadioClient;
   PibP.MacReset -> BeaconTransmitP;
   BeaconTransmitP.PIBUpdate[IEEE154_macAssociationPermit] -> PibP.PIBUpdate[IEEE154_macAssociationPermit];
@@ -260,6 +286,7 @@ implementation
   BeaconTransmitP.GtsInfoWrite -> CoordCfp.GtsInfoWrite;
   BeaconTransmitP.PendingAddrSpecUpdated -> IndirectTxP.PendingAddrSpecUpdated;
   BeaconTransmitP.PendingAddrWrite -> IndirectTxP.PendingAddrWrite;
+  BeaconTransmitP.GtsSpecUpdated -> CoordCfp.GtsSpecUpdated;
   BeaconTransmitP.FrameUtility -> PibP.FrameUtility;
   BeaconTransmitP.IsTrackingBeacons -> BeaconSynchronizeP.IsTrackingBeacons;
   BeaconTransmitP.IncomingSF -> BeaconSynchronizeP.IncomingSF;
@@ -335,6 +362,9 @@ implementation
   DataP.TxFramePool -> TxFramePoolP;
   DataP.BroadcastTx -> CoordBroadcastP.BroadcastDataFrame;
   DataP.DeviceCfpTx -> DeviceCfp.CfpTx;
+  DataP.CoordCfpTx -> CoordCfp.CfpTx;
+  DataP.DeviceCfpRx -> DeviceCfp.FrameRx;
+  DataP.CoordCfpRx -> CoordCfp.FrameRx;
   DataP.IndirectTx -> IndirectTxP.FrameTx[unique(INDIRECT_TX_CLIENT)];
   DataP.FrameUtility -> PibP;
   DataP.Frame -> PibP;
@@ -398,7 +428,7 @@ implementation
   PibP.DispatchQueueReset -> CoordCapQueue;
   CoordCapQueue.Queue -> CoordCapQueueC;
   CoordCapQueue.FrameTxCsma -> CoordCap;
-  
+
   components new RadioClientC(RADIO_CLIENT_DEVICECAP) as DeviceCapRadioClient;
   PibP.DispatchReset -> DeviceCap;
   DeviceCap.CapEndAlarm = Alarm3;
@@ -468,6 +498,10 @@ implementation
   DeviceCfp.RadioOff -> DeviceCfpRadioClient;
   DeviceCfp.MLME_GET -> PibP;
   DeviceCfp.MLME_SET -> PibP.MLME_SET; 
+  DeviceCfp.GTSrequestTx -> DeviceCapQueue.FrameTx[unique(CAP_TX_CLIENT)];
+  DeviceCfp.TxFramePool -> TxFramePoolP;
+  DeviceCfp.TxControlPool -> TxControlPoolP;
+  DeviceCfp.FrameUtility -> PibP;
 
   /* -------------------- GTS (outgoing superframe) --------------------- */
 
@@ -482,6 +516,32 @@ implementation
   CoordCfp.RadioOff -> CoordCfpRadioClient;
   CoordCfp.MLME_GET -> PibP;
   CoordCfp.MLME_SET -> PibP.MLME_SET;
+  CoordCfp.GtsRequestRx -> CoordCap.FrameRx[FC1_FRAMETYPE_CMD + CMD_FRAME_GTS_REQUEST];
+  CoordCfp.Frame -> PibP;
+
+  /* --------------- Inactive Period (incoming superframe) -------------- */
+
+  components new RadioClientC(RADIO_CLIENT_DEVICE_INACTIVE_PERIOD) as DeviceInactivePeriodClient;
+  DeviceInactivePeriod.RadioToken -> DeviceInactivePeriodClient;
+  DeviceInactivePeriod.Alarm = Alarm12;
+  DeviceInactivePeriod.RadioControl = PhySplitControl;
+  DeviceInactivePeriod.SF -> BeaconSynchronizeP.IncomingSF;
+  DeviceInactivePeriod.IsEmbedded -> BeaconTransmitP.IsSendingBeacons;
+  DeviceInactivePeriod.RadioOff -> DeviceInactivePeriodClient;
+  DeviceInactivePeriod.MLME_GET -> PibP;
+  DeviceInactivePeriod.TimeCalc -> PibP;
+
+  /* --------------- Inactive Period (outgoing superframe) -------------- */
+
+  components new RadioClientC(RADIO_CLIENT_COORD_INACTIVE_PERIOD) as CoordInactivePeriodClient;
+  CoordInactivePeriod.RadioToken -> CoordInactivePeriodClient;
+  CoordInactivePeriod.Alarm = Alarm13;
+  CoordInactivePeriod.RadioControl = PhySplitControl;
+  CoordInactivePeriod.SF -> BeaconTransmitP.OutgoingSF;
+  CoordInactivePeriod.IsEmbedded -> BeaconSynchronizeP.IsTrackingBeacons;
+  CoordInactivePeriod.RadioOff -> CoordInactivePeriodClient;
+  CoordInactivePeriod.MLME_GET -> PibP;
+  CoordInactivePeriod.TimeCalc -> PibP;
 
   /* -------------------------- promiscuous mode ------------------------ */
 
@@ -524,4 +584,5 @@ implementation
   RadioControlP.PhyRadioOff = RadioOff;
   RadioControlP.RadioPromiscuousMode -> PromiscuousModeP;
   RadioControlP.Leds = Leds;
+
 }

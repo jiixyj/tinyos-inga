@@ -35,7 +35,7 @@
  * @author Roman Lim
  * @author Razvan Musaloie-E.
  * @author Jeonggil Ko
- * @version $Revision: 1.4 $ $Date: 2008/06/23 20:25:15 $
+ * @version $Revision: 1.4 $ $Date: 2008-06-23 20:25:15 $
  */
 
 module CC2420SpiP @safe() {
@@ -175,7 +175,7 @@ implementation {
     return SUCCESS;
   }
   
-  async command uint8_t Resource.isOwner[ uint8_t id ]() {
+  async command bool Resource.isOwner[ uint8_t id ]() {
     atomic return (m_holder == id);
   }
 

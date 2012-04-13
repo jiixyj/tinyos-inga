@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:11 $
+ * @version $Revision: 1.4 $ $Date: 2006-12-12 18:23:11 $
  */
 
 #include <I2C.h>
@@ -75,7 +75,7 @@ implementation {
     return call UsartResource.request[ id ]();
   }
   
-  async command uint8_t Resource.isOwner[ uint8_t id ]() {
+  async command bool Resource.isOwner[ uint8_t id ]() {
     return call UsartResource.isOwner[ id ]();
   }
   
@@ -221,6 +221,6 @@ implementation {
       signal I2CBasicAddr.readDone( error, I2CSA, m_len, m_buf );
   }
   
-  default async command error_t UsartResource.isOwner[ uint8_t id ]() { return FAIL; }
+ default async command bool UsartResource.isOwner[ uint8_t id ]() { return FALSE; }
 
 }

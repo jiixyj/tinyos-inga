@@ -1,4 +1,4 @@
-/* $Id: MagConfigP.nc,v 1.4 2008/06/11 00:42:14 razvanm Exp $
+/* $Id: MagConfigP.nc,v 1.4 2008-06-11 00:42:14 razvanm Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

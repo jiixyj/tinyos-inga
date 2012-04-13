@@ -1,4 +1,4 @@
-/* $Id: NoInitC.nc,v 1.5 2008/06/26 04:39:15 regehr Exp $
+/* $Id: NoInitC.nc,v 1.5 2008-06-26 04:39:15 regehr Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

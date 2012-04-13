@@ -37,7 +37,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
- * @version $Revision: 1.3 $ $Date: 2009/03/04 18:31:04 $
+ * @version $Revision: 1.3 $ $Date: 2009-03-04 18:31:04 $
  */
 
 interface CC2420Power {

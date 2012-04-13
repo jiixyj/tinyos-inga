@@ -1,24 +1,35 @@
-// $Id: MicSetting.nc,v 1.2 2008/06/11 00:46:27 razvanm Exp $
+// $Id: MicSetting.nc,v 1.1 2010-07-21 13:23:51 zkincses Exp $
 
 /*
- * "Copyright (c) 2000-2003 The Regents of the University  of California.  
+ * Copyright (c) 2000-2003 The Regents of the University  of California.  
  * All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written agreement is
- * hereby granted, provided that the above copyright notice, the following
- * two paragraphs and the author appear in all copies of this software.
- * 
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
- * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
- * CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
- * ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
- * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the University of California nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Copyright (c) 2002-2003 Intel Corporation
  * All rights reserved.
@@ -48,7 +59,6 @@
  * If an audio signal at 4.3kHz is picked up by the microphone, the tone
  * detect will decode it and generate a binary ouput (0 meaning tone is detected, 1 meaning
  * tone is not detected).  Users can read this output simply by calling readToneDetector().
- *
  */
 
 /**
@@ -60,15 +70,27 @@ interface MicSetting {
    * Return:  returns SUCCESS or FAIL
    */
   command error_t muxSel(uint8_t sel);
+
   /* Effect:  Set the amplificatoin gain  on the microphone
    * Return:  returns SUCCESS or FAIL
    */
   command error_t gainAdjust(uint8_t val);
 
+   /* Effect:  Power on the microphone
+   * Return:  returns SUCCESS or FAIL
+   */
+  command error_t startMic();
+
+   /* Effect:  Power off the microphone
+   * Return:  returns SUCCESS or FAIL
+   */
+  command error_t stopMic();
+
   /* Effect:  returns the binary tone detector's output
    * Return:  0 meaning tone is detected, 1 meanning tone is not detected
    */
   command uint8_t readToneDetector();
+
   /* Effects: disable interrupts
      Returns: SUCCESS
   */

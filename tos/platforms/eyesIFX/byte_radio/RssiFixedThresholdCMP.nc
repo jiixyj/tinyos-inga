@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.6 $
- * $Date: 2008/08/14 13:14:09 $
+ * $Date: 2008-08-14 13:14:09 $
  * @author: Kevin Klues (klues@tkn.tu-berlin.de)
  * @author: Philipp Huppertz (huppertz@tkn.tu-berlin.de)
  * @author: Andreas Koepke (koepke@tkn.tu-berlin.de)

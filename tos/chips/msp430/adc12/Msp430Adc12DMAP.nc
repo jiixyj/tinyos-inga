@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.5 $
- * $Date: 2008/06/23 20:25:15 $
+ * $Date: 2008-06-23 20:25:15 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -89,10 +89,10 @@ implementation
       call DMAControl.init();
       call DMAControl.setFlags(ENABLE_NMI, NOT_ROUND_ROBIN, ON_FETCH);
       call DMAChannel.setupTransfer(
-        DMA_REPEATED_SINGLE_TRANSFER, 
+        DMA_SINGLE_TRANSFER, 
         DMA_TRIGGER_ADC12IFGx,
         DMA_EDGE_SENSITIVE,
-        ADC12MEM,
+        (void*) ADC12MEM_,
         buf,
         length,
         DMA_WORD,
@@ -127,7 +127,7 @@ implementation
   async command error_t SingleChannel.getData[uint8_t id]()
   {
     if (mode == MULTIPLE_SINGLE_AGAIN)
-      call DMAChannel.repeatTransfer(ADC12MEM, buffer, numSamples);
+      call DMAChannel.repeatTransfer((void*) ADC12MEM_, buffer, numSamples);
     return call SubSingleChannel.getData[id]();
   }
   
@@ -145,19 +145,21 @@ implementation
   
   async event void DMAChannel.transferDone(error_t success)
   {
-    uint16_t* next;
     uint8_t oldMode = mode;
+    uint16_t *new_buffer;
+
     if (oldMode != MULTIPLE_REPEAT){
       call AsyncAdcControl.stop[client]();
       mode = MULTIPLE_SINGLE_AGAIN;
     }
-    next = signal SingleChannel.multipleDataReady[client](buffer, numSamples);
-    if (oldMode == MULTIPLE_REPEAT)
-      if (next){
-        call DMAChannel.repeatTransfer(ADC12MEM, next, numSamples);
-        call AsyncAdcControl.start[client]();
+    new_buffer = signal SingleChannel.multipleDataReady[client](buffer, numSamples);
+    if (oldMode == MULTIPLE_REPEAT) {
+      if (new_buffer) {
+        buffer = new_buffer;
+        call DMAChannel.repeatTransfer((void*) ADC12MEM_, buffer, numSamples);
       } else
         call AsyncAdcControl.stop[client]();
+    }
   }
 
   default async command error_t SubSingleChannel.configureSingle[uint8_t id](

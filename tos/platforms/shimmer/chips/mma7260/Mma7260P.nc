@@ -34,12 +34,12 @@
  * ported to TOS 2
  */
 
-#include "Mma7260.h"
+#include "Mma_Accel.h"
 
 module Mma7260P 
 {
     provides interface Init;
-    provides interface Mma7260;
+    provides interface Mma_Accel as Accel;
 }
 implementation 
 {
@@ -59,13 +59,13 @@ implementation
         TOSH_SEL_ADC_ACCELX_MODFUNC();
 
         // by default wake up accelerometer
-        call Mma7260.wake(TRUE);
+        call Accel.wake(TRUE);
 
         return SUCCESS;
     }
 
     
-    command void Mma7260.wake(bool wakeup) 
+    command void Accel.wake(bool wakeup) 
     {
         if(wakeup)
             TOSH_SET_ACCEL_SLEEP_N_PIN();    // wakes up accel board
@@ -73,7 +73,7 @@ implementation
             TOSH_CLR_ACCEL_SLEEP_N_PIN();    // puts accel board to sleep
     }
 
-    command void Mma7260.setSensitivity(enum MMA7260_RANGE sensitivity) 
+    command void Accel.setSensitivity(uint8_t sensitivity) 
     {
         switch(sensitivity) {
         case RANGE_1_5G:

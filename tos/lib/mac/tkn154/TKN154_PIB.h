@@ -27,7 +27,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * - Revision -------------------------------------------------------------
- * $Date: 2009/03/04 18:31:37 $
+ * $Date: 2009-03-04 18:31:37 $
  * @author Torsten Halbhuebner <hhuebner@tkn.tu-berlin.de>
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
@@ -225,6 +225,9 @@ typedef struct ieee154_PIB {
 #endif
 #ifndef IEEE154_DEFAULT_TRANSACTIONPERSISTENCETIME  
   #define IEEE154_DEFAULT_TRANSACTIONPERSISTENCETIME  0x01F4
+#endif
+#ifndef IEEE154_DEFAULT_MACPANCOORDINATOR  
+  #define IEEE154_DEFAULT_MACPANCOORDINATOR  FALSE
 #endif
 
 #define IEEE154_INVALID_TIMESTAMP (0xffffffff)

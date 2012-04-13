@@ -8,11 +8,10 @@ MultihopOscilloscopeLqi, works only on platforms that have the CC2420.
 Rather than use CTP, it uses MultihopLqi (lib/net/lqi), which is 
 much lighter weight but not quite as efficient or reliable. 
 
-The application periodically samples
-the default sensor and broadcasts a message every few readings. These readings
-can be displayed by the Java "Oscilloscope" application found in the
-TOSROOT/apps/Oscilloscope/java subdirectory. The sampling rate starts at 4Hz,
-but can be changed from the Java application.
+The application periodically samples the default sensor and broadcasts a
+message every few readings. These readings can be displayed by the Java
+"Oscilloscope" application found in the ./java subdirectory. The sampling rate
+starts at 1Hz, but can be changed from the Java application.
 
 You can compile MultihopOscilloscope with a sensor board's default sensor by
 compiling as follows:
@@ -25,12 +24,12 @@ Tools:
 
 The Java application displays readings it receives from motes running the
 MultihopOscilloscope demo via a serial forwarder. To run it, change to the
-TOSROOT/apps/Oscilloscope/java subdirectory and type:
+./java subdirectory and type:
 
   make
   java net.tinyos.sf.SerialForwarder -comm serial@<serial port>:<mote>
-  # e.g., java net.tinyps.sf.SerialForwarder -comm serial@/dev/ttyUSB0:mica2
-  # or java net.tinyps.sf.SerialForwarder -comm serial@COM2:telosb
+  # e.g., java net.tinyos.sf.SerialForwarder -comm serial@/dev/ttyUSB0:mica2
+  # or java net.tinyos.sf.SerialForwarder -comm serial@COM2:telosb
   ./run
 
 The controls at the bottom of the screen allow you to zoom in or out the X

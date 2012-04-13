@@ -23,4 +23,4 @@ Known bugs/limitations:
 
 None.
 
-$Id: README.txt,v 1.3 2008/06/25 01:29:44 konradlorincz Exp $
+$Id: README.txt,v 1.3 2008-06-25 01:29:44 konradlorincz Exp $

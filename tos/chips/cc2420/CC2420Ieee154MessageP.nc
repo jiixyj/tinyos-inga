@@ -1,52 +1,71 @@
 /*
- * "Copyright (c) 2008 The Regents of the University  of California.
+ * Copyright (c) 2008 The Regents of the University  of California.
  * All rights reserved."
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written agreement is
- * hereby granted, provided that the above copyright notice, the following
- * two paragraphs and the author appear in all copies of this software.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
  *
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
- * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
- * CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the copyright holders nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
  *
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
- * ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
- * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 /*									tab:4
- * "Copyright (c) 2005 Stanford University. All rights reserved.
+ * Copyright (c) 2005 Stanford University. All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and
- * its documentation for any purpose, without fee, and without written
- * agreement is hereby granted, provided that the above copyright
- * notice, the following two paragraphs and the author appear in all
- * copies of this software.
- * 
- * IN NO EVENT SHALL STANFORD UNIVERSITY BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN
- * IF STANFORD UNIVERSITY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.
- * 
- * STANFORD UNIVERSITY SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE
- * PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND STANFORD UNIVERSITY
- * HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
- * ENHANCEMENTS, OR MODIFICATIONS."
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the copyright holder nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 
 /**
  *
  * @author Stephen Dawson-Haggerty
- * @version $Revision: 1.2 $ $Date: 2009/09/17 23:36:36 $
+ * @version $Revision: 1.3 $ $Date: 2010-06-29 22:07:44 $
  */
  
 #include "CC2420.h"
@@ -56,30 +75,73 @@ module CC2420Ieee154MessageP {
 
   provides {
     interface Ieee154Send;
+    interface Receive as Ieee154Receive;
     interface Ieee154Packet;
     interface Packet;
   }
   
   uses {
     interface Send as SubSend;
+    interface Receive as SubReceive;
     interface CC2420Packet;
     interface CC2420PacketBody;
     interface CC2420Config;
+#ifdef CC2420_IEEE154_RESOURCE_SEND
+    interface Resource;
+#endif
   }
 }
 implementation {
+  message_t *m_pending_msg;
+  enum {
+    EXTRA_OVERHEAD = sizeof(cc2420_header_t) - offsetof(cc2420_header_t, network),
+  };
 
   /***************** Ieee154Send Commands ****************/
   command error_t Ieee154Send.send(ieee154_saddr_t addr,
                                    message_t* msg,
                                    uint8_t len) {
     cc2420_header_t* header = call CC2420PacketBody.getHeader( msg );
+
+    header->length = len + CC2420_SIZE - EXTRA_OVERHEAD;
     header->dest = addr;
     header->destpan = call CC2420Config.getPanAddr();
     header->src = call CC2420Config.getShortAddr();
+    header->fcf = ( 1 << IEEE154_FCF_INTRAPAN ) |
+      ( IEEE154_ADDR_SHORT << IEEE154_FCF_DEST_ADDR_MODE ) |
+      ( IEEE154_ADDR_SHORT << IEEE154_FCF_SRC_ADDR_MODE ) ;
 
-    return call SubSend.send( msg, len );
+#ifdef CC2420_IEEE154_RESOURCE_SEND
+    if (call Resource.isOwner())
+      return EBUSY;
+
+    if (call Resource.immediateRequest() == SUCCESS) {
+      error_t rc;
+      rc = call SubSend.send( msg, header->length - 1 );
+      if (rc != SUCCESS) {
+        call Resource.release();
+      }
+      return rc;
+    } else {
+      m_pending_msg = msg;
+      return call Resource.request();
+    }
+#else
+    return call SubSend.send( msg, header->length - 1 );
+#endif
   }
+
+#ifdef CC2420_IEEE154_RESOURCE_SEND
+  event void Resource.granted() {
+    error_t rc;
+    cc2420_header_t* header = call CC2420PacketBody.getHeader( m_pending_msg );
+    rc = call SubSend.send(m_pending_msg, header->length - 1);
+    if (rc != SUCCESS) {
+      call Resource.release();
+      signal Ieee154Send.sendDone(m_pending_msg, rc);
+    }
+  }
+#endif
 
   command error_t Ieee154Send.cancel(message_t* msg) {
     return call SubSend.cancel(msg);
@@ -91,6 +153,12 @@ implementation {
 
   command void* Ieee154Send.getPayload(message_t* m, uint8_t len) {
     return call Packet.getPayload(m, len);
+  }
+
+  event message_t *SubReceive.receive(message_t *msg, void *payload, uint8_t len) {
+    return signal Ieee154Receive.receive(msg,
+                                         call Packet.getPayload(msg, 0),
+                                         call Packet.payloadLength(msg));
   }
 
   /***************** Ieee154Packet Commands ****************/
@@ -139,29 +207,32 @@ implementation {
 
   /***************** Packet Commands ****************/
   command void Packet.clear(message_t* msg) {
-    memset(call CC2420PacketBody.getHeader(msg), sizeof(cc2420_header_t) - AM_OVERHEAD, 0);
+    memset(call CC2420PacketBody.getHeader(msg), sizeof(cc2420_header_t) - EXTRA_OVERHEAD, 0);
     memset(call CC2420PacketBody.getMetadata(msg), sizeof(cc2420_metadata_t), 0);
   }
   
   command uint8_t Packet.payloadLength(message_t* msg) {
-    return (call CC2420PacketBody.getHeader(msg))->length - CC2420_SIZE + AM_OVERHEAD;
+    return (call CC2420PacketBody.getHeader(msg))->length - CC2420_SIZE + EXTRA_OVERHEAD;
   }
   
   command void Packet.setPayloadLength(message_t* msg, uint8_t len) {
-    (call CC2420PacketBody.getHeader(msg))->length  = len + CC2420_SIZE - AM_OVERHEAD;
+    (call CC2420PacketBody.getHeader(msg))->length  = len + CC2420_SIZE - EXTRA_OVERHEAD;
   }
   
   command uint8_t Packet.maxPayloadLength() {
-    return TOSH_DATA_LENGTH + AM_OVERHEAD;
+    return TOSH_DATA_LENGTH + EXTRA_OVERHEAD;
   }
   
   command void* Packet.getPayload(message_t* msg, uint8_t len) {
-        return call SubSend.getPayload( msg, len );
+    return msg->data - EXTRA_OVERHEAD;
   }
 
   
   /***************** SubSend Events ****************/
   event void SubSend.sendDone(message_t* msg, error_t result) {
+#ifdef CC2420_IEEE154_RESOURCE_SEND
+    call Resource.release();
+#endif
     signal Ieee154Send.sendDone(msg, result);
   }
 

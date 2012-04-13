@@ -120,6 +120,8 @@ implementation {
    * the device is docked.
    */
   void powerCycle() {
+    register uint8_t i;
+
     // wait until the tx buf is clear before killing the card
     CS_HIGH();
 
@@ -139,7 +141,8 @@ implementation {
     TOSH_CLR_SD_DO_PIN();
     TOSH_CLR_SD_CLK_PIN();
 
-    TOSH_uwait(60000);  
+    for(i = 0; i < 10; i++)
+      TOSH_uwait(6000);  
 
     TOSH_SET_SD_CS_N_PIN();             
     TOSH_CLR_SW_SD_PWR_N_PIN();    
@@ -188,6 +191,8 @@ implementation {
 
   async event void DockInterrupt.fired() {
     if (call DockInterrupt.getValue() == TRUE){      // off the dock
+      powerCycle();
+
       cardInit();
 
       call DockInterrupt.edge(FALSE);
@@ -213,10 +218,16 @@ implementation {
 
     /*
      * set the clock to 115200 for sd init, default is smclk / 2
-     * cardInit raises speed back to 512k at end of init routine
+     * cardInit raises speed back to smclk / 2 at end of init routine
      */
+
+#ifndef SMCLK_4MHZ
     call Usart.setUbr(UBR_1MHZ_115200);
     call Usart.setUmctl(UMCTL_1MHZ_115200);
+#else
+    call Usart.setUbr(0x0024);
+    call Usart.setUmctl(0x0029);
+#endif
 
     call Usart.enableRxIntr();
 

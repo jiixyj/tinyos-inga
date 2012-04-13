@@ -34,7 +34,7 @@
  * serial code flash.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2007/02/04 19:55:17 $
+ * @version $Revision: 1.5 $ $Date: 2007-02-04 19:55:17 $
  */
 
 configuration Stm25pSectorC {

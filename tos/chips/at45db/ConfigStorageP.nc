@@ -1,4 +1,4 @@
-// $Id: ConfigStorageP.nc,v 1.7 2008/06/23 20:25:15 regehr Exp $
+// $Id: ConfigStorageP.nc,v 1.7 2008-06-23 20:25:15 regehr Exp $
 
 /*
  * Copyright (c) 2002-2006 Intel Corporation

@@ -28,18 +28,12 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.3 $
- * $Date: 2009/04/17 14:47:09 $
+ * $Date: 2009-04-17 14:47:09 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
 
 #include "printf.h"
-#include <stdio.h>
-#ifdef __STDC__
-#include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
 #if defined(PLATFORM_TELOSB)
 #include <UserButton.h>
 #endif

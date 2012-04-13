@@ -1,4 +1,4 @@
-// $Id: TestLplC.nc,v 1.2 2009/10/21 19:11:51 razvanm Exp $
+// $Id: TestLplC.nc,v 1.2 2009-10-21 19:11:51 razvanm Exp $
 
 /*									tab:4
  * "Copyright (c) 2000-2005 The Regents of the University  of California.  

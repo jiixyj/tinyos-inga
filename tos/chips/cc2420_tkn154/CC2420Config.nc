@@ -39,7 +39,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Jan Hauer <hauer@tkn.tu-berlin.de> (added some commands)
- * @version $Revision: 1.1 $ $Date: 2008/06/16 18:02:40 $
+ * @version $Revision: 1.1 $ $Date: 2008-06-16 18:02:40 $
  */
 
 interface CC2420Config {

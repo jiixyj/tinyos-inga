@@ -43,7 +43,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author David Gay
- * @version $Revision: 1.5 $ $Date: 2008/06/04 03:00:25 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-04 03:00:25 $
  */
 
 #include "Storage.h"

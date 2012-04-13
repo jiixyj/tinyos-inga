@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archedrock.com>
- * @version $Revision: 1.5 $ $Date: 2008/06/04 03:00:35 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-04 03:00:35 $
  */
 
 interface UartStream {

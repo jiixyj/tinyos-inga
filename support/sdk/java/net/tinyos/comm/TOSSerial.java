@@ -1,23 +1,34 @@
-//$Id: TOSSerial.java,v 1.6 2007/05/24 19:55:12 rincon Exp $
+//$Id: TOSSerial.java,v 1.7 2010-06-29 22:07:41 scipio Exp $
 
-/* "Copyright (c) 2000-2003 The Regents of the University of California.  
+/* Copyright (c) 2000-2003 The Regents of the University of California.  
  * All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written agreement
- * is hereby granted, provided that the above copyright notice, the following
- * two paragraphs and the author appear in all copies of this software.
- * 
- * IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
- * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY
- * OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
- * ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
- * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the copyright holder nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 //@author Cory Sharp <cssharp@eecs.berkeley.edu>
@@ -36,15 +47,12 @@ public class TOSSerial extends NativeSerial implements SerialPort {
   class EventDispatcher extends Thread {
     private boolean m_run;
 
-    private boolean busy;
-
     /**
      * Constructor
      * 
      */
     public EventDispatcher() {
-      busy = false;
-      m_run = true;
+      m_run = false;
     }
 
     /**
@@ -52,10 +60,9 @@ public class TOSSerial extends NativeSerial implements SerialPort {
      * 
      */
     public void open() {
-      synchronized (this) {
-        m_run = true;
-        this.notify();
-      }
+      m_run = true;
+      if( ! this.isAlive() )
+        this.start();
     }
 
     /**
@@ -91,17 +98,17 @@ public class TOSSerial extends NativeSerial implements SerialPort {
     public void close() {
       m_run = false;
       
-      synchronized (this) {
-        while (busy) {
-          write(0x7E);
-          cancelWait();
-          try {
+      while (this.isAlive()) {
+        write(0x7E);
+        cancelWait();
+        try {
+          synchronized(this) {
             // Wait for the waitForEvent() done event, if it doesn't work after
-            // 500 ms, then we try generating that OUTPUT_EMPTY event again.
-            wait(500);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
+            // 100 ms, then we try generating that OUTPUT_EMPTY event again.
+            wait(100);
           }
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
       }
     }
@@ -123,30 +130,18 @@ public class TOSSerial extends NativeSerial implements SerialPort {
     }
 
     public void run() {
-      while (true) {
-
-        synchronized (this) {
-          while (!m_run) {
-            try {
-              busy = false;
-              synchronized (this) {
-                this.notify();
-              }
-              this.wait();
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-          }
-        }
-
-        busy = true;
+      while (m_run) {
         if (waitForEvent()) {
           dispatch_event(SerialPortEvent.DATA_AVAILABLE);
           dispatch_event(SerialPortEvent.OUTPUT_EMPTY);
         }
       }
-    }
 
+      // wake up the closing thread 
+      synchronized(this) {
+        this.notify();
+      }
+    }
   }
 
   /**
@@ -283,7 +278,7 @@ public class TOSSerial extends NativeSerial implements SerialPort {
     m_in = new SerialInputStream();
     m_out = new SerialOutputStream();
     m_dispatch = new EventDispatcher();
-    m_dispatch.start();
+    m_dispatch.open();
   }
 
   /**

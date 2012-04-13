@@ -1,4 +1,4 @@
-// $Id: TossimPacket.nc,v 1.1 2007/09/04 17:19:23 scipio Exp $
+// $Id: TossimPacket.nc,v 1.1 2007-09-04 17:19:23 scipio Exp $
 /*
  * Copyright (c) 2007 Stanford University.
  * All rights reserved.

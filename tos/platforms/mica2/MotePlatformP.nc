@@ -1,4 +1,4 @@
-/* $Id: MotePlatformP.nc,v 1.5 2008/06/26 04:39:08 regehr Exp $
+/* $Id: MotePlatformP.nc,v 1.5 2008-06-26 04:39:08 regehr Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

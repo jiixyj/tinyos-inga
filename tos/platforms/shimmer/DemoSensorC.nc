@@ -42,7 +42,7 @@
  * by 4096 and multiply by 3.
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2008/05/21 22:07:24 $
+ * @version $Revision: 1.1 $ $Date: 2008-05-21 22:07:24 $
  * 
  */
 

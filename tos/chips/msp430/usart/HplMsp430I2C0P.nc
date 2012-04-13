@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2008/06/24 05:32:31 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-24 05:32:31 $
  */
 
 module HplMsp430I2C0P @safe() {
@@ -81,6 +81,11 @@ implementation {
       U0CTL &= ~I2CEN;
       
       U0CTL = (config->i2cRegisters.uctl | (I2C | SYNC)) & ~I2CEN;
+      
+      I2CTCTL = 0x01;  // resetting I2CTCTL first,
+                       // before configuring it,
+                       // for some reason causes the I2C module to
+                       // work after SPI has been used (Issue 14)           
       I2CTCTL = config->i2cRegisters.i2ctctl;
             
       I2CPSC = config->i2cRegisters.i2cpsc;

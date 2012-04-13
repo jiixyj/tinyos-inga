@@ -33,7 +33,7 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 
-  $Id: avr_stdio.h,v 1.2 2008/07/21 23:14:04 sallai Exp $
+  $Id: avr_stdio.h,v 1.2 2008-07-21 23:14:04 sallai Exp $
 */
 
 #ifndef _STDIO_H_

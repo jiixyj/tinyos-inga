@@ -38,5 +38,5 @@ Known bugs/limitations:
 
 - The timestamps for ACKs are incorrect
 
-$Id: README.txt,v 1.2 2010/01/05 17:12:56 janhauer Exp $
+$Id: README.txt,v 1.2 2010-01-05 17:12:56 janhauer Exp $
 

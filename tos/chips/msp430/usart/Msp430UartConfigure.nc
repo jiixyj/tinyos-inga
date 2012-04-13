@@ -30,7 +30,7 @@
 /**
  * Interface used by Msp430Uart clients to reconfigure the UART before use
  * @author Vlado Handziski <handzisk@tkn.tu-berlin.de>
- * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:11 $
+ * @version $Revision: 1.4 $ $Date: 2006-12-12 18:23:11 $
  */
 
 #include "msp430usart.h"

@@ -64,7 +64,7 @@
 /**
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Henri Dubois-Ferriere
- * @version $Revision: 1.5 $ $Date: 2007/07/13 15:54:08 $
+ * @version $Revision: 1.5 $ $Date: 2007-07-13 15:54:08 $
  */
 
 module XE1205SpiImplP {
@@ -165,7 +165,7 @@ implementation {
 	}
     }
   
-    async command uint8_t Resource.isOwner[ uint8_t id ]() {
+    async command bool Resource.isOwner[ uint8_t id ]() {
 	atomic return (m_holder == id);
     }
 

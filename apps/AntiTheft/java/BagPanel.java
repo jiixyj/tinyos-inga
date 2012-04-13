@@ -1,4 +1,4 @@
-// $Id: BagPanel.java,v 1.2 2007/04/04 22:29:29 idgay Exp $
+// $Id: BagPanel.java,v 1.2 2007-04-04 22:29:29 idgay Exp $
 
 /*									tab:4
  * Copyright (c) 2007 Intel Corporation

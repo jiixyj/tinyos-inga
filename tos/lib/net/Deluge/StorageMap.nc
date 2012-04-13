@@ -33,7 +33,7 @@
  * An abstraction to map volume addresses to physical addresses.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2008/01/25 00:50:15 $
+ * @version $Revision: 1.1 $ $Date: 2008-01-25 00:50:15 $
  */
 
 interface StorageMap {

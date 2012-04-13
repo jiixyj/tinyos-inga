@@ -1,26 +1,34 @@
-/* $Id: LinkEstimatorP.nc,v 1.17 2010/02/04 07:36:52 gnawali Exp $ */
+/* $Id: LinkEstimatorP.nc,v 1.19 2010-06-29 22:07:47 scipio Exp $ */
 /*
- * "Copyright (c) 2006 University of Southern California.
+ * Copyright (c) 2006 University of Southern California.
  * All rights reserved.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose, without fee, and without written
- * agreement is hereby granted, provided that the above copyright
- * notice, the following two paragraphs and the author appear in all
- * copies of this software.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
  *
- * IN NO EVENT SHALL THE UNIVERSITY OF SOUTHERN CALIFORNIA BE LIABLE TO
- * ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
- * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS
- * DOCUMENTATION, EVEN IF THE UNIVERSITY OF SOUTHERN CALIFORNIA HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the
+ *   distribution.
+ * - Neither the name of the copyright holders nor the names of
+ *   its contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
  *
- * THE UNIVERSITY OF SOUTHERN CALIFORNIA SPECIFICALLY DISCLAIMS ANY
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE
- * PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
- * SOUTHERN CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE,
- * SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
@@ -325,19 +333,20 @@ implementation {
       if (ne->ll_addr == n) {
 	if (ne->flags & VALID_ENTRY) {
 	  dbg("LI", "Making link: %d mature\n", i);
-	  ne->flags |= MATURE_ENTRY;
 	  totalPkt = ne->rcvcnt + ne->failcnt;
-	  dbg("LI", "MinPkt: %d, totalPkt: %d\n", minPkt, totalPkt);
-	  if (totalPkt < minPkt) {
-	    totalPkt = minPkt;
-	  }
-	  if (totalPkt == 0) {
-	    ne->inquality = (ALPHA * ne->inquality) / 10;
-	  } else {
+
+	  if (!(ne->flags & MATURE_ENTRY)) {
 	    newEst = (250UL * ne->rcvcnt) / totalPkt;
-	    dbg("LI,LITest", "  %hu: %hhu -> %hhu", ne->ll_addr, ne->inquality, (ALPHA * ne->inquality + (10-ALPHA) * newEst)/10);
-	    ne->inquality = (ALPHA * ne->inquality + (10-ALPHA) * newEst)/10;
+	    ne->inquality = newEst;
+	    ne->etx =
+	      computeETX(ne->inquality);
 	  }
+
+	  ne->flags |= MATURE_ENTRY;
+	  dbg("LI", "MinPkt: %d, totalPkt: %d\n", minPkt, totalPkt);
+	  newEst = (250UL * ne->rcvcnt) / totalPkt;
+	  dbg("LI,LITest", "  %hu: %hhu -> %hhu", ne->ll_addr, ne->inquality, (ALPHA * ne->inquality + (10-ALPHA) * newEst)/10);
+	  ne->inquality = (ALPHA * ne->inquality + (10-ALPHA) * newEst)/10;
 	  ne->rcvcnt = 0;
 	  ne->failcnt = 0;
 	  updateETX(ne, computeETX(ne->inquality));
@@ -357,7 +366,6 @@ implementation {
 
     if (NeighborTable[idx].flags & INIT_ENTRY) {
       dbg("LI", "Init entry update\n");
-      NeighborTable[idx].lastseq = seq;
       NeighborTable[idx].flags &= ~INIT_ENTRY;
     }
     
@@ -370,19 +378,15 @@ implementation {
       NeighborTable[idx].failcnt += packetGap - 1;
     }
 
-    // The or with packetGap >= BLQ_PKT_WINDOW is needed in case
-    // failcnt gets reset above
-
-    if (((NeighborTable[idx].rcvcnt + NeighborTable[idx].failcnt) >= BLQ_PKT_WINDOW)
-	|| (packetGap >= BLQ_PKT_WINDOW)) {
-      updateNeighborTableEst(NeighborTable[idx].ll_addr);
-    }
-
     if (packetGap > MAX_PKT_GAP) {
       initNeighborIdx(idx, NeighborTable[idx].ll_addr);
       NeighborTable[idx].lastseq = seq;
       NeighborTable[idx].rcvcnt = 1;
+    } else if (((NeighborTable[idx].rcvcnt + NeighborTable[idx].failcnt) >= BLQ_PKT_WINDOW)
+	       || (packetGap >= BLQ_PKT_WINDOW)) {
+      updateNeighborTableEst(NeighborTable[idx].ll_addr);
     }
+
   }
 
 
@@ -624,6 +628,7 @@ implementation {
 	if (nidx != INVALID_RVAL) {
 	  dbg("LI", "Found an empty entry\n");
 	  initNeighborIdx(nidx, ll_addr);
+	  NeighborTable[nidx].lastseq = hdr->seq;
 	  updateNeighborEntryIdx(nidx, hdr->seq);
 	} else {
 	  nidx = findWorstNeighborIdx(EVICT_ETX_THRESHOLD);

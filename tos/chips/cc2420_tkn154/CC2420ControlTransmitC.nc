@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.4 $
- * $Date: 2009/03/04 18:31:04 $
+ * $Date: 2009-03-04 18:31:04 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -39,7 +39,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Jan-Hinrich Hauer
- * @version $Revision: 1.4 $ $Date: 2009/03/04 18:31:04 $
+ * @version $Revision: 1.4 $ $Date: 2009-03-04 18:31:04 $
  */
 
 #include "CC2420.h"
@@ -63,7 +63,6 @@ configuration CC2420ControlTransmitC {
     // CC2420TransmitC
     interface Alarm<T62500hz,uint32_t> as AckAlarm;
     interface CaptureTime;
-    interface ReferenceTime;
   }
 }
 
@@ -116,7 +115,6 @@ implementation {
   CC2420Tx = CC2420TransmitP;
   AckAlarm = CC2420TransmitP;
   CaptureTime = CC2420TransmitP;
-  ReferenceTime = CC2420TransmitP;
 
   MainC.SoftwareInit -> CC2420TransmitP;
   CC2420TransmitP.CCA -> Pins.CCA;

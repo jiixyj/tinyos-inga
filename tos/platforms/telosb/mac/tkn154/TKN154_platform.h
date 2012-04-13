@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.4 $
- * $Date: 2009/03/26 17:50:44 $
+ * $Date: 2009-03-26 17:50:44 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -52,12 +52,23 @@ enum {
   IEEE154_RADIO_RX_DELAY = 400,
 
   // defines at what time the MAC payload for a beacon frame is assembled before
-  // the next scheduled beacon transmission time; the value must be smaller than 
+  // the next scheduled beacon transmission time; the value must be smaller than
   // the beacon interval plus the time for preparing the Tx operation
   BEACON_PAYLOAD_UPDATE_INTERVAL = 2500, 
 };
 
-typedef uint32_t ieee154_timestamp_t;
+// Defines the time to power the CC2420 radio from "Power Down" mode to "Idle"
+// mode. The actual start up time of the oscillator is 860 us (with default
+// capacitor, see CC2420 datasheet), but our constant must also include
+// software latency (task posting, etc.) + shutting the radio down
+// -> we keep it conservative, otherwise we may lose beacons
+// NOTE: if this constant is not defined, the radio will never be powered down
+// during inactive period, but always stay in idle (which consumes more energy).
+#ifndef IEEE154_INACTIVE_PERIOD_POWERDOWN_DISABLED
+  #ifndef IEEE154_RADIO_POWERUP_TIME
+  #define IEEE154_RADIO_POWERUP_TIME 200
+  #endif
+#endif
 
 #endif
 

@@ -1,3 +1,3 @@
 
-SUBDIRS = lib6lowpan driver
+SUBDIRS = lib6lowpan 
 

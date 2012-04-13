@@ -27,7 +27,7 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * - Revision -------------------------------------------------------------
- * $Date: 2009/09/08 09:04:43 $
+ * $Date: 2009-09-08 09:04:43 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -133,6 +133,7 @@ implementation
     m_pib.macShortAddress = IEEE154_DEFAULT_SHORTADDRESS;
     m_pib.macSuperframeOrder = IEEE154_DEFAULT_SUPERFRAMEORDER;
     m_pib.macTransactionPersistenceTime = IEEE154_DEFAULT_TRANSACTIONPERSISTENCETIME;
+    m_pib.macPanCoordinator = IEEE154_DEFAULT_MACPANCOORDINATOR;
     updateMacMaxFrameTotalWaitTime();
   }
 
@@ -205,11 +206,17 @@ implementation
 
   event void RadioControl.stopDone(error_t result)
   {
-    ASSERT(result == SUCCESS);
-    call DispatchReset.init();       // resets the dispatch component(s), spools out frames
-    call DispatchQueueReset.init();  // resets the dispatch queue component(s), spools out frames
-    call MacReset.init();            // resets the remaining components
-    post resetSpinTask();
+    // NOTE: RadioControl is fanning out, so we have to check if we
+    // are the actual client that is owning the radio (or if someone
+    // else has called RadioControl.stop).
+
+    if (call RadioToken.isOwner()) {
+      ASSERT(result == SUCCESS);
+      call DispatchReset.init();       // resets the dispatch component(s), spools out frames
+      call DispatchQueueReset.init();  // resets the dispatch queue component(s), spools out frames
+      call MacReset.init();            // resets the remaining components
+      post resetSpinTask();
+    }
   }
 
   task void resetSpinTask()
@@ -226,22 +233,24 @@ implementation
 
   event void RadioControl.startDone(error_t error)
   {
-    if (m_setDefaultPIB)
-      resetAttributesToDefault();
-    else {
-      // restore previous PHY attributes
+    // comment at RadioControl.stopDone() applies here as well
+    if (call RadioToken.isOwner()) {
+      if (m_setDefaultPIB)
+        resetAttributesToDefault();
+
       signal PIBUpdate.notify[IEEE154_phyCurrentChannel](&m_pib.phyCurrentChannel);
-      signal PIBUpdate.notify[IEEE154_phyTransmitPower](&m_pib.phyTransmitPower);
-      signal PIBUpdate.notify[IEEE154_phyCCAMode](&m_pib.phyCCAMode);
-      signal PIBUpdate.notify[IEEE154_phyCurrentPage](&m_pib.phyCurrentPage);
-      signal PIBUpdate.notify[IEEE154_macPANId](&m_pib.macPANId);
       signal PIBUpdate.notify[IEEE154_macShortAddress](&m_pib.macShortAddress);
+      signal PIBUpdate.notify[IEEE154_macPANId](&m_pib.macPANId);
+      signal PIBUpdate.notify[IEEE154_phyCCAMode](&m_pib.phyCCAMode);
+      signal PIBUpdate.notify[IEEE154_phyTransmitPower](&m_pib.phyTransmitPower);
+      signal PIBUpdate.notify[IEEE154_phyCurrentPage](&m_pib.phyCurrentPage);
       signal PIBUpdate.notify[IEEE154_macPanCoordinator](&m_pib.macPanCoordinator);
+
+      call RadioToken.release();
+      signal MLME_RESET.confirm(IEEE154_SUCCESS);
     }
-    call RadioToken.release();
-    signal MLME_RESET.confirm(IEEE154_SUCCESS);
   }
-  
+
   /* ----------------------- MLME-GET ----------------------- */
 
   command ieee154_phyCurrentChannel_t MLME_GET.phyCurrentChannel() { return m_pib.phyCurrentChannel;}
@@ -552,8 +561,11 @@ implementation
 
   command void Packet.clear(message_t* msg)
   {
-    memset(msg->header, 0, sizeof(message_header_t));
-    memset(msg->metadata, 0, sizeof(message_metadata_t));
+    message_header_t* header = (message_header_t*) msg->header;
+    message_metadata_t* metadata = (message_metadata_t*) msg->metadata;
+    header->ieee154.length = 0;
+    memset( header->ieee154.mhr, 0x0, MHR_MAX_LEN);
+    memset( &metadata->ieee154, 0x0, sizeof(ieee154_metadata_t));
   }
 
   command uint8_t Packet.payloadLength(message_t* msg)
@@ -568,9 +580,6 @@ implementation
 
   command uint8_t Packet.maxPayloadLength()
   {
-#if TOSH_DATA_LENGTH < IEEE154_aMaxMACPayloadSize
-#warning Payload portion in message_t is smaller than required (TOSH_DATA_LENGTH < IEEE154_aMaxMACPayloadSize). This means that larger packets cannot be sent/received.
-#endif
     return TOSH_DATA_LENGTH;
   }
 
@@ -679,7 +688,7 @@ implementation
 
     if (security && security->SecurityLevel)
       return FAIL; // not implemented
-    mhr[MHR_INDEX_FC2] &= (FC2_DEST_MODE_MASK | FC2_SRC_MODE_MASK);
+    mhr[MHR_INDEX_FC2] &= ~(FC2_DEST_MODE_MASK | FC2_SRC_MODE_MASK);
     mhr[MHR_INDEX_FC2] |= dstAddrMode << FC2_DEST_MODE_OFFSET;
     mhr[MHR_INDEX_FC2] |= srcAddrMode << FC2_SRC_MODE_OFFSET;
     if (srcAddrMode == ADDR_MODE_SHORT_ADDRESS)
@@ -761,6 +770,12 @@ implementation
   {
     ieee154_metadata_t *metadata = (ieee154_metadata_t*) frame->metadata;
     return metadata->linkQuality;
+  }
+
+  command int8_t Frame.getRSSI(message_t* frame)
+  {
+    ieee154_metadata_t *metadata = (ieee154_metadata_t*) frame->metadata;
+    return metadata->rssi;
   }
 
   command uint8_t Frame.getSrcAddrMode(message_t* frame)

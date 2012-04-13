@@ -34,7 +34,7 @@
  * ChipCon CC2420 radio.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2008/06/17 07:28:24 $
+ * @version $Revision: 1.4 $ $Date: 2008-06-17 07:28:24 $
  */
 
 #include "message.h"

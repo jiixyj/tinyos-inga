@@ -1,0 +1,580 @@
+In file included from BlinkToRadioAppC.nc:49:
+In component `ActiveMessageC':
+/opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:57: interface RadioChannel not found
+In file included from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230ActiveMessageC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:52: interface PacketField not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:52: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:53: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:54: unexpected type arguments
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230RadioC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:62: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:63: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:64: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:26:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckConfig.nc:24:21: error: Tasklet.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:33,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:74,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In interface `SoftwareAckConfig':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckConfig.nc:75: syntax error before `tasklet_async'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueConfig.nc:24:21: error: Tasklet.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:34,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:74,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In interface `UniqueConfig':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueConfig.nc:47: syntax error before `tasklet_async'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TrafficMonitorConfig.nc:24:21: error: Tasklet.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:36,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:74,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In interface `TrafficMonitorConfig':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TrafficMonitorConfig.nc:50: syntax error before `tasklet_async'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:74,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230RadioP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:50: interface RadioAlarm not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:51: interface RadioPacket not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:129: syntax error before `command'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:153: syntax error before `command'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc: In function `TrafficMonitorConfig.getChannelTime':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:229: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc: In function `RandomCollisionConfig.getTransmitBarrier':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:269: interface has no command or event named `getNow'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioP.nc:280: syntax error before `event'
+In component `RF230RadioC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:74: component RadioAlarmC not found
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:88,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `ActiveMessageLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerC.nc:39: interface BareSend not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerC.nc:40: interface BareReceive not found
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerC.nc:47,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:88,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `ActiveMessageLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `getHeader':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:53: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:58: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `AMSend.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:79: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:83: `sendDone' is not in interface `SubSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `AMSend.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:89: interface has no command or event named `cancel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:113: `receive' is not in interface `SubReceive'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:200: `headerLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:201: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:205: `payloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:206: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:210: `setPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:211: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:215: `maxPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:216: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:220: `metadataLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:221: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:225: `clear' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `RadioPacket.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:226: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `Packet.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:233: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `Packet.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:238: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `Packet.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:243: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `Packet.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:248: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc: In function `Packet.getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:253: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/ActiveMessageLayerP.nc:256: interface has no command or event named `headerLength'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:106,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `AutoResourceAcquireLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:43: `send' is not in interface `BareSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: In function `BareSend.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:46: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: In function `Resource.granted':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:59: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:63: interface has no command or event named `sendDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:68: `sendDone' is not in interface `SubSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: In function `SubSend.sendDone':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:70: interface has no command or event named `sendDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:74: `cancel' is not in interface `BareSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc: In function `BareSend.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/AutoResourceAcquireLayerC.nc:75: interface has no command or event named `cancel'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:122,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `Ieee154MessageLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:48: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Packet.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:55: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Packet.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:60: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Packet.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:65: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Packet.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:70: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Packet.getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:75: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Ieee154Send.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:95: interface has no command or event named `cancel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: In function `Ieee154Send.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:114: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:118: `sendDone' is not in interface `SubSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154MessageLayerC.nc:133: `receive' is not in interface `SubReceive'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:138,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `TinyosNetworkLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:71: `send' is not in interface `Ieee154Send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Send.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:72: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:76: `cancel' is not in interface `Ieee154Send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Send.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:77: interface has no command or event named `cancel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:81: `headerLength' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:82: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:86: `payloadLength' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:87: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:91: `setPayloadLength' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:92: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:96: `maxPayloadLength' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:97: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:101: `metadataLength' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:102: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:106: `clear' is not in interface `Ieee154Packet'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `Ieee154Packet.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:107: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `getHeader':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:118: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:122: `send' is not in interface `TinyosSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosSend.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:126: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:130: `cancel' is not in interface `TinyosSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosSend.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:131: interface has no command or event named `cancel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:144: `headerLength' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:145: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:149: `payloadLength' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:150: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:154: `setPayloadLength' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:155: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:159: `maxPayloadLength' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:160: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:164: `metadataLength' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:165: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:169: `clear' is not in interface `TinyosPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `TinyosPacket.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:170: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:204: `sendDone' is not in interface `SubSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `SubSend.sendDone':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:206: interface has no command or event named `sendDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:208: interface has no command or event named `sendDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:212: `receive' is not in interface `SubReceive'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc: In function `SubReceive.receive':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:214: interface has no command or event named `receive'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TinyosNetworkLayerC.nc:216: interface has no command or event named `receive'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerC.nc:41,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:146,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `Ieee154PacketLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `getHeader':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:65: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:70: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `Ieee154PacketLayer.createAckFrame':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:100: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `Ieee154PacketLayer.createAckReply':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:107: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:256: `headerLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:257: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:261: `payloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:262: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:266: `setPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:267: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:271: `maxPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:272: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:276: `metadataLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:277: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:281: `clear' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc: In function `RadioPacket.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/Ieee154PacketLayerP.nc:283: interface has no command or event named `clear'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:151,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `UniqueLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:30: interface RadioReceive not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:24:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:25:26: error: Neighborhood.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:43,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:151,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `UniqueLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:43: interface Neighborhood not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:44: interface NeighborhoodFlag not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:59: `send' is not in interface `Send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: In function `Send.send':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:61: interface has no command or event named `send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:65: `cancel' is not in interface `Send'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: In function `Send.cancel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:66: interface has no command or event named `cancel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:70: `sendDone' is not in interface `SubSend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: In function `SubSend.sendDone':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:71: interface has no command or event named `sendDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerP.nc:74: syntax error before `event'
+In component `UniqueLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:43: component NeighborhoodC not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:43: component NeighborhoodFlagC not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:43: component `NeighborhoodFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:46: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/UniqueLayerC.nc:47: no match
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:187,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `DummyLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/DummyLayerC.nc:32: interface RadioState not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/DummyLayerC.nc:33: interface RadioSend not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/DummyLayerC.nc:35: interface RadioCCA not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:24:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:25:25: error: RadioAssert.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerC.nc:43,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:194,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `MessageBufferLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:41: interface Tasklet not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: In function `SplitControl.start':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:67: interface has no command or event named `suspend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:72: interface has no command or event named `turnOn'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:77: interface has no command or event named `resume'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: In function `SplitControl.stop':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:86: interface has no command or event named `suspend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:91: interface has no command or event named `turnOff'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:96: interface has no command or event named `resume'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:102: `setChannel' is not in interface `RadioChannel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: In function `RadioChannel.setChannel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:105: interface has no command or event named `suspend'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:110: interface has no command or event named `setChannel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:115: interface has no command or event named `resume'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:121: `getChannel' is not in interface `RadioChannel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: In function `RadioChannel.getChannel':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:122: interface has no command or event named `getChannel'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: In function `stateDoneTask.runTask':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:139: interface has no command or event named `setChannelDone'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerP.nc:144: syntax error before `event'
+MessageBufferLayerP: `SoftwareInit.init' not implemented
+In component `MessageBufferLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerC.nc:43: component TaskletC not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MessageBufferLayerC.nc:53: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:24:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:25:25: error: RadioAssert.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerC.nc:41,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:221,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RandomCollisionLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:46: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:57: syntax error before `message_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:58: syntax error before `uint16_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerP.nc:60: syntax error before `event'
+In component `RandomCollisionLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/RandomCollisionLayerC.nc:49: cannot find `RadioAlarm'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:24:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:25:25: error: RadioAssert.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerC.nc:45,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:235,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `SoftwareAckLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:43: interface PacketFlag not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:49: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:58: syntax error before `message_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:59: syntax error before `message_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerP.nc:61: syntax error before `event'
+SoftwareAckLayerP: `PacketAcknowledgements.requestAck' not implemented
+SoftwareAckLayerP: `PacketAcknowledgements.noAck' not implemented
+SoftwareAckLayerP: `PacketAcknowledgements.wasAcked' not implemented
+In component `SoftwareAckLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerC.nc:45: component MetadataFlagC not found
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerC.nc:45: component `MetadataFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerC.nc:54: cannot find `RadioAlarm'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/SoftwareAckLayerC.nc:55: no match
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerC.nc:42,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:251,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `TimeStampingLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `getMeta':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:51: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `PacketTimeStampRadio.isValid':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:58: interface has no command or event named `get'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `PacketTimeStampRadio.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:68: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `PacketTimeStampRadio.set':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:73: interface has no command or event named `set'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:106: `headerLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:107: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:111: `payloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:112: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:116: `setPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:117: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:121: `maxPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:122: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:126: `metadataLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:127: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:131: `clear' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc: In function `RadioPacket.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerP.nc:133: interface has no command or event named `clear'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:251,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `TimeStampingLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerC.nc:52: component `MetadataFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/TimeStampingLayerC.nc:53: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:25:25: error: RadioAssert.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:259,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `MetadataFlagsLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `getMeta':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:45: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:51: `get' is not in interface `PacketFlag'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:56: `set' is not in interface `PacketFlag'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `PacketFlag.set':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:57: implicit declaration of function `ASSERT'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:63: `clear' is not in interface `PacketFlag'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `PacketFlag.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:64: implicit declaration of function `ASSERT'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:70: `setValue' is not in interface `PacketFlag'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `PacketFlag.setValue':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:72: interface has no command or event named `set'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:72: subscripted value is neither array nor pointer
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:74: interface has no command or event named `clear'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:74: subscripted value is neither array nor pointer
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:80: `headerLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.headerLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:81: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:85: `payloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.payloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:86: interface has no command or event named `payloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:90: `setPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.setPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:91: interface has no command or event named `setPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:95: `maxPayloadLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.maxPayloadLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:96: interface has no command or event named `maxPayloadLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:100: `metadataLength' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.metadataLength':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:101: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:105: `clear' is not in interface `RadioPacket'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc: In function `RadioPacket.clear':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/layers/MetadataFlagsLayerC.nc:107: interface has no command or event named `clear'
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:269,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230DriverLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:37: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:38: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:39: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:40: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:25:21: error: Tasklet.h: No such file or directory
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:26:25: error: RadioAssert.h: No such file or directory
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:54,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:269,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230DriverLayerP':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:43: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:44: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:45: unexpected type arguments
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:46: unexpected type arguments
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:54,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:269,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `getPayload':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:90: interface has no command or event named `headerLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `getMeta':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:95: interface has no command or event named `metadataLength'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:100: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:113: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:130: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:131: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:133: syntax error before `message_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:138: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:139: syntax error before `uint8_t'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `writeRegister':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:145: implicit declaration of function `ASSERT'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `readRegister':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:157: implicit declaration of function `ASSERT'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:180: syntax error before `event'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:188: syntax error before `=='
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:188: warning: return-type defaults to `int'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:188: warning: data definition has no type or storage class
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:190: warning: type defaults to `int' in declaration of `cmd'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:190: warning: data definition has no type or storage class
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:191: warning: type defaults to `int' in declaration of `cca'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:191: initializer element is not constant
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:191: (near initialization for `cca')
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:191: warning: data definition has no type or storage class
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:193: syntax error before `('
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:193: warning: return-type defaults to `int'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `ASSERT':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:215: `rxMsg' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:215: (Each undeclared identifier is reported only once
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:215: for each function it appears in.)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:218: `rssiClear' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:219: `rssiBusy' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `initRadio':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:248: `txPower' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:249: `channel' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:253: `state' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: In function `SpiResource.granted':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:263: `state' undeclared (first use in this function)
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:269: interface has no command or event named `schedule'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc: At top level:
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerP.nc:291: syntax error before `command'
+RF230DriverLayerP: `PlatformInit.init' not implemented
+RF230DriverLayerP: `IRQ.captured' not implemented
+In file included from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:269,
+                 from /opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230ActiveMessageC.nc:64,
+                 from /opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:66,
+                 from BlinkToRadioAppC.nc:49:
+In component `RF230DriverLayerC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:67: component `MetadataFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:71: component `MetadataFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:75: component `MetadataFlagC' is not generic
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:68: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:72: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:76: no match
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:83: cannot find `RadioAlarm'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:84: cannot find `Alarm'
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230DriverLayerC.nc:94: no match
+In component `RF230RadioC':
+/opt/tinyos-2.1.1/tos/chips/rf2xx/rf230/RF230RadioC.nc:81: cannot find `RadioAlarm'
+In component `ActiveMessageC':
+/opt/tinyos-2.1.1/tos/platforms/inga/ActiveMessageC.nc:80: no match
+make: *** [exe0] Error 1

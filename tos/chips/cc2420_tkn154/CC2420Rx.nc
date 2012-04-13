@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.2 $
- * $Date: 2009/03/04 18:31:07 $
+ * $Date: 2009-03-04 18:31:07 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -42,7 +42,7 @@ interface CC2420Rx {
    * Receive a packet buffer, returning a buffer for the signaling
    * component to use for the next reception. 
    */
-  event message_t* received(message_t *data, ieee154_timestamp_t *timestamp);
+  event message_t* received(message_t *data);
 
 }
 

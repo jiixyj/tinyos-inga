@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2007/07/04 00:37:16 $
+ * @version $Revision: 1.1 $ $Date: 2007-07-04 00:37:16 $
  */
 
 configuration CC2420SpiWireC {

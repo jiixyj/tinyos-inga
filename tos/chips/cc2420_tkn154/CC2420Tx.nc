@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.3 $
- * $Date: 2009/03/04 18:31:12 $
+ * $Date: 2009-03-04 18:31:12 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -41,15 +41,15 @@ interface CC2420Tx {
   async event void loadTXFIFODone(ieee154_txframe_t *data, error_t error );
 
   async command error_t send(bool cca);
-  async event void sendDone(ieee154_txframe_t *frame, ieee154_timestamp_t *referenceTime, 
-      bool ackPendingFlag, error_t error);
+  async event void sendDone(ieee154_txframe_t *frame, bool ackPendingFlag, error_t error);
 
   async command bool cca();
   async command void lockChipSpi();
   async command void unlockChipSpi();  
 
   async event void transmissionStarted ( ieee154_txframe_t *data );
-  async event void transmittedSFD ( uint32_t time, ieee154_txframe_t *data );
+  // timestamp denotes first bit of preamble (not SFD byte)!
+  async event void transmittedSFD(uint32_t timestamp, ieee154_txframe_t *data);
 
   /**
    * Modify the contents of a packet. This command can only be used

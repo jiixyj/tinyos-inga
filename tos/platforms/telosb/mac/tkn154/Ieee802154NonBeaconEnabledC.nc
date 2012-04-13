@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.3 $
- * $Date: 2009/05/18 12:54:11 $
+ * $Date: 2009-05-18 12:54:11 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -106,10 +106,9 @@ implementation
   PHY.Alarm1 -> PHYAlarm1;
   PHY.Alarm2 -> PHYAlarm2;
   PHY.LocalTime -> LocalTime62500hzC;
-  PHY.CaptureTime -> TKN154TimingP;
   PHY.ReliableWait -> TKN154TimingP;
-  PHY.ReferenceTime -> TKN154TimingP;
   PHY.TimeCalc -> MAC;
+  PHY.CaptureTime -> TKN154TimingP;
   TKN154TimingP.TimeCalc -> MAC;
   TKN154TimingP.Leds -> LedsC;
   TKN154TimingP.CCA -> PHY;

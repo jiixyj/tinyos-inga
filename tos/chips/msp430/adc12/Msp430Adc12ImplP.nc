@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.14 $
- * $Date: 2008/11/10 14:56:12 $
+ * $Date: 2008-11-10 14:56:12 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -92,11 +92,17 @@ implementation
   command error_t Init.init()
   {
     adc12ctl0_t ctl0;
-    call HplAdc12.stopConversion();
-    ctl0 = call HplAdc12.getCtl0();
-    ctl0.adc12tovie = 1;
-    ctl0.adc12ovie = 1;
-    call HplAdc12.setCtl0(ctl0);
+
+    atomic {
+      // stop any ongoing conversion (conversion data -if any- is unreliable)
+      call HplAdc12.stopConversion(); 
+      // clear pending interrupt flags (potential relict from SW reset / PUC)
+      call HplAdc12.resetIFGs(); 
+      ctl0 = call HplAdc12.getCtl0();
+      ctl0.adc12tovie = 1;
+      ctl0.adc12ovie = 1;
+      call HplAdc12.setCtl0(ctl0);
+    }
     return SUCCESS;
   }
 
@@ -554,6 +560,8 @@ implementation
       // only if the client didn't ask for data as fast as possible (jiffies was not zero)
       if (!(call HplAdc12.getCtl0()).msc)
         overflow = TRUE;
+      if (call HplAdc12.getIEFlags() == 0)
+        return; // DMA serves interrupts
     }
     switch (state & CONVERSION_MODE_MASK) 
     { 
@@ -634,6 +642,9 @@ implementation
           break;
         }
 #endif
+      default:
+        stopConversion();
+        break;
       } // switch
   }
 

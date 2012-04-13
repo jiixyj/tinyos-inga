@@ -34,7 +34,7 @@
  *
  * @author Kevin Klues (klues@tkn.tu-berlin.edu)
  * @version $ $
- * @date $Date: 2007/02/04 20:06:42 $ 
+ * @date $Date: 2007-02-04 20:06:42 $ 
  */
 
 interface ResourceDefaultOwner {

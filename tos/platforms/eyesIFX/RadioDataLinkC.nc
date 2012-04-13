@@ -30,7 +30,7 @@
  * provides preamble sampling csma with timestamping
  * - Revision -------------------------------------------------------------
  * $Revision: 1.9 $
- * $Date: 2010/01/24 23:02:37 $
+ * $Date: 2010-01-24 23:02:37 $
  * @author: Kevin Klues (klues@tkn.tu-berlin.de)
  * ========================================================================
  */

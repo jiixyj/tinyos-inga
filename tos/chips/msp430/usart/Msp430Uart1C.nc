@@ -34,7 +34,7 @@
  * @author Vlado Handziski <handzisk@tkn.tu-berlin.de>
  * @author Jonathan Hui <jhui@archedrock.com>
  * @author Eric B. Decker <cire81@gmail.com>
- * @version $Revision: 1.5 $ $Date: 2008/05/21 22:11:57 $
+ * @version $Revision: 1.5 $ $Date: 2008-05-21 22:11:57 $
  */
 
 #include "msp430usart.h"

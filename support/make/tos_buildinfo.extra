@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: tos_buildinfo.extra,v 1.1 2007/08/17 15:47:30 beutel Exp $
+#$Id: tos_buildinfo.extra,v 1.1 2007-08-17 15:47:30 beutel Exp $
 
 TOS_BUILDINFO_PL ?= tos-write-buildinfo
 IDENT_PROGRAM_NAME ?= $(COMPONENT)

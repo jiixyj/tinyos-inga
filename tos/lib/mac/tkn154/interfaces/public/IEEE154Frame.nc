@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.3 $
- * $Date: 2009/03/04 18:31:46 $
+ * $Date: 2009-03-04 18:31:46 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -134,7 +134,7 @@ interface IEEE154Frame
    *                      disabled)
    *                      
    * @return          SUCCESS if the addressing fields where written,
-   *                  FAIL if a wrong addressing mode was specified
+   *                  FAIL if an incorrect addressing mode was specified
    */
   command error_t setAddressingFields(message_t* frame,
                           uint8_t SrcAddrMode,
@@ -159,14 +159,18 @@ interface IEEE154Frame
     */
   command uint8_t getPayloadLength(message_t* frame);
 
- /**
-   * Returns the point in time when the frame was received. If 
-   * <tt>isTimestampValid()</tt> returns FALSE then the 
-   * timestamp is not valid and must be ignored.
-   *
-   * @param frame     the frame
-   * @return          timestamp of the frame
-   */
+ /** 
+  * Returns the point in time when the first bit (of the PHY preamble) of the
+  * frame was received or transmitted. Time is expressed in symbols as local
+  * time (which can also be accessed via the LocalTime<T62500hz> interface
+  * provided by your platform, e.g.
+  * tos/platforms/telosb/mac/tkn154/timer/LocalTime62500hzC).  If
+  * <tt>isTimestampValid()</tt> returns FALSE then the timestamp is not valid
+  * and must be ignored.
+  *
+  * @param frame     the frame 
+  * @return          timestamp of the frame
+  */
   command uint32_t getTimestamp(message_t* frame);  
 
  /**
@@ -185,12 +189,27 @@ interface IEEE154Frame
   command uint8_t getDSN(message_t* frame);  
 
  /**
-   * Returns the link quality level at which the frame was received.
+   * Returns the link quality level of a received frame, where
+   * "link quality level" is defined in Sect. 6.9.8 of the 
+   * IEEE 802.15.4-2006 standard. For the CC2420 radio it is
+   * identical with the LQI.
    *
    * @param frame     the frame
    * @return          link quality level 
    */
   command uint8_t getLinkQuality(message_t* frame);  
+
+ /**
+   * Returns the average RSSI (in dBm) of a received frame. The 
+   * IEEE 802.15.4-2006 standard does not specify that a radio
+   * must provide RSSI, so this command is optional: if a
+   * radio does not provide per-frame RSSI then this call will 
+   * return a value of +127.
+   *
+   * @param frame     the frame
+   * @return          RSSI
+   */
+  command int8_t getRSSI(message_t* frame);  
 
   /**
     * Returns the type of the frame

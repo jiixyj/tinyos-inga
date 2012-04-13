@@ -1,4 +1,4 @@
-/* $Id: PhotoTempP.nc,v 1.4 2007/03/14 04:14:13 pipeng Exp $
+/* $Id: PhotoTempP.nc,v 1.4 2007-03-14 04:14:13 pipeng Exp $
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.
  *

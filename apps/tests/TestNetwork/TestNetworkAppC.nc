@@ -8,7 +8,7 @@
  * Collection Tree Protocol for details.
  * 
  * @author Philip Levis
- * @version $Revision: 1.7 $ $Date: 2009/09/16 00:51:50 $
+ * @version $Revision: 1.7 $ $Date: 2009-09-16 00:51:50 $
  */
 #include "TestNetwork.h"
 #include "Ctp.h"

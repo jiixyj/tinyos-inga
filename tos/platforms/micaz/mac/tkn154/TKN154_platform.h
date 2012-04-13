@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.1 $
- * $Date: 2009/05/18 16:29:56 $
+ * $Date: 2009-05-18 16:29:56 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -56,7 +56,7 @@ enum {
   BEACON_PAYLOAD_UPDATE_INTERVAL = 2500, 
 };
 
-typedef uint32_t ieee154_timestamp_t;
+// TODO: add (and test) IEEE154_RADIO_POWERUP_TIME (see telos)
 
 #endif
 

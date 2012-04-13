@@ -38,7 +38,7 @@
  * 0.986 from voltage and divide by 0.00355 to get degrees C.
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2008/09/11 19:59:50 $
+ * @version $Revision: 1.1 $ $Date: 2008-09-11 19:59:50 $
  */
  
 /**

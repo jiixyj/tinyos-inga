@@ -1,4 +1,4 @@
-/* $Id: MagXStreamC.nc,v 1.2 2008/06/11 00:42:14 razvanm Exp $
+/* $Id: MagXStreamC.nc,v 1.2 2008-06-11 00:42:14 razvanm Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

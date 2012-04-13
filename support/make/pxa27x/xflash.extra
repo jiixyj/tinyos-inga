@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: xflash.extra,v 1.5 2008/05/29 20:16:43 kusy Exp $
+#$Id: xflash.extra,v 1.5 2008-05-29 20:16:43 kusy Exp $
 
 PROGRAM = xflash
 

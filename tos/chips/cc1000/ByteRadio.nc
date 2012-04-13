@@ -1,4 +1,4 @@
-/* $Id: ByteRadio.nc,v 1.5 2008/06/03 04:08:34 regehr Exp $
+/* $Id: ByteRadio.nc,v 1.5 2008-06-03 04:08:34 regehr Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

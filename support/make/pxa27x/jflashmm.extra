@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: jflashmm.extra,v 1.5 2008/05/27 18:21:43 kusy Exp $
+#$Id: jflashmm.extra,v 1.5 2008-05-27 18:21:43 kusy Exp $
 
 PROGRAM = jflashmm
 

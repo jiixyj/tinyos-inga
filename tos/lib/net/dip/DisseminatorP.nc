@@ -39,7 +39,7 @@
  * @param t the type of the object that will be disseminated
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.3 $ $Date: 2008/02/16 10:56:07 $
+ * @version $Revision: 1.3 $ $Date: 2008-02-16 10:56:07 $
  */
 
 generic module DisseminatorP(typedef t, dip_key_t key) {

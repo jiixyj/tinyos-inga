@@ -1,4 +1,4 @@
-/* $Id: LIS3L02DQInternalC.nc,v 1.4 2006/12/12 18:23:45 vlahan Exp $ */
+/* $Id: LIS3L02DQInternalC.nc,v 1.4 2006-12-12 18:23:45 vlahan Exp $ */
 /*
  * Copyright (c) 2005 Arch Rock Corporation 
  * All rights reserved. 

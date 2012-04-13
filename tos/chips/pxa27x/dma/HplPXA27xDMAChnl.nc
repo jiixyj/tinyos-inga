@@ -1,4 +1,4 @@
-/* $Id: HplPXA27xDMAChnl.nc,v 1.6 2008/06/11 00:46:24 razvanm Exp $ */
+/* $Id: HplPXA27xDMAChnl.nc,v 1.6 2008-06-11 00:46:24 razvanm Exp $ */
 /*
  * Copyright (c) 2005 Arched Rock Corporation 
  * All rights reserved. 

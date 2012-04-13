@@ -21,4 +21,4 @@ Known bugs/limitations:
 None.
 
 
-$Id: README.txt,v 1.5 2007/07/10 20:01:58 klueska Exp $
+$Id: README.txt,v 1.5 2007-07-10 20:01:58 klueska Exp $

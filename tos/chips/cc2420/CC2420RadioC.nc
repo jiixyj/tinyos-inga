@@ -43,10 +43,11 @@ configuration CC2420RadioC {
     interface SplitControl;
 
     interface Resource[uint8_t clientId];
-    interface Send;
-    interface Receive;
+    interface Send as BareSend;
+    interface Receive as BareReceive;
+    interface Packet as BarePacket;
 
-    interface Send as ActiveSend;
+    interface Send    as ActiveSend;
     interface Receive as ActiveReceive;
 
     interface CC2420Packet;
@@ -85,8 +86,10 @@ implementation {
   LinkPacketMetadata = CC2420PacketC;
   
   Resource = CC2420TinyosNetworkC;
-  Send = CC2420TinyosNetworkC.Send;
-  Receive = CC2420TinyosNetworkC.Receive;
+  BareSend = CC2420TinyosNetworkC.Send;
+  BareReceive = CC2420TinyosNetworkC.Receive;
+  BarePacket = CC2420TinyosNetworkC.BarePacket;
+  
   ActiveSend = CC2420TinyosNetworkC.ActiveSend;
   ActiveReceive = CC2420TinyosNetworkC.ActiveReceive;
 

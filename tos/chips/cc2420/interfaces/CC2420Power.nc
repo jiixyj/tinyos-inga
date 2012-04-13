@@ -36,7 +36,7 @@
  * transmission power, see the CC2420Config interface.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2007/07/04 00:37:14 $
+ * @version $Revision: 1.1 $ $Date: 2007-07-04 00:37:14 $
  */
 
 interface CC2420Power {

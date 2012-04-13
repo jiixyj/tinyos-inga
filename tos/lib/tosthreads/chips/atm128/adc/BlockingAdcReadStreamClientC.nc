@@ -1,4 +1,4 @@
-/* $Id: BlockingAdcReadStreamClientC.nc,v 1.2 2008/06/14 19:27:25 klueska Exp $
+/* $Id: BlockingAdcReadStreamClientC.nc,v 1.2 2008-06-14 19:27:25 klueska Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

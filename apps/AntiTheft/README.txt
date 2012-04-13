@@ -97,4 +97,4 @@ Known bugs/limitations:
 None.
 
 
-$Id: README.txt,v 1.6 2007/11/19 17:21:20 sallai Exp $
+$Id: README.txt,v 1.6 2007-11-19 17:21:20 sallai Exp $

@@ -28,10 +28,13 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.2 $
- * $Date: 2009/03/25 16:47:49 $
+ * $Date: 2009-03-25 16:47:49 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
+
+#define NEW_PRINTF_SEMANTICS
+#include "printf.h"
 
 configuration DebugC {
 }
@@ -39,6 +42,9 @@ implementation {
   components DebugP, LedsC, MainC;
   DebugP.Boot -> MainC;
   DebugP.Leds -> LedsC;
+
+  components PrintfC;
+  components SerialStartC;
 
 #if defined(PLATFORM_TELOSB)
   components UserButtonC;

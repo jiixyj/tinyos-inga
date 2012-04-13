@@ -16,11 +16,21 @@ push( @includes, qw(
   %T/platforms/shimmer2/chips/sd
   %T/platforms/shimmer2/chips/bluetooth
   %T/platforms/shimmer2/chips/tilt
+  %T/platforms/shimmer2/chips/gyro
+  %T/platforms/shimmer2/chips/gyromag
+  %T/platforms/shimmer2/chips/fgpmmopa6b
+  %T/platforms/shimmer2/chips/bmp085
+  %T/platforms/shimmer2/chips/hmc5843
+  %T/platforms/shimmer2/chips/straingauge
   %T/platforms/shimmer
   %T/platforms/shimmer/chips/msp430
   %T/platforms/shimmer/chips/mma7260
   %T/platforms/shimmer/chips/sd
+  %T/platforms/shimmer/chips/sd/fatfs
   %T/platforms/shimmer/chips/bluetooth
+  %T/platforms/shimmer/chips/ds2411
+  %T/platforms/shimmer/chips/gsr
+  %T/platforms/shimmer/chips/rmcm01
   %T/chips/cc2420
   %T/chips/cc2420/alarm
   %T/chips/cc2420/control
@@ -56,6 +66,7 @@ push( @includes, qw(
   -fnesc-no-debug
 );
 
+push @opts, "-mdisable-hwmul" if `msp430-gcc --version | grep 3.2.3`;
 push @opts, "-fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask" if !$with_scheduler_flag;
 push @opts, "-mingw-gcc" if $cygwin;
 

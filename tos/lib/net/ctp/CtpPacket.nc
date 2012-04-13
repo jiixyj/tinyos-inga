@@ -1,4 +1,4 @@
-/* $Id: CtpPacket.nc,v 1.5 2007/11/28 04:42:52 rincon Exp $ */
+/* $Id: CtpPacket.nc,v 1.5 2007-11-28 04:42:52 rincon Exp $ */
 /*
  * Copyright (c) 2006 Stanford University.
  * All rights reserved.
@@ -35,7 +35,7 @@
  *
  *  @author Philip Levis
  *  @author Kyle Jamieson
- *  @date   $Date: 2007/11/28 04:42:52 $
+ *  @date   $Date: 2007-11-28 04:42:52 $
  */
 
 #include <AM.h>

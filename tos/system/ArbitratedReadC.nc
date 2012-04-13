@@ -1,4 +1,4 @@
-/* $Id: ArbitratedReadC.nc,v 1.6 2008/06/26 04:39:14 regehr Exp $
+/* $Id: ArbitratedReadC.nc,v 1.6 2008-06-26 04:39:14 regehr Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

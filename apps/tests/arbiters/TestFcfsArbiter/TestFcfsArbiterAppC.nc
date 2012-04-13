@@ -56,7 +56,7 @@
  *
  * @author Kevin Klues <klueska@cs.berkeley.edu>
  * @version  $Revision: 1.2 $
- * @date $Date: 2009/12/22 08:34:09 $
+ * @date $Date: 2009-12-22 08:34:09 $
  */
  
 #define TEST_ARBITER_RESOURCE   "Test.Arbiter.Resource"

@@ -1,4 +1,4 @@
-/* $Id: MultiplexedReadC.nc,v 1.1 2007/02/08 17:49:05 idgay Exp $
+/* $Id: MultiplexedReadC.nc,v 1.1 2007-02-08 17:49:05 idgay Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

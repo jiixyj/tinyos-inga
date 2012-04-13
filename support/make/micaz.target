@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: micaz.target,v 1.6 2008/07/09 15:36:50 sallai Exp $
+#$Id: micaz.target,v 1.6 2008-07-09 15:36:50 sallai Exp $
 
 PLATFORM = micaz
 SENSORBOARD ?= micasb

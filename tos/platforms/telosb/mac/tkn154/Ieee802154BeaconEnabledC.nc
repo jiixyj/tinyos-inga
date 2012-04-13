@@ -26,11 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * - Revision -------------------------------------------------------------
- * $Revision: 1.2 $
- * $Date: 2009/03/04 18:39:38 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
- * ========================================================================
  */
 #include "TKN154.h"
 configuration Ieee802154BeaconEnabledC
@@ -47,7 +43,7 @@ configuration Ieee802154BeaconEnabledC
     interface MLME_COMM_STATUS;
     interface MLME_DISASSOCIATE;
     interface MLME_GET;
-/*    interface MLME_GTS;*/
+    interface MLME_GTS;
     interface MLME_ORPHAN;
     interface MLME_POLL;
     interface MLME_RESET;
@@ -86,6 +82,7 @@ implementation
   MLME_RX_ENABLE = MAC;
   MLME_POLL = MAC;
   MLME_ORPHAN = MAC;
+  MLME_GTS=MAC;
   IEEE154Frame = MAC;
   IEEE154BeaconFrame = MAC;
   LocalExtendedAddress = MAC;
@@ -111,10 +108,9 @@ implementation
   PHY.Alarm1 -> PHYAlarm1;
   PHY.Alarm2 -> PHYAlarm2;
   PHY.LocalTime -> LocalTime62500hzC;
-  PHY.CaptureTime -> TKN154TimingP;
   PHY.ReliableWait -> TKN154TimingP;
-  PHY.ReferenceTime -> TKN154TimingP;
   PHY.TimeCalc -> MAC;
+  PHY.CaptureTime -> TKN154TimingP;
   TKN154TimingP.TimeCalc -> MAC;
   TKN154TimingP.Leds -> LedsC;
   TKN154TimingP.CCA -> PHY;
@@ -129,6 +125,10 @@ implementation
              new Alarm62500hz32VirtualizedC() as  MACAlarm7,
              new Alarm62500hz32VirtualizedC() as  MACAlarm8,
              new Alarm62500hz32VirtualizedC() as  MACAlarm9,
+             new Alarm62500hz32VirtualizedC() as  MACAlarm10,
+             new Alarm62500hz32VirtualizedC() as  MACAlarm11,
+             new Alarm62500hz32VirtualizedC() as  MACAlarm12,
+             new Alarm62500hz32VirtualizedC() as  MACAlarm13,
 
              new Timer62500C() as  MACTimer1,
              new Timer62500C() as  MACTimer2,
@@ -145,6 +145,10 @@ implementation
   MAC.Alarm7 ->  MACAlarm7;
   MAC.Alarm8 ->  MACAlarm8;
   MAC.Alarm9 ->  MACAlarm9;
+  MAC.Alarm10 ->  MACAlarm10;
+  MAC.Alarm11 ->  MACAlarm11;
+  MAC.Alarm12 ->  MACAlarm12;
+  MAC.Alarm13 ->  MACAlarm13;
 
   MAC.Timer1 -> MACTimer1;
   MAC.Timer2 -> MACTimer2;

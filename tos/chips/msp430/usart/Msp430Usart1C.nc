@@ -34,7 +34,7 @@
  *
  * @author Vlado Handziski <handisk@tkn.tu-berlin.de>
  * @author Jonathan Hui <jhui@archedrock.com>
- * @version $Revision: 1.5 $ $Date: 2008/05/21 22:11:57 $
+ * @version $Revision: 1.5 $ $Date: 2008-05-21 22:11:57 $
  */
 
 generic configuration Msp430Usart1C() {

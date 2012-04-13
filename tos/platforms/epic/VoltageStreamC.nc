@@ -37,7 +37,7 @@
  * multiply by 3.
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2008/08/07 06:37:05 $
+ * @version $Revision: 1.1 $ $Date: 2008-08-07 06:37:05 $
  */
 
 generic configuration VoltageStreamC() {

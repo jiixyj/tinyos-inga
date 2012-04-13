@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.9 $
- * $Date: 2009/10/17 11:48:33 $
+ * $Date: 2009-10-17 11:48:33 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -117,7 +117,7 @@ implementation
     
   async command bool HplAdc12.isBusy(){ return (ADC12CTL1 & ADC12BUSY); }
 
-  TOSH_SIGNAL(ADC_VECTOR) {
+  TOSH_SIGNAL(ADC12_VECTOR) {
     signal HplAdc12.conversionDone(ADC12IV);
   }
 }

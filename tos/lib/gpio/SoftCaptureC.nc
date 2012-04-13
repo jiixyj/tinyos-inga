@@ -1,4 +1,4 @@
-// $Id: SoftCaptureC.nc,v 1.6 2008/06/11 00:46:24 razvanm Exp $
+// $Id: SoftCaptureC.nc,v 1.6 2008-06-11 00:46:24 razvanm Exp $
 
 /*
  *  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.  By

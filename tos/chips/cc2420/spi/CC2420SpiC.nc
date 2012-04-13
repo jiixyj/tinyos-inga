@@ -33,7 +33,7 @@
  * Implementation of basic SPI primitives for the ChipCon CC2420 radio.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2009/08/14 20:33:43 $
+ * @version $Revision: 1.4 $ $Date: 2009-08-14 20:33:43 $
  */
 
 generic configuration CC2420SpiC() {

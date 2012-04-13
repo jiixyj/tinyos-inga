@@ -64,7 +64,7 @@
 /**
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Henri Dubois-Ferriere
- * @version $Revision: 1.5 $ $Date: 2007/07/13 15:54:08 $
+ * @version $Revision: 1.5 $ $Date: 2007-07-13 15:54:08 $
  */
 
 configuration XE1205SpiP {

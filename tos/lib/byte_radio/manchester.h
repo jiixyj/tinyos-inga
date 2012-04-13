@@ -30,7 +30,7 @@
  * provide functions to encode/decode a manchester stream
  * - Revision -------------------------------------------------------------
  * $Revision: 1.4 $
- * $Date: 2006/12/12 18:23:28 $
+ * $Date: 2006-12-12 18:23:28 $
  * @author Andreas Koepke <koepke@tkn.tu-berlin.de>
  * ========================================================================
  */

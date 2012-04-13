@@ -1,4 +1,4 @@
-// $Id: ActiveMessageC.nc,v 1.6 2008/04/24 06:52:12 klueska Exp $
+// $Id: ActiveMessageC.nc,v 1.6 2008-04-24 06:52:12 klueska Exp $
 /*
  * Copyright (c) 2005-2006 Intel Corporation
  * All rights reserved.

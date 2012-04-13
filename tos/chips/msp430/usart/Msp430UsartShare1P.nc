@@ -32,7 +32,7 @@
 /**
  * @author Vlado Handziski <handzisk@tkn.tu-berlin.de>
  * @author Jonathan Hui <jhui@archedrock.com>
- * @version $Revision: 1.6 $ $Date: 2008/05/21 22:11:57 $
+ * @version $Revision: 1.6 $ $Date: 2008-05-21 22:11:57 $
  */
 
 configuration Msp430UsartShare1P {

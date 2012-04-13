@@ -1,4 +1,4 @@
-// $Id: AlarmCounterMilliP.nc,v 1.7 2007/07/06 17:33:22 scipio Exp $
+// $Id: AlarmCounterMilliP.nc,v 1.7 2007-07-06 17:33:22 scipio Exp $
 /*
  * Copyright (c) 2005-2006 Intel Corporation
  * All rights reserved.

@@ -37,7 +37,7 @@
  * Sensirion SHT11 driver.
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.6 $ $Date: 2007/02/04 19:56:29 $
+ * @version $Revision: 1.6 $ $Date: 2007-02-04 19:56:29 $
  */
 
 configuration HplSensirionSht11C {

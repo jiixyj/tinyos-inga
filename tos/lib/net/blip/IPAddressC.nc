@@ -25,13 +25,9 @@ configuration IPAddressC {
   provides interface IPAddress;
 
 } implementation {
-  components IPAddressP, ActiveMessageAddressC;
+  components IPAddressP, Ieee154AddressC;
 
   IPAddress = IPAddressP;
-
-#ifndef SIM
-  IPAddressP.ActiveMessageAddress -> ActiveMessageAddressC;
-#else
-  IPAddressP.setAmAddress -> ActiveMessageAddressC;
-#endif
+  IPAddressP.Ieee154Address -> Ieee154AddressC;
 }
+

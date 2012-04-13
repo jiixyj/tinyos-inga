@@ -38,7 +38,7 @@
  * See TEP118 - Dissemination for details.
  * 
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.2 $ $Date: 2008/06/04 04:31:08 $
+ * @version $Revision: 1.2 $ $Date: 2008-06-04 04:31:08 $
  */
 
 interface DisseminationCache {

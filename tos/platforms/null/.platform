@@ -3,7 +3,7 @@
 # 
 # A do-nothing platform. A good target for mig when using external types.
 #
-# $Id: .platform,v 1.6 2009/11/14 06:51:21 razvanm Exp $
+# $Id: .platform,v 1.6 2009-11-14 06:51:21 razvanm Exp $
 #
 push( @includes, qw(
 

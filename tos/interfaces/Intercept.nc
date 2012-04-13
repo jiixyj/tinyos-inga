@@ -5,7 +5,7 @@
  *
  * @author Philip Levis
  * @author Kyle Jamieson
- * @version $Id: Intercept.nc,v 1.6 2008/06/04 03:00:26 regehr Exp $
+ * @version $Id: Intercept.nc,v 1.6 2008-06-04 03:00:26 regehr Exp $
  * @see TEP 116: Packet Protocols, TEP 119: Collection
  */
 

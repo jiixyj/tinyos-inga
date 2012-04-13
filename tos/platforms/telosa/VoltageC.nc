@@ -37,7 +37,7 @@
  * multiply by 3.
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.2 $ $Date: 2006/12/13 01:22:36 $
+ * @version $Revision: 1.2 $ $Date: 2006-12-13 01:22:36 $
  */
 
 generic configuration VoltageC() {

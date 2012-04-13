@@ -34,7 +34,7 @@
  * CC2420 radio connected to a TI MSP430 processor.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2008/05/21 22:07:25 $
+ * @version $Revision: 1.1 $ $Date: 2008-05-21 22:07:25 $
  */
 /**
  * Ported to the SHIMMER platform. 
@@ -55,10 +55,18 @@ implementation {
 
   components HplMsp430GeneralIOC as GeneralIOC;
   components Msp430TimerC;
-  components new GpioCaptureC() as CaptureSFDC;
+  components new CC2420GpioCaptureC() as CaptureSFDC;
   CaptureSFDC.Msp430TimerControl -> Msp430TimerC.ControlA1;
   CaptureSFDC.Msp430Capture -> Msp430TimerC.CaptureA1;
   CaptureSFDC.GeneralIO -> GeneralIOC.Port12;
+
+  components Counter32khz32C as Counter, new CounterToLocalTimeC(T32khz);
+  CounterToLocalTimeC.Counter -> Counter;
+  CaptureSFDC.LocalTime32khz -> CounterToLocalTimeC;
+
+  components CounterMicro32C, new CounterToLocalTimeC(TMicro) as CounterMicroToLocalTime;
+  CounterMicroToLocalTime.Counter -> CounterMicro32C;
+  CaptureSFDC.LocalTimeMicro -> CounterMicroToLocalTime;
 
   components HplMsp430InterruptC;
   components new Msp430InterruptC() as InterruptCCAC;

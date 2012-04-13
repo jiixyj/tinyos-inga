@@ -35,7 +35,7 @@
  * Note that only the data path uses split phase resource arbitration
  * 
  * @author Phil Buonadonna <pbuonadonna@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:14 $
+ * @version $Revision: 1.4 $ $Date: 2006-12-12 18:23:14 $
  */
 
 module HalTMP175ControlP

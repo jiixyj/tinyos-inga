@@ -43,7 +43,7 @@
  * @param key the 16-bit identifier of the disseminated object
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.1 $ $Date: 2007/09/14 00:22:18 $
+ * @version $Revision: 1.1 $ $Date: 2007-09-14 00:22:18 $
  */
 
 generic configuration DisseminatorC(typedef t, uint16_t key) {

@@ -1,4 +1,4 @@
-// $Id: AntiTheftC.nc,v 1.7 2009/10/28 19:11:15 razvanm Exp $
+// $Id: AntiTheftC.nc,v 1.7 2009-10-28 19:11:15 razvanm Exp $
 /*
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.

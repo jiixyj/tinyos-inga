@@ -1,4 +1,4 @@
-/* $Id: AccelXStreamC.nc,v 1.3 2007/03/14 04:57:35 pipeng Exp $
+/* $Id: AccelXStreamC.nc,v 1.3 2007-03-14 04:57:35 pipeng Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

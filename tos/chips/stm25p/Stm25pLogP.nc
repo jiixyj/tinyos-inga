@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.9 $ $Date: 2009/12/23 02:28:47 $
+ * @version $Revision: 1.9 $ $Date: 2009-12-23 02:28:47 $
  */
 
 #include <Stm25p.h>

@@ -1,4 +1,4 @@
-/* $Id: HplPXA27xI2CP.nc,v 1.6 2008/09/08 03:10:23 regehr Exp $ */
+/* $Id: HplPXA27xI2CP.nc,v 1.6 2008-09-08 03:10:23 regehr Exp $ */
 /*
  * Copyright (c) 2005 Arch Rock Corporation 
  * All rights reserved. 

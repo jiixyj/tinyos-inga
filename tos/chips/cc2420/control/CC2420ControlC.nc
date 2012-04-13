@@ -82,8 +82,10 @@ implementation {
   CC2420ControlP.MDMCTRL0 -> Spi.MDMCTRL0;
   CC2420ControlP.MDMCTRL1 -> Spi.MDMCTRL1;
   CC2420ControlP.PANID -> Spi.PANID;
+  CC2420ControlP.IEEEADR -> Spi.IEEEADR;
   CC2420ControlP.RXCTRL1 -> Spi.RXCTRL1;
   CC2420ControlP.RSSI  -> Spi.RSSI;
+  CC2420ControlP.TXCTRL  -> Spi.TXCTRL;
 
   components new CC2420SpiC() as SyncSpiC;
   CC2420ControlP.SyncResource -> SyncSpiC;
@@ -93,6 +95,9 @@ implementation {
   
   components ActiveMessageAddressC;
   CC2420ControlP.ActiveMessageAddress -> ActiveMessageAddressC;
+
+  components LocalIeeeEui64C;
+  CC2420ControlP.LocalIeeeEui64 -> LocalIeeeEui64C;
 
 }
 

@@ -1,4 +1,4 @@
-/// $Id: HplAtm128Timer0AsyncC.nc,v 1.1 2008/06/12 14:02:14 klueska Exp $
+/// $Id: HplAtm128Timer0AsyncC.nc,v 1.1 2008-06-12 14:02:14 klueska Exp $
 /*
  * Copyright (c) 2006 Stanford University.
  * All rights reserved.

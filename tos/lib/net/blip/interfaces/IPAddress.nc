@@ -19,19 +19,40 @@
  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
  *
  */
-#include <6lowpan.h>
+#include <lib6lowpan/6lowpan.h>
 
 interface IPAddress {
-  command ieee154_saddr_t getShortAddr();
-  command void setShortAddr(ieee154_saddr_t newaddr);
 
-  command struct in6_addr *getPublicAddr();
-  command void getLLAddr(struct in6_addr *addr);
-  command void getIPAddr(struct in6_addr *addr);
+  /**
+   * Get the preferred link-local interface for this node
+   */
+  command bool getLLAddr(struct in6_addr *addr);
 
-  command void setSource(struct ip6_hdr *hdr);
+  /** 
+   * Get the preferred global IPv6 address for this node
+   */
+  command bool getGlobalAddr(struct in6_addr *addr);
 
-  command void setPrefix(uint8_t *prefix);
+  /**
+   * Choose a source address for a packet originating at this node.
+   */
+  command bool setSource(struct ip6_hdr *hdr);
 
-  command bool haveAddress();
+  /**
+   * @return TRUE if the address is assigned to a local interface
+   */
+  command bool isLocalAddress(struct in6_addr *addr);
+
+  /**
+   * @return TRUE of the address is a link local address not requiring
+   * routing.
+   */
+  command bool isLLAddress(struct in6_addr *addr);
+
+  command error_t setAddress(struct in6_addr *addr);
+
+  command error_t removeAddress();
+
+  event void changed(bool valid);
+
 }

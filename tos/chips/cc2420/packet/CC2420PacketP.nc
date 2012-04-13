@@ -77,6 +77,27 @@ implementation {
   }
 
   /***************** CC2420Packet Commands ****************/
+  
+  int getAddressLength(int type) {
+    switch (type) {
+    case IEEE154_ADDR_SHORT: return 2;
+    case IEEE154_ADDR_EXT: return 8;
+    case IEEE154_ADDR_NONE: return 0;
+    default: return -100;
+    }
+  }
+  
+  uint8_t * ONE getNetwork(message_t * ONE msg) {
+    cc2420_header_t *hdr = (call CC2420PacketBody.getHeader( msg ));
+    int offset;
+    
+    offset = getAddressLength((hdr->fcf >> IEEE154_FCF_DEST_ADDR_MODE) & 0x3) +
+      getAddressLength((hdr->fcf >> IEEE154_FCF_SRC_ADDR_MODE) & 0x3) + 
+      offsetof(cc2420_header_t, dest);
+
+    return ((uint8_t *)hdr) + offset;
+  }
+
   async command void CC2420Packet.setPower( message_t* p_msg, uint8_t power ) {
     if ( power > 31 )
       power = 31;
@@ -95,17 +116,19 @@ implementation {
     return (call CC2420PacketBody.getMetadata( p_msg ))->lqi;
   }
 
-  async command uint8_t CC2420Packet.getNetwork( message_t* p_msg ) {
+  async command uint8_t CC2420Packet.getNetwork( message_t* ONE p_msg ) {
 #if defined(TFRAMES_ENABLED)
     return TINYOS_6LOWPAN_NETWORK_ID;
 #else
-    return (call CC2420PacketBody.getHeader( p_msg ))->network;
+    atomic 
+      return *(getNetwork(p_msg));
 #endif
   }
 
-  async command void CC2420Packet.setNetwork( message_t* p_msg , uint8_t networkId ) {
+  async command void CC2420Packet.setNetwork( message_t* ONE p_msg , uint8_t networkId ) {
 #if ! defined(TFRAMES_ENABLED)
-    (call CC2420PacketBody.getHeader( p_msg ))->network = networkId;
+    atomic 
+      *(getNetwork(p_msg)) = networkId;
 #endif
   }    
 
@@ -113,6 +136,17 @@ implementation {
   /***************** CC2420PacketBody Commands ****************/
   async command cc2420_header_t * ONE CC2420PacketBody.getHeader( message_t* ONE msg ) {
     return TCAST(cc2420_header_t* ONE, (uint8_t *)msg + offsetof(message_t, data) - sizeof( cc2420_header_t ));
+  }
+
+  async command uint8_t * CC2420PacketBody.getPayload( message_t* msg) {
+    cc2420_header_t *hdr = (call CC2420PacketBody.getHeader( msg ));
+    int offset;
+    
+    offset = getAddressLength((hdr->fcf >> IEEE154_FCF_DEST_ADDR_MODE) & 0x3) +
+      getAddressLength((hdr->fcf >> IEEE154_FCF_SRC_ADDR_MODE) & 0x3) + 
+      offsetof(cc2420_header_t, dest);
+
+    return ((uint8_t *)hdr) + offset;
   }
 
   async command cc2420_metadata_t *CC2420PacketBody.getMetadata( message_t* msg ) {
@@ -199,4 +233,5 @@ implementation {
   {
     (call CC2420PacketBody.getMetadata( msg ))->timesync = FALSE;
   }
+
 }

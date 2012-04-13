@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.7 2007/04/06 02:48:44 prabal Exp $
+$Id: README.txt,v 1.7 2007-04-06 02:48:44 prabal Exp $
 
 README for Config
 Author/Contact: tinyos-help@millennium.berkeley.edu

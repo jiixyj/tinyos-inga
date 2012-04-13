@@ -1,4 +1,4 @@
-/// $Id: HplAtm128Timer0AsyncC.nc,v 1.7 2007/03/29 21:07:25 idgay Exp $
+/// $Id: HplAtm128Timer0AsyncC.nc,v 1.7 2007-03-29 21:07:25 idgay Exp $
 /*
  * Copyright (c) 2006 Stanford University.
  * All rights reserved.

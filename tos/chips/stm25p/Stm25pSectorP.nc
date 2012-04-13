@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2007/12/22 08:11:51 $
+ * @version $Revision: 1.5 $ $Date: 2007-12-22 08:11:51 $
  */
 
 #include <Stm25p.h>
@@ -146,7 +146,7 @@ implementation {
     signal ClientResource.granted[ m_client ]();
   }
   
-  async command uint8_t ClientResource.isOwner[ uint8_t id ]() {
+  async command bool ClientResource.isOwner[ uint8_t id ]() {
     return call Stm25pResource.isOwner[id]();
   }
   

@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.6 2008/06/18 19:04:45 sallai Exp $
+# $Id: Makefile,v 1.6 2008-06-18 19:04:45 sallai Exp $
 #
 # TinyOS Tools Makefile
 #

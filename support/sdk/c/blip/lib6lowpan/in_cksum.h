@@ -29,17 +29,12 @@
  */
 
 #include <stdint.h>
+#include "iovec.h"
 #include "ip.h"
 
-typedef struct {
-	const uint8_t *ptr;
-	int	len;
-} vec_t;
-
-extern int in_cksum(const vec_t *vec, int veclen);
-
-// extern uint16_t in_cksum(const vec_t *vec, int veclen);
-
-extern uint16_t msg_cksum(struct split_ip_msg *msg, uint8_t nxt_hdr);
+int in_cksum(const struct ip_iovec *vec);
+uint16_t msg_cksum(const struct ip6_hdr *iph, 
+                   struct ip_iovec *data,
+                   uint8_t nxt_hdr);
 
 #endif

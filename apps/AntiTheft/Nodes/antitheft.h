@@ -1,4 +1,4 @@
-// $Id: antitheft.h,v 1.3 2007/04/04 22:06:22 idgay Exp $
+// $Id: antitheft.h,v 1.3 2007-04-04 22:06:22 idgay Exp $
 /*
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.

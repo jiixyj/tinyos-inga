@@ -53,7 +53,7 @@ typedef nx_struct DelugePatchCmd {
 
 enum {
   DELUGE_INVALID_UID = 0xffffffff,
-  DELUGE_NUM_VOLUMES = 4, 
+  DELUGE_NUM_VOLUMES = 2, 
   DELUGE_IDENT_SIZE                 = 128,
   DELUGE_MAX_PAGES                  = 128,
   DELUGE_CRC_SIZE                   = sizeof(uint16_t),

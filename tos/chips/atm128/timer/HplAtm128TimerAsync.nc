@@ -1,4 +1,4 @@
-// $Id: HplAtm128TimerAsync.nc,v 1.2 2007/03/29 21:29:33 idgay Exp $
+// $Id: HplAtm128TimerAsync.nc,v 1.2 2007-03-29 21:29:33 idgay Exp $
 /*
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.

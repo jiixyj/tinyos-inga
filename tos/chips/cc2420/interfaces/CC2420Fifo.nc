@@ -34,7 +34,7 @@
  * CC2420 radio.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.2 $ $Date: 2008/06/03 04:43:03 $
+ * @version $Revision: 1.2 $ $Date: 2008-06-03 04:43:03 $
  */
 
 interface CC2420Fifo {

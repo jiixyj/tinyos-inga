@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: sim-sf.extra,v 1.1 2007/10/03 02:09:59 hiro Exp $
+#$Id: sim-sf.extra,v 1.1 2007-10-03 02:09:59 hiro Exp $
 # Copyright (c) 2007 Toilers Research Group - Colorado School of Mines
 # All rights reserved.
 #
@@ -41,7 +41,7 @@ OPTFLAGS = -g -O0
 LIBS = -lm -lstdc++ 
 PFLAGS += -tossim -fnesc-nido-tosnodes=1000 -fnesc-simulate -fnesc-nido-motenumber=sim_node\(\) $(SF_FLAGS)
 WFLAGS = -Wno-nesc-data-race
-PYTHON_VERSION=2.5
+PYTHON_VERSION ?= $(shell python --version 2>&1 | sed 's/Python 2\.\([0-9]\)\.[0-9]+\{0,1\}/2.\1/')
 
 BUILDDIR = simbuild/$(PLATFORM)
 

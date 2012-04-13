@@ -33,7 +33,7 @@
  * @author Jonathan Hui <jhui@archrock.com>
  * @author Vlado Handziski <handzisk@tkn.tu-berlin.de>
  * @author Eric B. Decker <cire831@gmail.com>
- * @version $Revision: 1.7 $ $Date: 2008/06/04 05:31:15 $
+ * @version $Revision: 1.7 $ $Date: 2008-06-04 05:31:15 $
  */
 
 #include<Timer.h>
@@ -70,7 +70,7 @@ implementation {
     return call UsartResource.request[ id ]();
   }
 
-  async command uint8_t Resource.isOwner[ uint8_t id ]() {
+  async command bool Resource.isOwner[ uint8_t id ]() {
     return call UsartResource.isOwner[ id ]();
   }
 
@@ -207,7 +207,7 @@ implementation {
   
   async event void Counter.overflow() {}
   
-  default async command error_t UsartResource.isOwner[ uint8_t id ]() { return FAIL; }
+  default async command bool UsartResource.isOwner[ uint8_t id ]() { return FALSE; }
   default async command error_t UsartResource.request[ uint8_t id ]() { return FAIL; }
   default async command error_t UsartResource.immediateRequest[ uint8_t id ]() { return FAIL; }
   default async command error_t UsartResource.release[ uint8_t id ]() { return FAIL; }

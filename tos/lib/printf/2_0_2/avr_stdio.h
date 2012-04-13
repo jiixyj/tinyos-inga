@@ -33,7 +33,7 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 
-  $Id: avr_stdio.h,v 1.1 2008/06/12 12:33:47 klueska Exp $
+  $Id: avr_stdio.h,v 1.1 2008-06-12 12:33:47 klueska Exp $
 */
 
 #ifndef _STDIO_H_

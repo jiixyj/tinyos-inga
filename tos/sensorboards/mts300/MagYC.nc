@@ -1,4 +1,4 @@
-/* $Id: MagYC.nc,v 1.2 2008/06/11 00:42:15 razvanm Exp $
+/* $Id: MagYC.nc,v 1.2 2008-06-11 00:42:15 razvanm Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

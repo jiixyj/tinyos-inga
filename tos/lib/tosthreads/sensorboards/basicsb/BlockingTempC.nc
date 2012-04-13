@@ -1,4 +1,4 @@
-/* $Id: BlockingTempC.nc,v 1.1 2008/06/14 19:27:25 klueska Exp $
+/* $Id: BlockingTempC.nc,v 1.1 2008-06-14 19:27:25 klueska Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

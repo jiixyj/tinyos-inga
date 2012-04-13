@@ -1,4 +1,4 @@
-/* $Id: HalTsl2561ReaderP.nc,v 1.4 2006/12/12 18:23:14 vlahan Exp $ */
+/* $Id: HalTsl2561ReaderP.nc,v 1.4 2006-12-12 18:23:14 vlahan Exp $ */
 /*
  * Copyright (c) 2005 Arch Rock Corporation 
  * All rights reserved. 

@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.3 2007/04/19 07:39:18 prabal Exp $
+$Id: README.txt,v 1.3 2007-04-19 07:39:18 prabal Exp $
 
 README for PacketParrot
 
@@ -54,5 +54,4 @@ Tools:
 
 Known bugs/limitations:
 
-  Only works on motes with the CC2420 radio.  Tested and verified with
-  TelosB, Tmote, and MicaZ nodes.
+  None

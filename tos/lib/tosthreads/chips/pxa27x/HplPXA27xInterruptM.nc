@@ -1,4 +1,4 @@
-// $Id: HplPXA27xInterruptM.nc,v 1.1 2008/06/12 14:02:31 klueska Exp $ 
+// $Id: HplPXA27xInterruptM.nc,v 1.1 2008-06-12 14:02:31 klueska Exp $ 
 
 /*									tab:4
  *  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.  By

@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.5 $
- * $Date: 2009/03/04 18:31:29 $
+ * $Date: 2009-03-04 18:31:29 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -153,6 +153,7 @@ implementation
       }
     }
     signal RxEnableStateChange.notify(TRUE);
+    dbg_serial_flush();
   }
 
   async command bool IsRxEnableActive.getNow()
@@ -164,18 +165,19 @@ implementation
   {
     if (m_isRxEnabled && m_confirmPending) {
       m_confirmPending = FALSE;
-      dbg_serial("RxEnableP", "MLME_RX_ENABLE.confirm, radio is now in Rx mode\n");
       signal MLME_RX_ENABLE.confirm(IEEE154_SUCCESS);
     }
+    dbg_serial("RxEnableP", "Radio is now (%lu) in Rx\n", (uint32_t) call RxEnableTimer.getNow());
+    dbg_serial_flush();
   }
 
   command error_t RxEnableStateChange.enable() {return FAIL;}
   command error_t RxEnableStateChange.disable() {return FAIL;}
   default event void MLME_RX_ENABLE.confirm(ieee154_status_t status) {}
   default async command uint32_t IncomingSuperframeStructure.sfStartTime() {return 0;}
-  default async command uint16_t IncomingSuperframeStructure.sfSlotDuration() {return 0;}
+  default async command uint32_t IncomingSuperframeStructure.sfSlotDuration() {return 0;}
   default async command uint32_t OutgoingSuperframeStructure.sfStartTime() {return 0;}
-  default async command uint16_t OutgoingSuperframeStructure.sfSlotDuration() {return 0;}
+  default async command uint32_t OutgoingSuperframeStructure.sfSlotDuration() {return 0;}
   default async command bool IsTrackingBeacons.getNow() { return FALSE;}
   default async command bool IsSendingBeacons.getNow() { return FALSE;}
   default command ieee154_macPanCoordinator_t IsMacPanCoordinator.get() { return FALSE;}

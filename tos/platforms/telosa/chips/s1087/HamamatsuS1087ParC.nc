@@ -34,7 +34,7 @@
  * radiation sensor available on the telosb platform. 
  *
  * @author Gilman Tolle <gtolle@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2007/04/13 21:46:18 $
+ * @version $Revision: 1.5 $ $Date: 2007-04-13 21:46:18 $
  */
 
 generic configuration HamamatsuS1087ParC() {

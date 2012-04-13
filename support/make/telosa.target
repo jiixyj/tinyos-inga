@@ -1,13 +1,9 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: telosa.target,v 1.6 2008/03/11 09:34:13 klueska Exp $
+#$Id: telosa.target,v 1.6 2008-03-11 09:34:13 klueska Exp $
 
 PLATFORM ?= telosa
 
-MSP_MCU = msp430x149
-
-# Disable MSP430 hardware multiply because it makes MSPGCC die
-PFLAGS += -mdisable-hwmul
-OPTFLAGS += -O
+MSP_MCU = msp430f149
 
 MSP_BSL ?= tos-bsl
 

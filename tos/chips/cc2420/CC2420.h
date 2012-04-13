@@ -30,7 +30,7 @@
  *
  * @author Jonathan Hui <jhui@archrock.com>
  * @author David Moss
- * @version $Revision: 1.19 $ $Date: 2009/09/17 23:36:36 $
+ * @version $Revision: 1.19 $ $Date: 2009-09-17 23:36:36 $
  */
 
 #ifndef __CC2420_H__
@@ -185,8 +185,6 @@ enum {
   MAC_PACKET_SIZE = MAC_HEADER_SIZE + TOSH_DATA_LENGTH + MAC_FOOTER_SIZE,
 
   CC2420_SIZE = MAC_HEADER_SIZE + MAC_FOOTER_SIZE,
-
-  AM_OVERHEAD = 2,
 };
 
 enum cc2420_enums {

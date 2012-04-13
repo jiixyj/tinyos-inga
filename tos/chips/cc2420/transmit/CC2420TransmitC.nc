@@ -33,7 +33,7 @@
  * Implementation of the transmit path for the ChipCon CC2420 radio.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.3 $ $Date: 2009/08/14 20:33:43 $
+ * @version $Revision: 1.3 $ $Date: 2009-08-14 20:33:43 $
  */
 
 #include "IEEE802154.h"

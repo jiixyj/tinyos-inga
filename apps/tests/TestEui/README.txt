@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.1 2008/10/31 17:01:31 sallai Exp $
+$Id: README.txt,v 1.1 2008-10-31 17:01:31 sallai Exp $
 
 README for TestEui
 Author/Contact: tinyos-help@millennium.berkeley.edu

@@ -1,4 +1,4 @@
-/* $Id: BigQueueC.nc,v 1.1 2007/09/19 17:20:47 klueska Exp $ */
+/* $Id: BigQueueC.nc,v 1.1 2007-09-19 17:20:47 klueska Exp $ */
 /*
  * Copyright (c) 2006 Stanford University.
  * All rights reserved.
@@ -35,7 +35,7 @@
  *
  *  @author Philip Levis
  *  @author Geoffrey Mainland
- *  @date   $Date: 2007/09/19 17:20:47 $
+ *  @date   $Date: 2007-09-19 17:20:47 $
  */
 
    

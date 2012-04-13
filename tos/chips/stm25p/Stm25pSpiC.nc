@@ -34,7 +34,7 @@
  * code flash.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:13 $
+ * @version $Revision: 1.4 $ $Date: 2006-12-12 18:23:13 $
  */
 
 configuration Stm25pSpiC {

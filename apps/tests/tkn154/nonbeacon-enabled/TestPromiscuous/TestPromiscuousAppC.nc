@@ -28,16 +28,21 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.1 $
- * $Date: 2009/10/29 17:42:56 $
+ * $Date: 2009-10-29 17:42:56 $
  * @author: Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
+
+#define NEW_PRINTF_SEMANTICS
+#include "printf.h"
 
 configuration TestPromiscuousAppC
 {
 } implementation {
  components MainC, TestPromiscuousC as App, LedsC, 
             Ieee802154NonBeaconEnabledC as MAC;
+  components PrintfC;
+  components SerialStartC;
 
   MainC.Boot <- App;
   App.Leds -> LedsC;

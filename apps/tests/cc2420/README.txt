@@ -12,4 +12,4 @@ Known bugs/limitations:
 None.
 
 
-$Id: README.txt,v 1.1 2008/06/24 17:40:30 idgay Exp $
+$Id: README.txt,v 1.1 2008-06-24 17:40:30 idgay Exp $

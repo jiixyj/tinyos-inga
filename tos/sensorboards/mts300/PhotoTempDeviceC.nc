@@ -36,7 +36,13 @@ implementation
   TempPower.SplitControl -> TempControl;
   TempControl.PhotoTempResource -> SharingArbiter.Resource[unique(UQ_PHOTOTEMP_RESOURCE)];
   TempControl.Timer -> WarmupTimer;
+#if defined(MTS300CA) || defined(MTS310CA)
   TempControl.Power -> MicaBusC.Int2;
+#elif defined(MTS300CB) | defined(MTS310CB)
+  TempControl.Power -> MicaBusC.PW0;
+#else
+#error "Please define your sensorboard revision: MTS300CA, MTS300CB, MTS310CA, MTS310CB"
+#endif
   ReadTemp = TempControl;
   TempControl.ActualRead -> Adc;
 

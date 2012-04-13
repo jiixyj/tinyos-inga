@@ -1,4 +1,4 @@
-/* $Id: HalPXA27xSpiPioM.nc,v 1.6 2008/06/11 00:42:13 razvanm Exp $ */
+/* $Id: HalPXA27xSpiPioM.nc,v 1.6 2008-06-11 00:42:13 razvanm Exp $ */
 /*
  * Copyright (c) 2005 Arched Rock Corporation 
  * All rights reserved. 

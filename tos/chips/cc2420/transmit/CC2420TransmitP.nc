@@ -35,7 +35,7 @@
  * @author Jung Il Choi Initial SACK implementation
  * @author JeongGil Ko
  * @author Razvan Musaloiu-E
- * @version $Revision: 1.16 $ $Date: 2009/10/28 21:09:52 $
+ * @version $Revision: 1.18 $ $Date: 2010-04-13 20:27:05 $
  */
 
 #include "CC2420.h"
@@ -255,11 +255,13 @@ implementation {
   async command void RadioBackoff.setCca(bool useCca) {
   }
   
-  
-  inline uint32_t getTime32(uint16_t time)
+  // this method converts a 16-bit timestamp into a 32-bit one
+  inline uint32_t getTime32(uint16_t captured_time)
   {
-    uint32_t recent_time=call BackoffTimer.getNow();
-    return recent_time + (int16_t)(time - recent_time);
+    uint32_t now = call BackoffTimer.getNow();
+
+    // the captured_time is always in the past
+    return now - (uint16_t)(now - captured_time);
   }
 
   /**
@@ -619,7 +621,7 @@ implementation {
     uint8_t key;
     uint8_t micLength;
 
-    msg_header = call CC2420PacketBody.getHeader( m_msg );
+    msg_header = (cc2420_header_t*)m_msg->header;
 
     if(!(msg_header->fcf & (1 << IEEE154_FCF_SECURITY_ENABLED))){
       // Security is not used for this packet
@@ -643,6 +645,10 @@ implementation {
       atomic SECURITYLOCK = 1;
 
       secHdr = (security_header_t*) &msg_header->secHdr;
+#if ! defined(TFRAMES_ENABLED)
+    secHdr=(security_header_t*)((uint8_t*)secHdr+1);
+#endif
+
       memcpy(&nonceValue[3], &(secHdr->frameCounter), 4);
 
       skip = secHdr->reserved;
@@ -652,6 +658,7 @@ implementation {
 	mode = CC2420_NO_SEC;
 	micLength = 4;
       }else if (secHdr->secLevel == CBC_MAC_4){
+	//	call Leds.led0Toggle();
 	mode = CC2420_CBC_MAC;
 	micLength = 4;
       }else if (secHdr->secLevel == CBC_MAC_8){
@@ -661,6 +668,7 @@ implementation {
 	mode = CC2420_CBC_MAC;
 	micLength = 16;
       }else if (secHdr->secLevel == CTR){
+	//	call Leds.led1Toggle();
 	mode = CC2420_CTR;
 	micLength = 4;
       }else if (secHdr->secLevel == CCM_4){
@@ -675,7 +683,7 @@ implementation {
       }else{
 	return;
       }
-
+      
       CTR_SECCTRL0 = ((mode << CC2420_SECCTRL0_SEC_MODE) |
 		      ((micLength-2)/2 << CC2420_SECCTRL0_SEC_M) |
 		      (key << CC2420_SECCTRL0_SEC_TXKEYSEL) |

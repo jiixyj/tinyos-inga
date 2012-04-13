@@ -34,7 +34,7 @@
  * TEP103.
  *
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.5 $ $Date: 2008/06/04 03:00:29 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-04 03:00:29 $
  */
 
 #include "Storage.h"

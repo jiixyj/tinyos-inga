@@ -1,5 +1,5 @@
 #-*-Makefile-*- vim:syntax=make
-#$Id: eprb.extra,v 1.10 2008/09/22 20:56:36 idgay Exp $
+#$Id: eprb.extra,v 1.10 2008-09-22 20:56:36 idgay Exp $
 
 ifeq ($(EPRB),)
 $(error EPRB must be defined, try "make $(TARGETS) help")

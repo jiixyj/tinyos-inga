@@ -68,7 +68,7 @@
  * @author: Vlado Handziski <handzisk@tkn.tu-berlin.de>
  * @author: Joe Polastre
  * @author: Philipp Huppertz <huppertz@tkn.tu-berlin.de>
- * @version $Revision: 1.1 $ $Date: 2008/06/12 14:02:25 $
+ * @version $Revision: 1.1 $ $Date: 2008-06-12 14:02:25 $
  */
 
 module HplMsp430Usart0P {

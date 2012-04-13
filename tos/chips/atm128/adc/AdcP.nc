@@ -1,4 +1,4 @@
-/* $Id: AdcP.nc,v 1.6 2008/06/26 04:39:03 regehr Exp $
+/* $Id: AdcP.nc,v 1.6 2008-06-26 04:39:03 regehr Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

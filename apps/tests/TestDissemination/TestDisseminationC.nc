@@ -44,7 +44,7 @@
  * See TEP118 - Dissemination for details.
  * 
  * @author Gilman Tolle <gtolle@archedrock.com>
- * @version $Revision: 1.6 $ $Date: 2007/04/18 04:02:06 $
+ * @version $Revision: 1.6 $ $Date: 2007-04-18 04:02:06 $
  */
 
 module TestDisseminationC {

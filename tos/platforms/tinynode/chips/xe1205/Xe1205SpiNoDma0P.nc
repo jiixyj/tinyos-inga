@@ -31,7 +31,7 @@
 
 /**
  * @author Jonathan Hui <jhui@archedrock.com>
- * @version $Revision: 1.1 $ $Date: 2007/07/13 15:54:09 $
+ * @version $Revision: 1.1 $ $Date: 2007-07-13 15:54:09 $
  */
 
 configuration Xe1205SpiNoDma0P {

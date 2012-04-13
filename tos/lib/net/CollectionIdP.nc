@@ -1,4 +1,4 @@
-/* $Id: CollectionIdP.nc,v 1.4 2006/12/12 18:23:28 vlahan Exp $ */
+/* $Id: CollectionIdP.nc,v 1.4 2006-12-12 18:23:28 vlahan Exp $ */
 /*
  * Copyright (c) 2006 Massachusetts Institute of Technology (MIT).
  * All rights reserved.
@@ -37,7 +37,7 @@
  *  collection sender instance.
  *
  *  @author Kyle Jamieson
- *  @date   $Date: 2006/12/12 18:23:28 $
+ *  @date   $Date: 2006-12-12 18:23:28 $
  */
 
 #include "Collection.h"

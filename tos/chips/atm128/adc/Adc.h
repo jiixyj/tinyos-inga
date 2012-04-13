@@ -1,4 +1,4 @@
-/* $Id: Adc.h,v 1.4 2006/12/12 18:23:03 vlahan Exp $
+/* $Id: Adc.h,v 1.4 2006-12-12 18:23:03 vlahan Exp $
  * Copyright (c) 2005 Intel Corporation
  * All rights reserved.
  *

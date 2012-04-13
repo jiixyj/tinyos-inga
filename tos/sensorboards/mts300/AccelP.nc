@@ -1,4 +1,4 @@
-/* $Id: AccelP.nc,v 1.3 2007/03/14 03:25:05 pipeng Exp $
+/* $Id: AccelP.nc,v 1.3 2007-03-14 03:25:05 pipeng Exp $
  * Copyright (c) 2006 Intel Corporation
  * All rights reserved.
  *

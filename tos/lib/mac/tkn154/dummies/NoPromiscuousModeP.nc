@@ -28,7 +28,7 @@
  *
  * - Revision -------------------------------------------------------------
  * $Revision: 1.4 $
- * $Date: 2010/02/04 16:31:15 $
+ * $Date: 2010-02-04 16:31:15 $
  * @author Jan Hauer <hauer@tkn.tu-berlin.de>
  * ========================================================================
  */
@@ -65,7 +65,7 @@ implementation
 
   event void RadioToken.granted() { ASSERT(0);}
 
-  event message_t* PromiscuousRx.received(message_t *frame, const ieee154_timestamp_t *timestamp) { return frame; }
+  event message_t* PromiscuousRx.received(message_t *frame) { return frame; }
 
   async event void PromiscuousRx.enableRxDone(){}
 

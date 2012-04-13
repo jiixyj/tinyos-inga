@@ -26,4 +26,4 @@ Known bugs/limitations:
 None.
 
 
-$Id: README.txt,v 1.2 2008/07/03 18:41:36 regehr Exp $
+$Id: README.txt,v 1.2 2008-07-03 18:41:36 regehr Exp $

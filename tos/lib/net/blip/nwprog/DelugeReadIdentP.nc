@@ -26,9 +26,9 @@
 
 #include "imgNum2volumeId.h"
 
-module DelugeReadIdentP
-{
-  provides interface DelugeReadIdent[uint8_t client];
+module DelugeReadIdentP {
+
+  provides interface DelugeMetadata;
   uses {
     interface Boot;
     interface BlockRead[uint8_t volumeId];
@@ -47,7 +47,6 @@ implementation
   
   DelugeIdent ident;
   uint8_t state;
-  uint8_t currentClient;
   uint8_t currentIdx;
   uint8_t currentVolume;
   uint8_t fields;
@@ -55,13 +54,12 @@ implementation
 
   event void Boot.booted() { }
 
-  command error_t DelugeReadIdent.readVolume[uint8_t client](uint8_t imgNum)
+  command error_t DelugeReadIdent.readVolume(uint8_t imgNum)
   {
     if (state != S_READY) {
       return FAIL;
     }
     else {
-      currentClient = client;
       currentIdx = imgNum;
       currentVolume = _imgNum2volumeId[currentIdx];
       if (imgNum < DELUGE_NUM_VOLUMES) {
@@ -74,7 +72,7 @@ implementation
     }
   }
 
-  command error_t DelugeReadIdent.readNumVolumes[uint8_t client]()
+  command error_t DelugeReadIdent.readNumVolumes()
   {
     if (state != S_READY) {
       return FAIL;
@@ -82,7 +80,6 @@ implementation
     else {
       fields = 0;
       validVolumes = 0;
-      currentClient = client;
       currentIdx = 0;
       currentVolume = _imgNum2volumeId[currentIdx];
       state = S_READ_NUM_VOLUMES;
@@ -97,10 +94,10 @@ implementation
     switch (state) {
     case S_READ_VOLUME:
       if (error == SUCCESS && ident.uidhash != DELUGE_INVALID_UID) {
-        signal DelugeReadIdent.readVolumeDone[currentClient](currentIdx, buf, SUCCESS);
+        signal DelugeReadIdent.readVolumeDone(currentIdx, buf, SUCCESS);
       }
       else {
-        signal DelugeReadIdent.readVolumeDone[currentClient](currentIdx, buf, FAIL);
+        signal DelugeReadIdent.readVolumeDone(currentIdx, buf, FAIL);
       }
       state = S_READY;
       signal storageReady();
@@ -124,8 +121,7 @@ implementation
       else {
         state = S_READY;
         signal storageReady();
-        signal DelugeReadIdent.readNumVolumesDone[currentClient](
-          validVolumes, fields, SUCCESS);
+        signal DelugeReadIdent.readNumVolumesDone(validVolumes, fields, SUCCESS);
       }
       break; 
     }
@@ -138,9 +134,9 @@ implementation
   default command error_t BlockRead.computeCrc[uint8_t imgNum](
     storage_addr_t addr, storage_len_t len, uint16_t crc) { return FAIL; }
   default event void storageReady() {} 
-  default event void DelugeReadIdent.readNumVolumesDone[uint8_t client](
+  default event void DelugeReadIdent.readNumVolumesDone(
     uint8_t validVols, uint8_t volumeFields, error_t error) {}
-  default event void DelugeReadIdent.readVolumeDone[uint8_t client](
+  default event void DelugeReadIdent.readVolumeDone(
     uint8_t imgNum, DelugeIdent* id, error_t error) {} 
 
 }

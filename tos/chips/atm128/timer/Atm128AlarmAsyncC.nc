@@ -1,4 +1,4 @@
-// $Id: Atm128AlarmAsyncC.nc,v 1.3 2007/05/23 22:49:08 idgay Exp $
+// $Id: Atm128AlarmAsyncC.nc,v 1.3 2007-05-23 22:49:08 idgay Exp $
 /*
  * Copyright (c) 2007 Intel Corporation
  * All rights reserved.

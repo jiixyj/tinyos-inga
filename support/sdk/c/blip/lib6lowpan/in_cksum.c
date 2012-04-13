@@ -60,44 +60,46 @@
 #include <stdlib.h>
 #include "in_cksum.h"
 #include "lib6lowpan.h"
+#include "nwbyte.h"
 
 
 #define ADDCARRY(x)  (x > 65535 ? x -= 65535 : x)
 #define REDUCE {l_util.l = sum; sum = l_util.s[0] + l_util.s[1]; ADDCARRY(sum);}
 
 int
-in_cksum(const vec_t *vec, int veclen) {
+in_cksum(const struct ip_iovec *vec) {
+#if 1
+  /* This will break horribly if the length of any but the last ip_iovec is odd! */
 
   uint32_t sum = 0;
-  uint16_t res = 0;
   uint16_t cur = 0;
   int i;
-
-
   uint8_t *w;
  
-  for (; veclen != 0; vec++, veclen--) {
-    if (vec->len == 0)
+  for (; vec != NULL;  vec = vec->iov_next) {
+    if (vec->iov_len == 0)
       continue;
    
-    w = (uint8_t *)vec->ptr;
-    for (i = 0; i < vec->len; i++) {
+    w = vec->iov_base;
+    for (i = 0; i < vec->iov_len; i++) {
       if (i % 2 == 0) {
         cur |= ((uint16_t)w[i]) << 8;
-        if (i + 1 == vec->len) {
+        if (i + 1 == vec->iov_len) {
           goto finish;
         }
       } else {
         cur |= w[i];
       finish:
         sum += cur;
-        res = (sum & 0xffff) + (sum >> 16);
         cur = 0;
       }
     }
   }
-  return ~res ;
-#if 0
+  while (sum > 0xffff) {
+    sum = (sum & 0xffff) + (sum >> 16);
+  }
+  return ~((uint16_t)sum);
+#else
 	register const uint16_t *w;
 	register uint32_t sum = 0;
 	register uint32_t mlen = 0;
@@ -112,10 +114,11 @@ in_cksum(const vec_t *vec, int veclen) {
 		uint32_t	l;
 	} l_util;
 
-	for (; veclen != 0; vec++, veclen--) {
-		if (vec->len == 0)
+	for (; vec != NULL; vec = vec->iov_next) {
+
+		if (vec->iov_len == 0)
 			continue;
-		w = (const uint16_t *)vec->ptr;
+		w = (const uint16_t *)vec->iov_base;
 		if (mlen == -1) {
 			/*
 			 * The first byte of this chunk is the continuation
@@ -128,9 +131,9 @@ in_cksum(const vec_t *vec, int veclen) {
 			s_util.c[1] = *(const uint8_t *)w;
 			sum += s_util.s;
 			w = (const uint16_t *)((const uint8_t *)w + 1);
-			mlen = vec->len - 1;
+			mlen = vec->iov_len - 1;
 		} else
-			mlen = vec->len;
+			mlen = vec->iov_len;
 		/*
 		 * Force to even boundary.
 		 */
@@ -191,32 +194,23 @@ in_cksum(const vec_t *vec, int veclen) {
 }
 
 /* SDH : Added to allow for friendly message checksumming */
-uint16_t msg_cksum(struct split_ip_msg *msg, uint8_t nxt_hdr) {
-  struct generic_header *cur;
-  int n_headers = 4;
-  vec_t cksum_vec[7];
+uint16_t msg_cksum(const struct ip6_hdr *iph, 
+                   struct ip_iovec *data,
+                   uint8_t nxt_hdr) {
+  struct ip_iovec cksum_vec[3];
   uint32_t hdr[2];
 
-  cksum_vec[0].ptr = (uint8_t *)(msg->hdr.ip6_src.s6_addr);
-  cksum_vec[0].len = 16;
-  cksum_vec[1].ptr = (uint8_t *)(msg->hdr.ip6_dst.s6_addr);
-  cksum_vec[1].len = 16;
-  cksum_vec[2].ptr = (uint8_t *)hdr;
-  cksum_vec[2].len = 8;
-  hdr[0] = msg->data_len;
+  cksum_vec[0].iov_base = (uint8_t *)(iph->ip6_src.s6_addr);
+  cksum_vec[0].iov_len = 16;
+  cksum_vec[0].iov_next = &cksum_vec[1];
+  cksum_vec[1].iov_base = (uint8_t *)(iph->ip6_dst.s6_addr);
+  cksum_vec[1].iov_len = 16;
+  cksum_vec[1].iov_next = &cksum_vec[2];
+  cksum_vec[2].iov_base = (uint8_t *)hdr;
+  cksum_vec[2].iov_len = 8;
+  cksum_vec[2].iov_next = data;
+  hdr[0] = htonl(iov_len(data));
   hdr[1] = htonl(nxt_hdr);
-  cksum_vec[3].ptr = msg->data;
-  cksum_vec[3].len = msg->data_len;
 
-  cur = msg->headers;
-  while (cur != NULL) {
-    cksum_vec[n_headers].ptr = cur->hdr.data;
-    cksum_vec[n_headers].len = cur->len;
-    hdr[0] += cur->len;
-    n_headers++;
-    cur = cur->next;
-  }
-  hdr[0] = htonl(hdr[0]);
-  
-  return in_cksum(cksum_vec, n_headers);
+  return in_cksum(cksum_vec);
 }
