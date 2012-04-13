@@ -85,11 +85,7 @@ implementation {
   }
 
   event void Boot.booted() {
-    // call AMControl.start();
-    errcode = call AMControl.start();
-    printf("booted! radio errcode %d\n", errcode);
-    printfflush();
-    // call Timer0.startPeriodic(TIMER_PERIOD_MILLI);
+    call AMControl.start();
   }
 
   event void AMControl.startDone(error_t err) {
