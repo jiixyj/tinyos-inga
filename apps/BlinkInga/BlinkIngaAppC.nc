@@ -52,6 +52,8 @@ implementation
   components new TimerMilliC() as Timer1;
   components LocalIeeeEui64C as Eui64;
 
+  components PrintfC, SerialStartC;
+
   components UserButtonC;
   BlinkIngaC.UserButtonGet -> UserButtonC;
   BlinkIngaC.UserButtonNotify -> UserButtonC;
