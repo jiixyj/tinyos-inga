@@ -12,6 +12,8 @@ push( @includes, qw(
 
   %T/platforms/inga
   %T/platforms/inga/chips/rf230
+  %T/platforms/inga/chips/bmp085
+  %T/platforms/inga/chips/adxl345
   %T/chips/rf2xx/rf230
   %T/chips/rf2xx/layers
   %T/chips/rf2xx/util
@@ -28,6 +30,7 @@ push( @includes, qw(
   %T/chips/atm128/spi
   %T/chips/atm128/i2c
   %T/chips/atm128/timer
+  %T/chips/adxl345
   %T/lib/timer
   %T/lib/serial
   %T/lib/power
