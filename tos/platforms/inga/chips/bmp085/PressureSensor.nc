@@ -34,10 +34,6 @@
  */
 
 interface PressureSensor { 
-  command void powerUp();
-
-  command void powerDown();
-
   /*
    * range 0 to 3, lowest power to highest resolution
    * see driver for details
@@ -46,9 +42,6 @@ interface PressureSensor {
 
   command void readTemperature();
   command void readPressure();
-
-  command void disableBus();
-  command void enableBus();
 
   event void tempAvailable(int16_t * data);
   event void pressAvailable(int32_t * data);

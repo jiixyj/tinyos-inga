@@ -35,7 +35,6 @@
 
 configuration PressureSensorC {
   provides {
-    interface Init;
     interface StdControl;
     interface PressureSensor;
   }
@@ -43,32 +42,14 @@ configuration PressureSensorC {
 
 implementation {
   components Bmp085P;
-  Init           = Bmp085P;
   StdControl     = Bmp085P;
   PressureSensor = Bmp085P;
 
-  /*
-  components LedsC;
-  Bmp085P.Leds -> LedsC;
-  */
-  enum {
-    CLIENT_ID = unique( MSP430_I2CO_BUS ),
-  };
+  components new Atm128I2CMasterC();
+  Bmp085P.I2CPacket   -> Atm128I2CMasterC;
+  Bmp085P.I2CResource -> Atm128I2CMasterC;
 
-  components Msp430I2CP;        // this is mine, ported from tos-1.x; find it in shimmer/chips/msp430
-  Bmp085P.I2CPacket -> Msp430I2CP.I2CBasicAddr;
-
-  components HplMsp430I2C0C;
-  Bmp085P.HplI2C -> HplMsp430I2C0C;
-  Msp430I2CP.HplI2C -> HplMsp430I2C0C;
-
-  components HplMsp430Usart0C;
-  Msp430I2CP.I2CInterrupts -> HplMsp430Usart0C;
-
-  components HplMsp430InterruptP;
-  Bmp085P.EOCInterrupt -> HplMsp430InterruptP.Port13;
-
-  components HplMsp430GeneralIOC as GpioC; 
-  Bmp085P.Msp430GeneralIO -> GpioC.Port13;
+  components BusyWaitMicroC;
+  Bmp085P.BusyWait -> BusyWaitMicroC;
 }
 

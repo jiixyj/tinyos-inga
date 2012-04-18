@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2012 Martin Cerveny
+ * Copyright (c) 2012 Jan Kokemüller
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,9 +12,6 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the
  *   distribution.
- * - Neither the name of INSERT_AFFILIATION_NAME_HERE nor the names of
- *   its contributors may be used to endorse or promote products derived
- *   from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,18 +27,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Blink is a basic application that toggles a mote's LED periodically.
- * It does so by starting a Timer that fires every second. It uses the
- * OSKI TimerMilli service to achieve this goal.
- *
- * Also it sends last two bytes to hex LCD, lit on Raven symbol
- * and display "Hello world" on alfanumeric LCD.
- *
- * @author: Martin Cerveny
- *
- **/
-
 configuration PressureIngaAppC
 {
 }
@@ -49,7 +34,6 @@ implementation
 {
   components MainC, PressureIngaC, LedsC;
   components new TimerMilliC() as Timer0;
-  components LocalIeeeEui64C as Eui64;
 
   components PrintfC, SerialStartC;
 
@@ -61,12 +45,15 @@ implementation
 
   PressureIngaC.Timer0 -> Timer0;
   PressureIngaC.Leds -> LedsC;
-  PressureIngaC.Eui64 -> Eui64;
 
-  components new ADXL345C();
-  App.Xaxis -> ADXL345C.X;
-  App.Yaxis -> ADXL345C.Y;
-  App.Zaxis -> ADXL345C.Z;
-  App.AccelControl -> ADXL345C.SplitControl;
+  components PressureSensorC;
+  PressureIngaC.PressureSensor -> PressureSensorC;
+  PressureIngaC.PressureSensorControl -> PressureSensorC;
+
+  // components new ADXL345C();
+  // App.Xaxis -> ADXL345C.X;
+  // App.Yaxis -> ADXL345C.Y;
+  // App.Zaxis -> ADXL345C.Z;
+  // App.AccelControl -> ADXL345C.SplitControl;
 }
 

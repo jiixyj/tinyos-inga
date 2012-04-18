@@ -37,20 +37,13 @@
 
 module Bmp085P {
   provides {
-    interface Init;
     interface StdControl;
     interface PressureSensor;
   }
   uses {
     interface I2CPacket<TI2CBasicAddr> as I2CPacket;
-
-    interface HplMsp430I2C as HplI2C;
-    //    interface HplMsp430Usart as Usart;
-    interface HplMsp430UsartInterrupts as UsartInterrupts;
-    interface HplMsp430I2CInterrupts as I2CInterrupts;
-
-    interface HplMsp430Interrupt as EOCInterrupt;
-    interface HplMsp430GeneralIO as Msp430GeneralIO;
+    interface Resource as I2CResource;
+    interface BusyWait<TMicro,uint16_t> as BusyWait;
   }
 }
 
@@ -76,138 +69,71 @@ implementation {
   uint32_t b4, b7, up, ut;
   int16_t temp;
 
+  error_t errcode;
+
   bool operatingState;
 
-  msp430_i2c_union_config_t msp430_i2c_my_config = { 
-    {
-      rxdmaen : 0, 
-      txdmaen : 0, 
-      xa : 0, 
-      listen : 0, 
-      mst : 1,
-      i2cword : 0, 
-      i2crm : 1, 
-      i2cssel : 0x2, 
-      i2cpsc : 0, 
-      i2csclh : 0x3, 
-      i2cscll : 0x3,
-      i2coa : 0,
-    } 
-  };
+  // msp430_i2c_union_config_t msp430_i2c_my_config = { 
+  //   {
+  //     rxdmaen : 0, 
+  //     txdmaen : 0, 
+  //     xa : 0, 
+  //     listen : 0, 
+  //     mst : 1,
+  //     i2cword : 0, 
+  //     i2crm : 1, 
+  //     i2cssel : 0x2, 
+  //     i2cpsc : 0, 
+  //     i2csclh : 0x3, 
+  //     i2cscll : 0x3,
+  //     i2coa : 0,
+  //   } 
+  // };
 
   enum {
     WAITING_ON_REG,
     NORMAL
   };
 
-  command error_t Init.init() {
-    TOSH_SET_ADC_1_PIN();   // this is a pull-up to enable the i2c bus
+  task void cal() {
+    readReg(0xaa, 22);
+  }
 
-    TOSH_SET_ADC_2_PIN();   // module clear pin, logical false (basically reset)
-
-    call HplI2C.setModeI2C(&msp430_i2c_my_config);
-
-    TOSH_MAKE_SER0_RTS_INPUT();  // this is the EOC (end o calculation) pin
-
+  command error_t StdControl.start() {
     temp_run = 0;
     oss = 3;
 
     operatingState = NORMAL;
 
-    return SUCCESS;
-  }
-
-  task void cal(){
-    readReg(0xaa, 22);
-  }
-
-  command error_t StdControl.start(){
-    // this is the EOC (end o calculation) pin
-
-    atomic {
-      call Msp430GeneralIO.makeInput();
-      call Msp430GeneralIO.selectIOFunc();
-      call EOCInterrupt.disable();
-      call EOCInterrupt.edge(TRUE);
-      call EOCInterrupt.clear();
-      call EOCInterrupt.enable();
-    }
-
-    call PressureSensor.powerUp();
-
-    TOSH_uwait(15000);  // power-on startup time
+    // call BusyWait.wait(150000);
 
     post cal();
 
     return SUCCESS;
   }
 
-  command error_t StdControl.stop(){
-    call EOCInterrupt.disable();
-
-    call PressureSensor.powerDown();
-
-    call EOCInterrupt.clear();
-
-    TOSH_CLR_ADC_1_PIN();   // disable the i2c bus
-    
+  command error_t StdControl.stop() {
     return SUCCESS;
-  }
-
-  command void PressureSensor.disableBus(){
-    call HplI2C.disableI2C();
-    call EOCInterrupt.disable();
-
-    call EOCInterrupt.clear();
-
-    //    TOSH_CLR_ADC_1_PIN();   // disable the i2c bus
-  }
-
-  command void PressureSensor.enableBus(){
-    TOSH_SET_ADC_1_PIN();   // this is a pull-up to enable the i2c bus
-
-    call HplI2C.setModeI2C(&msp430_i2c_my_config);
-
-    call EOCInterrupt.clear();
-    call EOCInterrupt.enable();
-  }
-
-  command void PressureSensor.powerUp(){
-    TOSH_SET_ADC_2_PIN();   // out of reset
-  }
-
-  command void PressureSensor.powerDown(){
-    TOSH_CLR_ADC_2_PIN();   // reset
   }
 
   void readReg(uint8_t reg_addr, uint8_t size){
     // first we have to write the unary register address
-    uint8_t ra = reg_addr;
+    regToRead = reg_addr;
 
     operatingState = WAITING_ON_REG;
     bytesToRead = size;
 
-    call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &ra);
+    call I2CResource.request();
   }
-  
-  error_t writeReg(uint8_t reg_addr, uint8_t val) {
+
+  void writeReg(uint8_t reg_addr, uint8_t val) {
 
     // pack the packet with address of reg target, then register value
     packet[0] = reg_addr;
     packet[1] = val;
 
     // write addr is 0xee, so 7-bit addr should be 77
-    return call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 2, packet);
-  }
-
-  task void cleanup() {
-    readReg(regToRead, bytesToRead);
-  }
-
-  async event void EOCInterrupt.fired() {
-    call EOCInterrupt.clear();
-    
-    post cleanup();
+    call I2CResource.request();
   }
 
   command void PressureSensor.readTemperature() {
@@ -218,13 +144,13 @@ implementation {
 
     writeReg(0xf4, 0x2e);
   }
-    
+
   command void PressureSensor.readPressure(){
     uint8_t pressureMode;
 
     pressureMode = 0x34 + (oss << 6);
     operatingState = NORMAL;
-    
+
     regToRead = 0xf6;
     bytesToRead = 3;
 
@@ -238,7 +164,7 @@ implementation {
     temp = (b5 + 8) >> 4;
 
     signal PressureSensor.tempAvailable(&temp);
-  }    
+  }
 
   task void calc_press() {
     b6 = b5 - 4000;
@@ -267,7 +193,7 @@ implementation {
 
   task void store_cal(){
     uint16_t * src;
-    
+
     src = sbuf0;
     AC1 = *(int16_t *)src++;
     AC2 = *(int16_t *)src++;
@@ -311,9 +237,9 @@ implementation {
       src = swapbuff;
       dest = sbuf0;
       for(i = 0; i < bytesRead; i+=2){
-	*(swapbuff + i + 1) = *(readbuff + i);
-	*(swapbuff + i) = *(readbuff + i + 1);
-	*dest++ = *src++;
+        *(swapbuff + i + 1) = *(readbuff + i);
+        *(swapbuff + i) = *(readbuff + i + 1);
+        *dest++ = *src++;
       }
       post store_cal();
     }
@@ -332,35 +258,40 @@ implementation {
   async event void I2CPacket.readDone(error_t _success, uint16_t _addr, uint8_t _length, uint8_t* _data) { 
     bytesRead = _length;
     memcpy(readbuff, _data, _length);
+
+    call I2CResource.release();
+
     post collect_data();
   }
 
   async event void I2CPacket.writeDone(error_t _success, uint16_t _addr, uint8_t _length, uint8_t* _data) { 
-    if(operatingState == WAITING_ON_REG){
+    if (operatingState == WAITING_ON_REG) {
       call I2CPacket.read(I2C_START | I2C_STOP, 0x77, bytesToRead, readbuff);
       operatingState = NORMAL;
+    } else {
+
+      if (bytesToRead == 2) {  // reading temperature
+        call BusyWait.wait(4500);
+      } else {
+        switch (oss) {
+        case 0: call BusyWait.wait( 4500); break;
+        case 1: call BusyWait.wait( 7500); break;
+        case 2: call BusyWait.wait(13500); break;
+        case 3: call BusyWait.wait(25500); break;
+        }
+      }
+
+      operatingState = WAITING_ON_REG;
+      call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &regToRead);
     }
   }
 
-  async event void UsartInterrupts.rxDone( uint8_t data ) {}
-  async event void UsartInterrupts.txDone() {}
-  async event void I2CInterrupts.fired() {}
+  event void I2CResource.granted() {
+    if (operatingState == WAITING_ON_REG) {
+      call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &regToRead);
+    } else {
+      call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 2, packet);
+    }
+  }
 
-  /*
-  // these will trigger from the i2civ, but separate interrupts are available in i2cifg (separate enable, too).
-  async event void I2CEvents.arbitrationLost() { }
-  async event void I2CEvents.noAck() { }
-  async event void I2CEvents.ownAddr() { }
-  async event void I2CEvents.readyRegAccess() { }
-  async event void I2CEvents.readyRxData() { }
-  async event void I2CEvents.readyTxData() { }
-  async event void I2CEvents.generalCall() { }
-  async event void I2CEvents.startRecv() { }
-  */
 }
-  
-
-
-
-
-
