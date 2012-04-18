@@ -51,8 +51,6 @@ implementation {
   extern int sprintf(char *str, const char *format, ...) __attribute__ ((C));
   extern int snprintf(char *str, size_t len, const char *format, ...) __attribute__ ((C));
 
-  void readReg(uint8_t reg_addr, uint8_t size);
-
   uint8_t readbuff[128], bytesToRead, regToRead, bytesRead, temp_run, cal_run;
   uint16_t sbuf0[64];
   uint8_t packet[2];
@@ -63,7 +61,7 @@ implementation {
   // calibration vars
   int16_t AC1, AC2, AC3, B1, B2, MB, MC, MD;
   uint16_t AC4, AC5, AC6;
-  
+
   // calculation vars
   int32_t x1, x2, x3, b3, b5, b6, press;
   uint32_t b4, b7, up, ut;
@@ -73,30 +71,18 @@ implementation {
 
   bool operatingState;
 
-  // msp430_i2c_union_config_t msp430_i2c_my_config = { 
-  //   {
-  //     rxdmaen : 0, 
-  //     txdmaen : 0, 
-  //     xa : 0, 
-  //     listen : 0, 
-  //     mst : 1,
-  //     i2cword : 0, 
-  //     i2crm : 1, 
-  //     i2cssel : 0x2, 
-  //     i2cpsc : 0, 
-  //     i2csclh : 0x3, 
-  //     i2cscll : 0x3,
-  //     i2coa : 0,
-  //   } 
-  // };
-
   enum {
     WAITING_ON_REG,
     NORMAL
   };
 
   task void cal() {
-    readReg(0xaa, 22);
+    operatingState = WAITING_ON_REG;
+
+    regToRead = 0xaa;
+    bytesToRead = 22;
+
+    call I2CResource.request();
   }
 
   command error_t StdControl.start() {
@@ -104,8 +90,6 @@ implementation {
     oss = 3;
 
     operatingState = NORMAL;
-
-    // call BusyWait.wait(150000);
 
     post cal();
 
@@ -116,23 +100,10 @@ implementation {
     return SUCCESS;
   }
 
-  void readReg(uint8_t reg_addr, uint8_t size){
-    // first we have to write the unary register address
-    regToRead = reg_addr;
-
-    operatingState = WAITING_ON_REG;
-    bytesToRead = size;
-
-    call I2CResource.request();
-  }
-
   void writeReg(uint8_t reg_addr, uint8_t val) {
-
-    // pack the packet with address of reg target, then register value
     packet[0] = reg_addr;
     packet[1] = val;
 
-    // write addr is 0xee, so 7-bit addr should be 77
     call I2CResource.request();
   }
 
@@ -146,15 +117,12 @@ implementation {
   }
 
   command void PressureSensor.readPressure(){
-    uint8_t pressureMode;
-
-    pressureMode = 0x34 + (oss << 6);
     operatingState = NORMAL;
 
     regToRead = 0xf6;
     bytesToRead = 3;
 
-    writeReg(0xf4, pressureMode);
+    writeReg(0xf4, 0x34 + (oss << 6));
   }
 
   task void calc_temp() {
@@ -175,8 +143,8 @@ implementation {
     x1 = (int32_t)AC3 * b6 >> 13;
     x2 = (int32_t)B1 * (b6 * b6 >> 12) >> 16;
     x3 = (x1 + x2 + 2) >> 2;
-    b4 = (uint32_t)AC4 * (uint32_t)(x3 + 32768) >> 15;
-    b7 = (uint32_t)(up - b3) * (50000 >> oss);
+    b4 = ((uint32_t) AC4 * (uint32_t) (x3 + 32768u)) >> 15;
+    b7 = (uint32_t)(up - b3) * (50000u >> oss);
 
     if(b7  < 0x80000000UL)
       press = (b7 << 1) / b4;
