@@ -17,7 +17,7 @@ module PressureIngaC @safe()
   uses interface Notify<button_state_t> as UserButtonNotify;
 
   uses interface PressureSensor;
-  uses interface StdControl as PressureSensorControl;
+  uses interface SplitControl as PressureSensorControl;
 }
 
 implementation
@@ -26,9 +26,13 @@ implementation
   {
     printf("booted!\n");
     printfflush();
+    call PressureSensorControl.start();
+  }
+
+  event void PressureSensorControl.startDone(error_t error)
+  {
     call Timer0.startPeriodic( 1000 );
     call UserButtonNotify.enable( );
-    call PressureSensorControl.start();
   }
 
   event void Timer0.fired()
@@ -58,6 +62,8 @@ implementation
     printf("got press %"PRIi32"\n", data);
     printfflush();
   }
+
+  event void PressureSensorControl.stopDone(error_t error) { }
 
 }
 

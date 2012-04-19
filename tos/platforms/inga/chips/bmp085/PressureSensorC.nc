@@ -35,14 +35,14 @@
 
 configuration PressureSensorC {
   provides {
-    interface StdControl;
+    interface SplitControl;
     interface PressureSensor;
   }
 }
 
 implementation {
   components Bmp085P;
-  StdControl     = Bmp085P;
+  SplitControl   = Bmp085P;
   PressureSensor = Bmp085P;
 
   components new Atm128I2CMasterC();
@@ -52,4 +52,3 @@ implementation {
   components BusyWaitMicroC;
   Bmp085P.BusyWait -> BusyWaitMicroC;
 }
-

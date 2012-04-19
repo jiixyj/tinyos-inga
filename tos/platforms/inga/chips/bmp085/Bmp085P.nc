@@ -37,7 +37,7 @@
 
 module Bmp085P {
   provides {
-    interface StdControl;
+    interface SplitControl;
     interface PressureSensor;
   }
   uses {
@@ -77,12 +77,15 @@ implementation {
 
   error_t errcode;
 
-  bool operatingState, busy;
-
   enum {
-    WAITING_ON_REG,
-    NORMAL
+    OFF,
+    STARTING,
+    NORMAL,
+    WAITING_ON_REG
   };
+
+  bool operatingState = OFF;
+  bool busy;
 
   task void read_calibration_data() {
     operatingState = WAITING_ON_REG;
@@ -93,14 +96,27 @@ implementation {
     call I2CResource.request();
   }
 
-  command error_t StdControl.start() {
-    atomic busy = TRUE;
+  command error_t SplitControl.start() {
+    error_t error = SUCCESS;
+
+    atomic {
+      if (operatingState == OFF) {
+        operatingState = STARTING;
+      } else if (operatingState == STARTING) {
+        return SUCCESS;
+      } else {
+        error = EALREADY;
+      }
+    }
+
     oss = 3;
     post read_calibration_data();
+
     return SUCCESS;
   }
 
-  command error_t StdControl.stop() {
+  command error_t SplitControl.stop() {
+    signal SplitControl.stopDone(SUCCESS);
     return SUCCESS;
   }
 
@@ -191,6 +207,7 @@ implementation {
       for (i = 0; i < 11; ++i) {
         calibration_vars[i] = (readbuff[i*2] << 8) | readbuff[i*2+1];
       }
+      signal SplitControl.startDone(SUCCESS);
     }
   }
 
@@ -251,5 +268,8 @@ implementation {
       call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 2, packet);
     }
   }
+
+  default event void SplitControl.startDone(error_t error) { }
+  default event void SplitControl.stopDone(error_t error) { }
 
 }

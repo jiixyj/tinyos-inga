@@ -33,7 +33,7 @@
  *
  */
 
-interface PressureSensor { 
+interface PressureSensor {
   /*
    * range 0 to 3, lowest power to highest resolution
    * see driver for details
