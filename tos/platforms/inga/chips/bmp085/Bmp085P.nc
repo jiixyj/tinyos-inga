@@ -51,7 +51,9 @@ implementation {
   extern int sprintf(char *str, const char *format, ...) __attribute__ ((C));
   extern int snprintf(char *str, size_t len, const char *format, ...) __attribute__ ((C));
 
-  uint8_t readbuff[22], bytesToRead, regToRead, bytesRead;
+  uint8_t readbuff[22];
+  norace uint8_t bytesToRead, bytesRead; // both protected by "busy"
+  uint8_t regToRead;
   uint8_t packet[2];
 
   int16_t calibration_vars[11];
@@ -68,7 +70,7 @@ implementation {
   #define  MD (calibration_vars[10])
 
   // sensing mode
-  uint8_t oss;  // default is ultra high res
+  uint8_t oss = 3;  // default is ultra high res
 
   // calculation vars
   int32_t x1, x2, x3, b3, b5, b6, press;
@@ -80,16 +82,13 @@ implementation {
   enum {
     OFF,
     STARTING,
-    NORMAL,
-    WAITING_ON_REG
+    ON
   };
 
   bool operatingState = OFF;
-  bool busy;
+  bool busy = FALSE;
 
   task void read_calibration_data() {
-    operatingState = WAITING_ON_REG;
-
     regToRead = 0xaa;
     bytesToRead = 22;
 
@@ -97,19 +96,16 @@ implementation {
   }
 
   command error_t SplitControl.start() {
-    error_t error = SUCCESS;
-
     atomic {
       if (operatingState == OFF) {
         operatingState = STARTING;
       } else if (operatingState == STARTING) {
         return SUCCESS;
       } else {
-        error = EALREADY;
+        return EALREADY;
       }
     }
 
-    oss = 3;
     post read_calibration_data();
 
     return SUCCESS;
@@ -124,15 +120,10 @@ implementation {
 
   error_t writeReg(uint8_t reg_addr, uint8_t val,
                    uint8_t reg_to_read, uint8_t bytes_to_read) {
-    error_t error = SUCCESS;
     atomic {
-      if (busy) error = EBUSY;
+      if (busy) return EBUSY;
       else       busy = TRUE;
     }
-    if (error) return error;
-
-
-    operatingState = NORMAL;
 
     packet[0] = reg_addr;
     packet[1] = val;
@@ -143,8 +134,7 @@ implementation {
     errcode = call I2CResource.request();
     printf("request i2c%d\n", (int) errcode);
 
-
-    return error;
+    return SUCCESS;
   }
 
   command error_t PressureSensor.readTemperature() {
@@ -190,7 +180,6 @@ implementation {
   }
 
   task void collect_data() {
-    register uint8_t i;
     // temp
     if (bytesRead == 2) {
       ut = (readbuff[0] << 8) | readbuff[1];
@@ -204,11 +193,21 @@ implementation {
     }
     // calibration
     else if (bytesRead == 22) {
+      register uint8_t i;
+
       for (i = 0; i < 11; ++i) {
         calibration_vars[i] = (readbuff[i*2] << 8) | readbuff[i*2+1];
       }
+      atomic {
+        operatingState = ON;
+        busy = FALSE;
+      }
       signal SplitControl.startDone(SUCCESS);
+      return;
     }
+
+    atomic busy = FALSE;
+
   }
 
   /*
@@ -226,20 +225,15 @@ implementation {
     memcpy(readbuff, _data, _length);
 
     call I2CResource.release();
-    printf("i2c released\n");
-
-    atomic busy = FALSE;
-
     post collect_data();
   }
 
   async event void I2CPacket.writeDone(error_t _success, uint16_t _addr, uint8_t _length, uint8_t* _data) { 
+    static bool read_next = FALSE;
 
-    printf("write_done\n");
-
-    if (operatingState == WAITING_ON_REG) {
+    if (read_next || operatingState == STARTING) {
       call I2CPacket.read(I2C_START | I2C_STOP, 0x77, bytesToRead, readbuff);
-      operatingState = NORMAL;
+      read_next = FALSE;
     } else {
 
       if (bytesToRead == 2) {               // reading temperature
@@ -253,18 +247,15 @@ implementation {
         }
       }
 
-      operatingState = WAITING_ON_REG;
+      read_next = TRUE;
       call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &regToRead);
     }
   }
 
   event void I2CResource.granted() {
-
-    printf("request_granted\n");
-
-    if (operatingState == WAITING_ON_REG) {
+    if (operatingState == STARTING) {  // read calibration data
       call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &regToRead);
-    } else {
+    } else {                           // read temperature/pressure data
       call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 2, packet);
     }
   }
