@@ -131,8 +131,7 @@ implementation {
     regToRead = reg_to_read;
     bytesToRead = bytes_to_read;
 
-    errcode = call I2CResource.request();
-    printf("request i2c%d\n", (int) errcode);
+    call I2CResource.request();
 
     return SUCCESS;
   }
