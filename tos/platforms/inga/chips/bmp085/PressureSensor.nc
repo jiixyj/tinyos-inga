@@ -40,9 +40,9 @@ interface PressureSensor {
    */
   command void setSensingMode(uint8_t mode);
 
-  command void readTemperature();
-  command void readPressure();
+  command error_t readTemperature();
+  command error_t readPressure();
 
-  event void tempAvailable(int16_t * data);
-  event void pressAvailable(int32_t * data);
+  event void tempAvailable(int16_t data);
+  event void pressAvailable(int32_t data);
 }

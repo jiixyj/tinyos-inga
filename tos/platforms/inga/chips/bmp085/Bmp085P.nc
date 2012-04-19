@@ -51,16 +51,24 @@ implementation {
   extern int sprintf(char *str, const char *format, ...) __attribute__ ((C));
   extern int snprintf(char *str, size_t len, const char *format, ...) __attribute__ ((C));
 
-  uint8_t readbuff[128], bytesToRead, regToRead, bytesRead, temp_run, cal_run;
-  uint16_t sbuf0[64];
+  uint8_t readbuff[22], bytesToRead, regToRead, bytesRead;
   uint8_t packet[2];
+
+  int16_t calibration_vars[11];
+  #define AC1 (calibration_vars[ 0])
+  #define AC2 (calibration_vars[ 1])
+  #define AC3 (calibration_vars[ 2])
+  #define AC4 ((uint16_t) calibration_vars[ 3])
+  #define AC5 ((uint16_t) calibration_vars[ 4])
+  #define AC6 ((uint16_t) calibration_vars[ 5])
+  #define  B1 (calibration_vars[ 6])
+  #define  B2 (calibration_vars[ 7])
+  #define  MB (calibration_vars[ 8])
+  #define  MC (calibration_vars[ 9])
+  #define  MD (calibration_vars[10])
 
   // sensing mode
   uint8_t oss;  // default is ultra high res
-
-  // calibration vars
-  int16_t AC1, AC2, AC3, B1, B2, MB, MC, MD;
-  uint16_t AC4, AC5, AC6;
 
   // calculation vars
   int32_t x1, x2, x3, b3, b5, b6, press;
@@ -69,14 +77,14 @@ implementation {
 
   error_t errcode;
 
-  bool operatingState;
+  bool operatingState, busy;
 
   enum {
     WAITING_ON_REG,
     NORMAL
   };
 
-  task void cal() {
+  task void read_calibration_data() {
     operatingState = WAITING_ON_REG;
 
     regToRead = 0xaa;
@@ -86,13 +94,9 @@ implementation {
   }
 
   command error_t StdControl.start() {
-    temp_run = 0;
+    atomic busy = TRUE;
     oss = 3;
-
-    operatingState = NORMAL;
-
-    post cal();
-
+    post read_calibration_data();
     return SUCCESS;
   }
 
@@ -100,29 +104,39 @@ implementation {
     return SUCCESS;
   }
 
-  void writeReg(uint8_t reg_addr, uint8_t val) {
+  error_t errcode;
+
+  error_t writeReg(uint8_t reg_addr, uint8_t val,
+                   uint8_t reg_to_read, uint8_t bytes_to_read) {
+    error_t error = SUCCESS;
+    atomic {
+      if (busy) error = EBUSY;
+      else       busy = TRUE;
+    }
+    if (error) return error;
+
+
+    operatingState = NORMAL;
+
     packet[0] = reg_addr;
     packet[1] = val;
 
-    call I2CResource.request();
+    regToRead = reg_to_read;
+    bytesToRead = bytes_to_read;
+
+    errcode = call I2CResource.request();
+    printf("request i2c%d\n", (int) errcode);
+
+
+    return error;
   }
 
-  command void PressureSensor.readTemperature() {
-    operatingState = NORMAL;
-
-    regToRead = 0xf6;
-    bytesToRead = 2;
-
-    writeReg(0xf4, 0x2e);
+  command error_t PressureSensor.readTemperature() {
+    return writeReg(0xf4, 0x2e, 0xf6, 2);
   }
 
-  command void PressureSensor.readPressure(){
-    operatingState = NORMAL;
-
-    regToRead = 0xf6;
-    bytesToRead = 3;
-
-    writeReg(0xf4, 0x34 + (oss << 6));
+  command error_t PressureSensor.readPressure(){
+    return writeReg(0xf4, 0x34 + (oss << 6), 0xf6, 3);
   }
 
   task void calc_temp() {
@@ -131,7 +145,7 @@ implementation {
     b5 = x1 + x2;
     temp = (b5 + 8) >> 4;
 
-    signal PressureSensor.tempAvailable(&temp);
+    signal PressureSensor.tempAvailable(temp);
   }
 
   task void calc_press() {
@@ -156,60 +170,27 @@ implementation {
 
     press = press + ((x1 + x2 + 3791) >> 4);
 
-    signal PressureSensor.pressAvailable(&press);
-  }
-
-  task void store_cal(){
-    uint16_t * src;
-
-    src = sbuf0;
-    AC1 = *(int16_t *)src++;
-    AC2 = *(int16_t *)src++;
-    AC3 = *(int16_t *)src++;
-    AC4 = *src++;
-    AC5 = *src++;
-    AC6 = *src++;
-    B1 = *(int16_t *)src++;
-    B2 = *(int16_t *)src++;
-    MB = *(int16_t *)src++;
-    MC = *(int16_t *)src++;
-    MD = *(int16_t *)src++;
+    signal PressureSensor.pressAvailable(press);
   }
 
   task void collect_data() {
     register uint8_t i;
-    uint16_t * src, * dest;
-    uint8_t swapbuff[128];
-    uint8_t pressureData[3];
-
     // temp
-    if(bytesRead == 2){
-      src = swapbuff;
-      *(swapbuff + 1) = *readbuff;
-      *swapbuff = *(readbuff + 1);
-      ut = *src;
-
+    if (bytesRead == 2) {
+      ut = (readbuff[0] << 8) | readbuff[1];
       post calc_temp();
     }
     // pressure
-    else if(bytesRead == 3){
-      *pressureData = *readbuff;
-      *(pressureData + 1) = *(readbuff + 1);
-      *(pressureData + 2) = *(readbuff + 2);
-      up = ((uint32_t)*pressureData << 16 | (uint32_t)*(pressureData + 1) << 8 | *(pressureData + 2)) >> (8 - oss);
-
+    else if (bytesRead == 3) {
+      up = ((uint32_t) readbuff[0] << 16 | readbuff[1] <<  8 | readbuff[2])
+           >> (8 - oss);
       post calc_press();
     }
     // calibration
-    else if(!(bytesRead % 2)){
-      src = swapbuff;
-      dest = sbuf0;
-      for(i = 0; i < bytesRead; i+=2){
-        *(swapbuff + i + 1) = *(readbuff + i);
-        *(swapbuff + i) = *(readbuff + i + 1);
-        *dest++ = *src++;
+    else if (bytesRead == 22) {
+      for (i = 0; i < 11; ++i) {
+        calibration_vars[i] = (readbuff[i*2] << 8) | readbuff[i*2+1];
       }
-      post store_cal();
     }
   }
 
@@ -228,19 +209,25 @@ implementation {
     memcpy(readbuff, _data, _length);
 
     call I2CResource.release();
+    printf("i2c released\n");
+
+    atomic busy = FALSE;
 
     post collect_data();
   }
 
   async event void I2CPacket.writeDone(error_t _success, uint16_t _addr, uint8_t _length, uint8_t* _data) { 
+
+    printf("write_done\n");
+
     if (operatingState == WAITING_ON_REG) {
       call I2CPacket.read(I2C_START | I2C_STOP, 0x77, bytesToRead, readbuff);
       operatingState = NORMAL;
     } else {
 
-      if (bytesToRead == 2) {  // reading temperature
+      if (bytesToRead == 2) {               // reading temperature
         call BusyWait.wait(4500);
-      } else {
+      } else {                              // reading pressure
         switch (oss) {
         case 0: call BusyWait.wait( 4500); break;
         case 1: call BusyWait.wait( 7500); break;
@@ -255,6 +242,9 @@ implementation {
   }
 
   event void I2CResource.granted() {
+
+    printf("request_granted\n");
+
     if (operatingState == WAITING_ON_REG) {
       call I2CPacket.write(I2C_START | I2C_STOP, 0x77, 1, &regToRead);
     } else {

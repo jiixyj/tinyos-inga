@@ -41,18 +41,21 @@ implementation
 
   event void UserButtonNotify.notify(button_state_t state) {
     if (state) {
-      // call PressureSensor.readTemperature();
-      call PressureSensor.readPressure();
+      errcode = call PressureSensor.readTemperature();
+      printf("temp errcode: %d", (int) errcode);
+      errcode = call PressureSensor.readPressure();
+      printf(", pres errcode: %d\n", (int) errcode);
+      printfflush();
     }
   }
 
-  event void PressureSensor.tempAvailable(int16_t* data) {
-    printf("got temp %d\n", (int) *data);
+  event void PressureSensor.tempAvailable(int16_t data) {
+    printf("got temp %"PRIi16"\n", data);
     printfflush();
   }
 
-  event void PressureSensor.pressAvailable(int32_t* data) {
-    printf("got press %ld\n", (long) *data);
+  event void PressureSensor.pressAvailable(int32_t data) {
+    printf("got press %"PRIi32"\n", data);
     printfflush();
   }
 
