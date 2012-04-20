@@ -43,29 +43,19 @@
  */
 
 configuration HplADXL345C {
-  // provides interface GeneralIO as GeneralIO1;
-  // provides interface GeneralIO as GeneralIO2;
-  // provides interface GpioInterrupt as GpioInterrupt1;
-  // provides interface GpioInterrupt as GpioInterrupt2;
+  provides interface Resource;
+  provides interface SpiByte;
+  provides interface SpiPacket;
 }
 
 implementation {
-  // components HplMsp430GeneralIOC as GeneralIOC;
-  // components HplMsp430InterruptC as InterruptC;
+  enum {
+    CLIENT_ID = 2
+  };
 
-  // components new Msp430GpioC() as ADXL345Int1C;
-  // ADXL345Int1C -> GeneralIOC.Port16;
-  // GeneralIO1 = ADXL345Int1C;
+  components Atm1284Usart1SpiC;
 
-  // components new Msp430GpioC() as ADXL345Int2C;
-  // ADXL345Int2C -> GeneralIOC.Port17;
-  // GeneralIO2 = ADXL345Int2C;
-
-  // components new Msp430InterruptC() as InterruptAccel1C;
-  // InterruptAccel1C.HplInterrupt -> InterruptC.Port16;
-  // GpioInterrupt1 = InterruptAccel1C.Interrupt;
-
-  // components new Msp430InterruptC() as InterruptAccel2C;
-  // InterruptAccel2C.HplInterrupt -> InterruptC.Port17;
-  // GpioInterrupt2 = InterruptAccel2C.Interrupt;
+  Resource  = Atm1284Usart1SpiC.Resource[CLIENT_ID];
+  SpiByte   = Atm1284Usart1SpiC;
+  SpiPacket = Atm1284Usart1SpiC;
 }

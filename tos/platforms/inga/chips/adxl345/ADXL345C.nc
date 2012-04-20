@@ -73,6 +73,10 @@ implementation {
   Int1 = ADXL345P.Int1;
   Int2 = ADXL345P.Int2;
 
+  ADXL345P.Resource  -> HplADXL345C.Resource;
+  ADXL345P.SpiByte   -> HplADXL345C.SpiByte;
+  ADXL345P.SpiPacket -> HplADXL345C.SpiPacket;
+
   components new TimerMilliC() as TimeoutAlarm;
   ADXL345P.TimeoutAlarm -> TimeoutAlarm;
 

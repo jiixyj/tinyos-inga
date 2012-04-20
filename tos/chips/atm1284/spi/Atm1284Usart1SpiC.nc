@@ -42,7 +42,7 @@ configuration Atm1284Usart1SpiC {
 }
 implementation {
   components new Atm128SpiP(), HplAtm1284Usart1SpiC;
-  components new SimpleFcfsArbiterC("Atm128SpiC.Resource") as Arbiter;
+  components new SimpleFcfsArbiterC("Atm1284Usart1SpiC.Resource") as Arbiter;
   components McuSleepC;
 
   Init        = Atm128SpiP;

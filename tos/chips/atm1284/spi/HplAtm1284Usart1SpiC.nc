@@ -40,7 +40,7 @@ implementation {
   components HplAtm128GeneralIOC as IO, HplAtm1284Usart1SpiP, new NoPinC();
   components McuSleepC;
 
-  SpiBus = HplAtm128rfa1Usart0SpiP;
+  SpiBus = HplAtm1284Usart1SpiP;
 
   HplAtm1284Usart1SpiP.Mcu  -> McuSleepC;
   HplAtm1284Usart1SpiP.SS   -> NoPinC;

@@ -33,7 +33,7 @@
 */
 
 
-module HplAtm128rfa1Usart0SpiP {
+module HplAtm1284Usart1SpiP {
   provides interface Atm128Spi as SPI;
   provides interface McuPowerOverride;
   uses {
@@ -65,67 +65,62 @@ implementation {
   //    call SS.set();	// why was this needed?
   }
 
-  async command uint8_t SPI.read()        { return UDR0; }
-  async command void SPI.write(uint8_t d) { UDR0 = d; }
+  async command uint8_t SPI.read()        { return UDR1; }
+  async command void SPI.write(uint8_t d) { UDR1 = d; }
 
   default async event void SPI.dataReady(uint8_t d) {}
-  AVR_ATOMIC_HANDLER(USART0_UDRE_vect) {
+  AVR_ATOMIC_HANDLER(USART1_UDRE_vect) {
       signal SPI.dataReady(call SPI.read());
   }
 
    async command bool SPI.isInterruptPending() {
-    return READ_BIT(UCSR0A, RXC0);
+    return READ_BIT(UCSR1A, RXC1);
   }
 
   async command bool SPI.isInterruptEnabled () {                
-    return READ_BIT(UCSR0B, UDRIE0);
+    return READ_BIT(UCSR1B, UDRIE1); // FIXME: not sure about UDRIE1
   }
 
   async command void SPI.enableInterrupt(bool enabled) {
     if (enabled) {
-      SET_BIT(UCSR0B, UDRIE0);
+      SET_BIT(UCSR1B, UDRIE1);
       call Mcu.update();
     }
     else {
-      CLR_BIT(UCSR0B, UDRIE0);
+      CLR_BIT(UCSR1B, UDRIE1);
       call Mcu.update();
     }
   }
 
   async command bool SPI.isSpiEnabled() {
-    return (UCSR0B & (1 << RXEN0 | 1 << TXEN0))?TRUE:FALSE;
+    return (UCSR1B & (1 << RXEN1 | 1 << TXEN1))?TRUE:FALSE;
   }
   
   async command void SPI.enableSpi(bool enabled) {
     if (enabled) {
-      UCSR0B |= (1 << RXEN0) | (1 << TXEN0) /*| (1<<RXCIE0)*/;
+      UCSR1B |= (1 << RXEN1) | (1 << TXEN1) /*| (1<<RXCIE0)*/;
       call SPI.setClock(3); 
       call Mcu.update();
     }
     else {
-      UCSR0B &= ~((1 << RXEN0) | (1 << TXEN0) /*| (1<<RXCIE0)*/);
+      UCSR1B &= ~((1 << RXEN1) | (1 << TXEN1) /*| (1<<RXCIE0)*/);
       call Mcu.update();
     }
   }
 
   /* UDORD bit */
   async command void SPI.setDataOrder(bool lsbFirst) {
-    if (lsbFirst) {
-      SET_BIT(UCSR0C, UDORD0);
-    }
-    else {
-      CLR_BIT(UCSR0C, UDORD0);
-    }
+    // dummy, no UDORD1 available in compiler
   }
   
   async command bool SPI.isOrderLsbFirst() {
-    return READ_BIT(UCSR0C, UDORD0);
+    return TRUE;
   }
 
   /* MSTR bit */
   async command void SPI.setMasterBit(bool isMaster) {
     /* Only for backward compatibility */
-    UCSR0C = (1<<UMSEL01) | (1<<UMSEL00);
+    UCSR1C = (1<<UMSEL11) | (1<<UMSEL10);
   }
   async command bool SPI.isMasterBitSet() {
     return TRUE; // Hence this mode only provides master mode operation 
@@ -133,48 +128,29 @@ implementation {
 
  /* UCPOL bit */
   async command void SPI.setClockPolarity(bool highWhenIdle) {
-    uint8_t tail;
-    (UCSR0C & (1 << UCPHA0)?(tail=(1<<UCPHA0)):(tail=(0<<UCPHA0) ));
-    if (highWhenIdle) {
-      //SET_BIT(UCSR0C, UCPOL0);
-      UCSR0C |= (1 << UCPOL0) | (1 << UMSEL01) | (1 << UMSEL00);
-    }
-    else {
-      //CLR_BIT(UCSR0C, UCPOL0);
-      UCSR0C = 0;
-      UCSR0C |= (1 << UMSEL01) | (1 << UMSEL00) | tail;
-    }
+    // leave alone for INGA
   }
   
    async command bool SPI.getClockPolarity() {
-    return READ_BIT(UCSR0C, UCPOL0);
+    return READ_BIT(UCSR1C, UCPOL1);
   }
 
    /* UCPHA bit */
   async command void SPI.setClockPhase(bool sampleOnTrailing) {
-    uint8_t tail;
-    (UCSR0C & (1 << UCPOL0)?(tail=(1<<UCPOL0)):(tail=(0<<UCPOL0) ));
-    if (sampleOnTrailing) {
-      //SET_BIT(UCSR0C, UCPHA0);
-      UCSR0C |= (1 << UCPHA0) | (1 << UMSEL01) | (1 << UMSEL00);
-    }
-    else {call SCK.makeOutput();
-      //CLR_BIT(UCSR0C, UCPHA0);
-      UCSR0C = 0;
-      UCSR0C |= (1 << UMSEL01) | (1 << UMSEL00) | tail;
-    }
+    // leave alone for INGA
   }
   async command bool SPI.getClockPhase() {
-    return READ_BIT(UCSR0C, UCPHA0);
+    // dummy, leave alone for INGA
+    return TRUE;
   }
 
   async command uint8_t SPI.getClock () {                
-    return PLATFORM_MHZ * 1000000 / (2* UBRR0 +1);
+    return PLATFORM_MHZ * 1000000 / (2* UBRR1 +1);
   }
   
   async command void SPI.setClock (uint8_t Kbps) {
-    if(Kbps == 0) UBRR0 = 0; else
-    UBRR0 = (((uint32_t)PLATFORM_MHZ * 1000000) / (2 * (uint32_t)Kbps * 1000)) - 1;
+    if(Kbps == 0) UBRR1 = 0; else
+    UBRR1 = (((uint32_t)PLATFORM_MHZ * 1000000) / (2 * (uint32_t)Kbps * 1000)) - 1;
   }
 
   async command bool SPI.hasWriteCollided() {
@@ -190,7 +166,7 @@ implementation {
   }
 
   async command mcu_power_t McuPowerOverride.lowestState() {
-		if( (UCSR0B & (1 << RXEN0 | 1 << TXEN0)) && (UCSR0C & (1 << UMSEL01 | 1<< UMSEL00)) ) {
+		if( (UCSR1B & (1 << RXEN1 | 1 << TXEN1)) && (UCSR1C & (1 << UMSEL11 | 1<< UMSEL10)) ) {
 			return ATM128_POWER_IDLE;
 		}
 		else
