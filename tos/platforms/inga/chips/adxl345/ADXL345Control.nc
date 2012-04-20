@@ -40,50 +40,32 @@
  * @author: Xavier Orduna <xorduna@dexmatech.com>
  * @author: Jordi Soucheiron <jsoucheiron@dexmatech.com>
  * @author: Antonio Linan <alinan@zolertia.com>
- * @author: Andre Rodrigues
  */
 
-#include "ADXL345.h"
+interface ADXL345Control
+{
+    command error_t setRange(uint8_t range, uint8_t resolution);
+    event void setRangeDone(error_t error);
 
-generic configuration ADXL345C() {
-  provides interface SplitControl;
-  provides interface Read<uint16_t> as X;
-  provides interface Read<uint16_t> as Y;
-  provides interface Read<uint16_t> as Z;
-  provides interface Read<adxl345_readxyt_t> as XYZ;
-  provides interface Read<uint8_t> as IntSource;
-  provides interface Read<uint8_t> as Register;
-  provides interface ADXL345Control;
-  provides interface Notify<adxlint_state_t> as Int1;
-  provides interface Notify<adxlint_state_t> as Int2;
-}
-implementation {
-  components ADXL345P;
-  X = ADXL345P.X;
-  Y = ADXL345P.Y;
-  Z = ADXL345P.Z;
-  XYZ = ADXL345P.XYZ;
-  IntSource = ADXL345P.IntSource;
-  SplitControl = ADXL345P;
-  ADXL345Control = ADXL345P;
-  Register = ADXL345P.Register;
+    command error_t setInterrups(uint8_t interrupt_vector);
+    event void setInterruptsDone(error_t error);
 
-  components new Msp430I2C1C() as I2C;
-  ADXL345P.Resource -> I2C;
-  ADXL345P.ResourceRequested -> I2C;
-  ADXL345P.I2CBasicAddr -> I2C;  
+    command error_t setIntMap(uint8_t int_map_vector);
+    event void setIntMapDone(error_t error);
 
-  components HplADXL345C;
+    command error_t setRegister(uint8_t reg, uint8_t value);
+    event void setRegisterDone(error_t error);
 
-  Int1 = ADXL345P.Int1;
-  Int2 = ADXL345P.Int2;
+    command error_t setDuration(uint8_t duration);
+    event void setDurationDone(error_t error);
 
-  ADXL345P.GpioInterrupt1 ->  HplADXL345C.GpioInterrupt1;
-  ADXL345P.GpioInterrupt2 ->  HplADXL345C.GpioInterrupt2;
-  ADXL345P.GeneralIO1 -> HplADXL345C.GeneralIO1;
-  ADXL345P.GeneralIO2 -> HplADXL345C.GeneralIO2;
+    command error_t setLatent(uint8_t latent);
+    event void setLatentDone(error_t error);
 
-  components new TimerMilliC() as TimeoutAlarm;
-  ADXL345P.TimeoutAlarm -> TimeoutAlarm;
+    command error_t setWindow(uint8_t window);
+    event void setWindowDone(error_t error);
+
+    command error_t setReadAddress(uint8_t address);
+    event void setReadAddressDone(error_t error);
 
 }
