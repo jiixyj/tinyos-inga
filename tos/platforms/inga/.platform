@@ -30,7 +30,6 @@ push( @includes, qw(
   %T/chips/atm128/spi
   %T/chips/atm128/i2c
   %T/chips/atm128/timer
-  %T/chips/adxl345
   %T/lib/timer
   %T/lib/serial
   %T/lib/power
