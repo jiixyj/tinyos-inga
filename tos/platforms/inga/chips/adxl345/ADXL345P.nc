@@ -61,14 +61,13 @@ module ADXL345P {
 	interface Read<uint16_t> as Z;
 	interface Read<adxl345_readxyt_t> as XYZ;
 	interface ADXL345Control;
-	interface Notify<adxlint_state_t> as Int1;
-	interface Notify<adxlint_state_t> as Int2;
    }
    uses {
 	interface Resource;
 	interface SpiByte;
 	interface SpiPacket;
 	interface Timer<TMilli> as TimeoutAlarm;
+	interface Set<uint8_t> as ChipSelect;
   }
    
 }
@@ -98,9 +97,6 @@ implementation {
   norace adxl345_readxyt_t xyz_axis;
 
 
-  task void sendEvent1();
-  task void sendEvent2();
-  
   task void started(){
 	if(call TimeoutAlarm.isRunning()) call TimeoutAlarm.stop();
 	lock = FALSE;
@@ -541,7 +537,7 @@ implementation {
 
 		case ADXLCMD_READ_XYZ: //NOTE moved to speedup
 		   	pointer = ADXL345_DATAX0;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 			  error_return = e;
 			  post calculateXYZ();
@@ -549,27 +545,39 @@ implementation {
   			break;
 
   		case ADXLCMD_START:
-			power_ctl = power_ctl | ADXL345_MEASURE_MODE;
-			databuf[0] = ADXL345_THRESH_TAP;
-			databuf[1] = 0x40;			//ADXL345_THRESH_TAP
-			databuf[2] = 0x0;			//ADXL345_OFSX
-			databuf[3] = 0x0;			//ADXL345_OFSY
-			databuf[4] = 0x0;			//ADXL345_OFSZ
-			databuf[5] = 0x7F;			//ADXL345_DUR
-			databuf[6] = 0x30;			//ADXL345_LATENT
-			databuf[7] = 0x7F;			//ADXL345_WINDOW
-			databuf[8] = 0x2;			//ADXL345_THRESH_ACT
-			databuf[9] = 0x1;			//ADXL345_THRESH_INACT
-			databuf[10] = 0xFF;			//ADXL345_TIME_INACT
-			databuf[11] = 0xFF;			//ADXL345_ACT_INACT_CTL
-			databuf[12] = 0x05;			//ADXL345_THRESH_FF
-			databuf[13] = 0x14;			//ADXL345_TIME_FF
-			databuf[14] = 0x7;			//ADXL345_TAP_AXES
-			databuf[15] = 0x0;			//ADXL345_ACT_TAP_STATUS(read only)
-			databuf[16] = 0x0A;			//ADXL345_BW_RATE
-			databuf[17] = power_ctl;		//ADXL345_POWER_CTL
-			databuf[18] = 0x0;			//ADXL345_INT_ENABLE (all disabled by default)
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 19, databuf);
+			// power_ctl = power_ctl | ADXL345_MEASURE_MODE;
+			// databuf[0] = ADXL345_THRESH_TAP;
+			// databuf[1] = 0x40;			//ADXL345_THRESH_TAP
+			// databuf[2] = 0x0;			//ADXL345_OFSX
+			// databuf[3] = 0x0;			//ADXL345_OFSY
+			// databuf[4] = 0x0;			//ADXL345_OFSZ
+			// databuf[5] = 0x7F;			//ADXL345_DUR
+			// databuf[6] = 0x30;			//ADXL345_LATENT
+			// databuf[7] = 0x7F;			//ADXL345_WINDOW
+			// databuf[8] = 0x2;			//ADXL345_THRESH_ACT
+			// databuf[9] = 0x1;			//ADXL345_THRESH_INACT
+			// databuf[10] = 0xFF;			//ADXL345_TIME_INACT
+			// databuf[11] = 0xFF;			//ADXL345_ACT_INACT_CTL
+			// databuf[12] = 0x05;			//ADXL345_THRESH_FF
+			// databuf[13] = 0x14;			//ADXL345_TIME_FF
+			// databuf[14] = 0x7;			//ADXL345_TAP_AXES
+			// databuf[15] = 0x0;			//ADXL345_ACT_TAP_STATUS(read only)
+			// databuf[16] = 0x0A;			//ADXL345_BW_RATE
+			// databuf[17] = power_ctl;		//ADXL345_POWER_CTL
+			// databuf[18] = 0x0;			//ADXL345_INT_ENABLE (all disabled by default)
+			// e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 19, databuf);
+			call ChipSelect.set(2);
+
+			call SpiByte.write(ADXL345_DATAFORMAT & 0x7f);
+			call SpiByte.write(0x00);
+			call SpiByte.write(ADXL345_POWER_CTL & 0x7f);
+			call SpiByte.write(0x08);
+			call SpiByte.write(ADXL345_BW_RATE & 0x7f);
+			call SpiByte.write(0x0a);
+
+			call SpiByte.write(ADXL345_BW_RATE & 0x7f);
+			call SpiByte.write(0x0a);
+
 			if (e!= SUCCESS) {
 			  error_return = e;
 			  post started();
@@ -578,7 +586,7 @@ implementation {
 
 		case ADXLCMD_READ_DURATION:
 			pointer = ADXL345_DUR;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post readDurationDone();
@@ -587,7 +595,7 @@ implementation {
 
   		case ADXLCMD_READ_LATENT:
 		   	pointer = ADXL345_LATENT;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post readLatentDone();
@@ -596,7 +604,7 @@ implementation {
 
   		case ADXLCMD_READ_WINDOW:
 		   	pointer = ADXL345_WINDOW;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post readWindowDone();
@@ -605,7 +613,7 @@ implementation {
 			
 		case ADXLCMD_READ_POWER_CTL:
 			pointer = ADXL345_POWER_CTL;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculatePowerCtl();
@@ -614,7 +622,7 @@ implementation {
 			
 		case ADXLCMD_READ_BW_RATE:
 			pointer = ADXL345_BW_RATE;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateBwRate();
@@ -623,7 +631,7 @@ implementation {
 
 		case ADXLCMD_READ_INT_ENABLE:
 			pointer = ADXL345_INT_ENABLE;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateIntEnable();
@@ -632,7 +640,7 @@ implementation {
 			
   		case ADXLCMD_READ_INT_MAP:
 		   	pointer = ADXL345_INT_MAP;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateIntMap();
@@ -641,7 +649,7 @@ implementation {
 			
   		case ADXLCMD_READ_INT_SOURCE:
 		   	pointer = ADXL345_INT_SOURCE;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer);
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateIntSource();
@@ -650,7 +658,7 @@ implementation {
 			
   		case ADXLCMD_READ_X:
 		   	pointer = ADXL345_DATAX0;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateX();
@@ -659,7 +667,7 @@ implementation {
 
   		case ADXLCMD_READ_Y:
 		   	pointer = ADXL345_DATAY0;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateY();
@@ -668,7 +676,7 @@ implementation {
 
   		case ADXLCMD_READ_Z:
 		   	pointer = ADXL345_DATAZ0;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateZ();
@@ -677,7 +685,7 @@ implementation {
 
 		case ADXLCMD_READ_REGISTER:
 		   	pointer = readAddress;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 1, &pointer); 
 			if (e!= SUCCESS) {
 				error_return = e;
 				post calculateRegister();
@@ -687,7 +695,7 @@ implementation {
 		case ADXLCMD_SET_REGISTER:
 		   	databuf[0] = set_reg[0];
   			databuf[1] = set_reg[1];
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post setRegisterDone();
@@ -697,7 +705,7 @@ implementation {
 		case ADXLCMD_SET_INT_MAP:
 		   	databuf[0] = ADXL345_INT_MAP;
   			databuf[1] = int_map;
-		   	e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+		   	//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post setIntMapDone();
@@ -707,7 +715,7 @@ implementation {
   		case ADXLCMD_SET_RANGE:
   			databuf[0] = ADXL345_DATAFORMAT;
   			databuf[1] = dataformat;
-  			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+  			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post rangeDone();
@@ -718,7 +726,7 @@ implementation {
 			power_ctl = power_ctl & ADXL345_STANDBY_MODE;
 			databuf[0] = ADXL345_POWER_CTL;
 		  	databuf[1] = power_ctl;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post stopped();
@@ -728,7 +736,7 @@ implementation {
 		case ADXLCMD_INT:
 			databuf[0] = ADXL345_INT_ENABLE;
 			databuf[1] = int_enable;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post interruptsDone();
@@ -738,7 +746,7 @@ implementation {
 		case ADXLCMD_SET_DURATION:
 			databuf[0] = ADXL345_DUR;
 			databuf[1] = duration;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post durationDone();
@@ -748,7 +756,7 @@ implementation {
 		case ADXLCMD_SET_LATENT:
 			databuf[0] = ADXL345_LATENT;
 			databuf[1] = latent;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post latentDone();
@@ -758,7 +766,7 @@ implementation {
 		case ADXLCMD_SET_WINDOW:
 			databuf[0] = ADXL345_WINDOW;
 			databuf[1] = window;
-			e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
+			//FIXME e = call I2CBasicAddr.write((I2C_START | I2C_STOP), ADXL345_ADDRESS, 2, databuf);
 			if (e!= SUCCESS) {
 				error_return = e;
 				post windowDone();
@@ -767,213 +775,207 @@ implementation {
 
   	}
   }
-  
-  async event void ResourceRequested.requested(){
-  	
-  }
-  
-  async event void ResourceRequested.immediateRequested(){
-  
-  }
-  
-  async event void I2CBasicAddr.readDone(error_t error, uint16_t addr, uint8_t length, uint8_t *data){
-	uint16_t tmp=0;
-	if(call Resource.isOwner()) {
-		error_return=error;
-		for(tmp=0;tmp<0x8fff;tmp++);		//delay
-		tmp= call Resource.release();
-		if(adxlcmd == ADXLCMD_READ_X || adxlcmd == ADXLCMD_READ_Y || adxlcmd == ADXLCMD_READ_Z)
-		{
-		  tmp = data[1];
-		  tmp = tmp << 8;
-		  tmp = tmp + data[0];
-		}
-		switch(adxlcmd){
-            case ADXLCMD_READ_XYZ: //NOTE moved to speedup
-				xyz_axis.x_axis = (data[1] << 8) + data[0];
-				xyz_axis.y_axis = (data[3] << 8) + data[2];
-                xyz_axis.z_axis = (data[5] << 8) + data[4];
-				post calculateXYZ();
-				break;
-			case ADXLCMD_READ_REGISTER:
-				regData=data[0];
-				post calculateRegister();
-				break;
-			case ADXLCMD_READ_DURATION:
-				duration=data[0];
-				post readDurationDone();
-				break;
-			case ADXLCMD_READ_LATENT:
-				latent=data[0];
-				post readLatentDone();
-				break;
-			case ADXLCMD_READ_WINDOW:
-				window=data[0];
-				post readWindowDone();
-				break;
-			case ADXLCMD_READ_POWER_CTL:
-				power_ctl=data[0];
-				post calculatePowerCtl();
-				break;
-			case ADXLCMD_READ_BW_RATE:
-				bw_rate=data[0];
-				post calculateBwRate();
-				break;
-			case ADXLCMD_READ_INT_ENABLE:
-				int_enable=data[0];
-				post calculateIntEnable();
-				break;
-			case ADXLCMD_READ_INT_MAP:
-				int_map=data[0];
-				post calculateIntMap();
-				break;
-			case ADXLCMD_READ_INT_SOURCE:
-				int_source=data[0];
-				post calculateIntSource();
-				break;
-			case ADXLCMD_READ_X:
-				x_axis = tmp;
-				post calculateX();
-				break;
-			case ADXLCMD_READ_Y:
-				y_axis = tmp;
-				post calculateY();
-				break;
-			case ADXLCMD_READ_Z:
-				z_axis = tmp;
-				post calculateZ();
-				break;
-		}
-	}
-  }
 
-  async event void I2CBasicAddr.writeDone(error_t error, uint16_t addr, uint8_t length, uint8_t *data){
-	if(call Resource.isOwner()) {
-		error_return=error;
-		if(	adxlcmd != ADXLCMD_READ_XYZ //NOTE moved to speedup
-            && adxlcmd != ADXLCMD_READ_REGISTER
-			&& adxlcmd != ADXLCMD_READ_DURATION
-			&& adxlcmd != ADXLCMD_READ_LATENT
-			&& adxlcmd != ADXLCMD_READ_WINDOW
-			&& adxlcmd != ADXLCMD_READ_INT_ENABLE
-			&& adxlcmd != ADXLCMD_READ_INT_MAP
-			&& adxlcmd != ADXLCMD_READ_INT_SOURCE
-			&& adxlcmd != ADXLCMD_READ_X
-			&& adxlcmd != ADXLCMD_READ_Y 
-			&& adxlcmd != ADXLCMD_READ_Z
-		)
-		{
-			call Resource.release();
-		}
-		switch(adxlcmd){
-			case ADXLCMD_READ_XYZ: //NOTE moved to speedup
-				if (error==SUCCESS)
-                  call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 6, databuf);	
-				else 
-				  post calculateXYZ();
-				break;
-			case ADXLCMD_START:
-				post started();
-				break;
-			case ADXLCMD_READ_REGISTER:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculateRegister();
-				break;	
-			case ADXLCMD_READ_DURATION:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post readDurationDone();
-				break;	
-			case ADXLCMD_READ_LATENT:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post readLatentDone();
-				break;	
-			case ADXLCMD_READ_WINDOW:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post readWindowDone();
-				break;	
-			case ADXLCMD_READ_POWER_CTL:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculatePowerCtl();
-				break;	
-			case ADXLCMD_READ_BW_RATE:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculateBwRate();
-				break;	
-			case ADXLCMD_READ_INT_ENABLE:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculateIntEnable();
-				break;	
-			case ADXLCMD_READ_INT_MAP:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculateIntMap();
-				break;	
-			case ADXLCMD_READ_INT_SOURCE:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
-				else 
-					post calculateIntSource();
-				break;	
-			case ADXLCMD_READ_X:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
-				else 
-					post calculateX();
-				break;
-			case ADXLCMD_READ_Y:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
-				else 
-					post calculateY();
-				break;
-			case ADXLCMD_READ_Z:
-				if (error==SUCCESS)
-					call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
-				else 
-					post calculateZ();
-				break;
-			case ADXLCMD_SET_REGISTER:
-				post setRegisterDone();
-				break;
-			case ADXLCMD_SET_INT_MAP:
-				post setIntMapDone();
-				break;
-			case ADXLCMD_SET_RANGE:
-				post rangeDone();
-				break;
-			case ADXLCMD_STOP:
-				post stopped();
-				break;
-			case ADXLCMD_INT:
-				post interruptsDone();
-				break;
-			case ADXLCMD_SET_DURATION:
-				post durationDone();
-				break;
-			case ADXLCMD_SET_LATENT:
-				post latentDone();
-				break;
-			case ADXLCMD_SET_WINDOW:
-				post windowDone();
-				break;
-	  	}
-	 }
-  }   
+  async event void SpiPacket.sendDone( uint8_t* txBuf, uint8_t* rxBuf, uint16_t len,
+                                       error_t error ) {}
+//   async event void SpiPacket.sendDone(error_t error, uint16_t addr, uint8_t length, uint8_t *data){
+// 	uint16_t tmp=0;
+// 	if(call Resource.isOwner()) {
+// 		error_return=error;
+// 		for(tmp=0;tmp<0x8fff;tmp++);		//delay
+// 		tmp= call Resource.release();
+// 		if(adxlcmd == ADXLCMD_READ_X || adxlcmd == ADXLCMD_READ_Y || adxlcmd == ADXLCMD_READ_Z)
+// 		{
+// 		  tmp = data[1];
+// 		  tmp = tmp << 8;
+// 		  tmp = tmp + data[0];
+// 		}
+// 		switch(adxlcmd){
+//             case ADXLCMD_READ_XYZ: //NOTE moved to speedup
+// 				xyz_axis.x_axis = (data[1] << 8) + data[0];
+// 				xyz_axis.y_axis = (data[3] << 8) + data[2];
+//                 xyz_axis.z_axis = (data[5] << 8) + data[4];
+// 				post calculateXYZ();
+// 				break;
+// 			case ADXLCMD_READ_REGISTER:
+// 				regData=data[0];
+// 				post calculateRegister();
+// 				break;
+// 			case ADXLCMD_READ_DURATION:
+// 				duration=data[0];
+// 				post readDurationDone();
+// 				break;
+// 			case ADXLCMD_READ_LATENT:
+// 				latent=data[0];
+// 				post readLatentDone();
+// 				break;
+// 			case ADXLCMD_READ_WINDOW:
+// 				window=data[0];
+// 				post readWindowDone();
+// 				break;
+// 			case ADXLCMD_READ_POWER_CTL:
+// 				power_ctl=data[0];
+// 				post calculatePowerCtl();
+// 				break;
+// 			case ADXLCMD_READ_BW_RATE:
+// 				bw_rate=data[0];
+// 				post calculateBwRate();
+// 				break;
+// 			case ADXLCMD_READ_INT_ENABLE:
+// 				int_enable=data[0];
+// 				post calculateIntEnable();
+// 				break;
+// 			case ADXLCMD_READ_INT_MAP:
+// 				int_map=data[0];
+// 				post calculateIntMap();
+// 				break;
+// 			case ADXLCMD_READ_INT_SOURCE:
+// 				int_source=data[0];
+// 				post calculateIntSource();
+// 				break;
+// 			case ADXLCMD_READ_X:
+// 				x_axis = tmp;
+// 				post calculateX();
+// 				break;
+// 			case ADXLCMD_READ_Y:
+// 				y_axis = tmp;
+// 				post calculateY();
+// 				break;
+// 			case ADXLCMD_READ_Z:
+// 				z_axis = tmp;
+// 				post calculateZ();
+// 				break;
+// 		}
+// 	}
+//   }
+
+//  async event void SpiPacket.writeDone(error_t error, uint16_t addr, uint8_t length, uint8_t *data){
+//	if(call Resource.isOwner()) {
+//		error_return=error;
+//		if(	adxlcmd != ADXLCMD_READ_XYZ //NOTE moved to speedup
+//            && adxlcmd != ADXLCMD_READ_REGISTER
+//			&& adxlcmd != ADXLCMD_READ_DURATION
+//			&& adxlcmd != ADXLCMD_READ_LATENT
+//			&& adxlcmd != ADXLCMD_READ_WINDOW
+//			&& adxlcmd != ADXLCMD_READ_INT_ENABLE
+//			&& adxlcmd != ADXLCMD_READ_INT_MAP
+//			&& adxlcmd != ADXLCMD_READ_INT_SOURCE
+//			&& adxlcmd != ADXLCMD_READ_X
+//			&& adxlcmd != ADXLCMD_READ_Y 
+//			&& adxlcmd != ADXLCMD_READ_Z
+//		)
+//		{
+//			call Resource.release();
+//		}
+//		switch(adxlcmd){
+//			case ADXLCMD_READ_XYZ: //NOTE moved to speedup
+//				if (error==SUCCESS)
+//                  //FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 6, databuf);	
+//				else 
+//				  post calculateXYZ();
+//				break;
+//			case ADXLCMD_START:
+//				post started();
+//				break;
+//			case ADXLCMD_READ_REGISTER:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculateRegister();
+//				break;	
+//			case ADXLCMD_READ_DURATION:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post readDurationDone();
+//				break;	
+//			case ADXLCMD_READ_LATENT:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post readLatentDone();
+//				break;	
+//			case ADXLCMD_READ_WINDOW:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post readWindowDone();
+//				break;	
+//			case ADXLCMD_READ_POWER_CTL:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculatePowerCtl();
+//				break;	
+//			case ADXLCMD_READ_BW_RATE:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculateBwRate();
+//				break;	
+//			case ADXLCMD_READ_INT_ENABLE:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculateIntEnable();
+//				break;	
+//			case ADXLCMD_READ_INT_MAP:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculateIntMap();
+//				break;	
+//			case ADXLCMD_READ_INT_SOURCE:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 1, databuf);	
+//				else 
+//					post calculateIntSource();
+//				break;	
+//			case ADXLCMD_READ_X:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
+//				else 
+//					post calculateX();
+//				break;
+//			case ADXLCMD_READ_Y:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
+//				else 
+//					post calculateY();
+//				break;
+//			case ADXLCMD_READ_Z:
+//				if (error==SUCCESS)
+//					//FIXME call I2CBasicAddr.read ((I2C_START | I2C_STOP),  ADXL345_ADDRESS, 2, databuf);	
+//				else 
+//					post calculateZ();
+//				break;
+//			case ADXLCMD_SET_REGISTER:
+//				post setRegisterDone();
+//				break;
+//			case ADXLCMD_SET_INT_MAP:
+//				post setIntMapDone();
+//				break;
+//			case ADXLCMD_SET_RANGE:
+//				post rangeDone();
+//				break;
+//			case ADXLCMD_STOP:
+//				post stopped();
+//				break;
+//			case ADXLCMD_INT:
+//				post interruptsDone();
+//				break;
+//			case ADXLCMD_SET_DURATION:
+//				post durationDone();
+//				break;
+//			case ADXLCMD_SET_LATENT:
+//				post latentDone();
+//				break;
+//			case ADXLCMD_SET_WINDOW:
+//				post windowDone();
+//				break;
+//	  	}
+//	 }
+//  }   
   
   /* default handlers */
   default event void Register.readDone(error_t error, uint8_t data) {
@@ -1060,11 +1062,6 @@ implementation {
 	return;
   } 
 
-  default event void Int1.notify(adxlint_state_t val) {
-  }
-
-  default event void Int2.notify(adxlint_state_t val) {
-  }
   /*defaut handlers end*/
 
   event void TimeoutAlarm.fired() {
@@ -1074,45 +1071,6 @@ implementation {
       
       signal SplitControl.startDone(EOFF);
     }
-  } 
-
-  command error_t Int1.enable() {
-    call GeneralIO1.makeInput();
-    return call GpioInterrupt1.enableRisingEdge();
   }
 
-  command error_t Int2.enable() {
-    call GeneralIO2.makeInput();
-    return call GpioInterrupt2.enableRisingEdge();
-  }
-
-  command error_t Int1.disable() {
-    return call GpioInterrupt1.disable();
-  }
-
-  command error_t Int2.disable() {
-    return call GpioInterrupt2.disable();
-  }
-
-  task void sendEvent1() {
-    signal Int1.notify( 1 );
-    call GpioInterrupt1.enableRisingEdge();
-  }
-
-  task void sendEvent2() {  
-    signal Int2.notify( 1 );
-    call GpioInterrupt2.enableRisingEdge();
-  }
-
-  async event void GpioInterrupt1.fired() {
-    call GpioInterrupt1.disable();
-
-    post sendEvent1();
-  }
-
-  async event void GpioInterrupt2.fired() {
-    call GpioInterrupt2.disable();
-    post sendEvent2();
-  }
-  
 }

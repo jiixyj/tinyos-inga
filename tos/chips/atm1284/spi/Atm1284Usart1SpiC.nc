@@ -54,7 +54,7 @@ implementation {
   Resource    = Atm128SpiP;
 
   // expose the underlying SPI
-  Atm128Spi   = HplAtm1284Usart1SpiC;
+  Atm128Spi   = HplAtm1284Usart1SpiC.SpiBus;
 
   Atm128SpiP.ArbiterInfo -> Arbiter;
   Atm128SpiP.ResourceArbiter -> Arbiter;

@@ -54,8 +54,6 @@ generic configuration ADXL345C() {
   provides interface Read<uint8_t> as IntSource;
   provides interface Read<uint8_t> as Register;
   provides interface ADXL345Control;
-  provides interface Notify<adxlint_state_t> as Int1;
-  provides interface Notify<adxlint_state_t> as Int2;
 }
 implementation {
   components ADXL345P;
@@ -70,14 +68,14 @@ implementation {
 
   components HplADXL345C;
 
-  Int1 = ADXL345P.Int1;
-  Int2 = ADXL345P.Int2;
-
   ADXL345P.Resource  -> HplADXL345C.Resource;
   ADXL345P.SpiByte   -> HplADXL345C.SpiByte;
   ADXL345P.SpiPacket -> HplADXL345C.SpiPacket;
 
   components new TimerMilliC() as TimeoutAlarm;
   ADXL345P.TimeoutAlarm -> TimeoutAlarm;
+
+  components ChipSelectC;
+  ADXL345P.ChipSelect -> ChipSelectC;
 
 }
