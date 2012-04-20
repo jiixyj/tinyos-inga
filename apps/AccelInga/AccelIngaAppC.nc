@@ -47,9 +47,7 @@ implementation
   AccelIngaC.Leds -> LedsC;
 
   components new ADXL345C();
-  App.Xaxis -> ADXL345C.X;
-  App.Yaxis -> ADXL345C.Y;
-  App.Zaxis -> ADXL345C.Z;
-  App.AccelControl -> ADXL345C.SplitControl;
+  AccelIngaC.XYZ -> ADXL345C.XYZ;
+  AccelIngaC.AccelControl -> ADXL345C.SplitControl;
 }
 
