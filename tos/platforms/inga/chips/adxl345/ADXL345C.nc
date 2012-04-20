@@ -68,20 +68,10 @@ implementation {
   ADXL345Control = ADXL345P;
   Register = ADXL345P.Register;
 
-  components new Msp430I2C1C() as I2C;
-  ADXL345P.Resource -> I2C;
-  ADXL345P.ResourceRequested -> I2C;
-  ADXL345P.I2CBasicAddr -> I2C;  
-
   components HplADXL345C;
 
   Int1 = ADXL345P.Int1;
   Int2 = ADXL345P.Int2;
-
-  ADXL345P.GpioInterrupt1 ->  HplADXL345C.GpioInterrupt1;
-  ADXL345P.GpioInterrupt2 ->  HplADXL345C.GpioInterrupt2;
-  ADXL345P.GeneralIO1 -> HplADXL345C.GeneralIO1;
-  ADXL345P.GeneralIO2 -> HplADXL345C.GeneralIO2;
 
   components new TimerMilliC() as TimeoutAlarm;
   ADXL345P.TimeoutAlarm -> TimeoutAlarm;

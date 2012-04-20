@@ -65,13 +65,13 @@ module ADXL345P {
 	interface Notify<adxlint_state_t> as Int2;
    }
    uses {
-	interface Resource;
-	interface ResourceRequested;
-	interface I2CPacket<TI2CBasicAddr> as I2CBasicAddr;     
-	interface GeneralIO as GeneralIO1;
-	interface GeneralIO as GeneralIO2;
-	interface GpioInterrupt as GpioInterrupt1;
-	interface GpioInterrupt as GpioInterrupt2;
+	// interface Resource;
+	// interface ResourceRequested;
+	// interface I2CPacket<TI2CBasicAddr> as I2CBasicAddr;     
+	// interface GeneralIO as GeneralIO1;
+	// interface GeneralIO as GeneralIO2;
+	// interface GpioInterrupt as GpioInterrupt1;
+	// interface GpioInterrupt as GpioInterrupt2;
 	interface Timer<TMilli> as TimeoutAlarm;
   }
    
