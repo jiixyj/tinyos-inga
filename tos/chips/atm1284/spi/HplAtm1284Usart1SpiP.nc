@@ -108,13 +108,25 @@ implementation {
     }
   }
 
+  // old compilers don't have those defines for atm1284
+#ifndef UDORD1
+  #define UDORD1 2
+  #define UCPHA1 1
+  #define UCPOL1 0
+#endif
+
   /* UDORD bit */
   async command void SPI.setDataOrder(bool lsbFirst) {
-    // dummy, no UDORD1 available in compiler
+    if (lsbFirst) {
+      SET_BIT(UCSR1C, UDORD1);
+    }
+    else {
+      CLR_BIT(UCSR1C, UDORD1);
+    }
   }
   
   async command bool SPI.isOrderLsbFirst() {
-    return TRUE;
+    return READ_BIT(UCSR1C, UDORD1);
   }
 
   /* MSTR bit */
@@ -128,7 +140,17 @@ implementation {
 
  /* UCPOL bit */
   async command void SPI.setClockPolarity(bool highWhenIdle) {
-    // leave alone for INGA
+    uint8_t tail;
+    (UCSR1C & (1 << UCPHA1)?(tail=(1<<UCPHA1)):(tail=(0<<UCPHA1) ));
+    if (highWhenIdle) {
+      //SET_BIT(UCSR0C, UCPOL0);
+      UCSR1C |= (1 << UCPOL1) | (1 << UMSEL11) | (1 << UMSEL10);
+    }
+    else {
+      //CLR_BIT(UCSR0C, UCPOL0);
+      UCSR1C = 0;
+      UCSR1C |= (1 << UMSEL11) | (1 << UMSEL10) | tail;
+    }
   }
   
    async command bool SPI.getClockPolarity() {
@@ -137,11 +159,20 @@ implementation {
 
    /* UCPHA bit */
   async command void SPI.setClockPhase(bool sampleOnTrailing) {
-    // leave alone for INGA
+    uint8_t tail;
+    (UCSR1C & (1 << UCPOL1)?(tail=(1<<UCPOL1)):(tail=(0<<UCPOL1) ));
+    if (sampleOnTrailing) {
+      //SET_BIT(UCSR0C, UCPHA0);
+      UCSR1C |= (1 << UCPHA1) | (1 << UMSEL11) | (1 << UMSEL10);
+    }
+    else {call SCK.makeOutput();
+      //CLR_BIT(UCSR0C, UCPHA0);
+      UCSR1C = 0;
+      UCSR1C |= (1 << UMSEL11) | (1 << UMSEL10) | tail;
+    }
   }
   async command bool SPI.getClockPhase() {
-    // dummy, leave alone for INGA
-    return TRUE;
+    return READ_BIT(UCSR1C, UCPHA1);
   }
 
   async command uint8_t SPI.getClock () {                
