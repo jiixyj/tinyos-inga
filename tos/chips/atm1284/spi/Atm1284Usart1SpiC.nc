@@ -39,6 +39,8 @@ configuration Atm1284Usart1SpiC {
   provides interface FastSpiByte;
   provides interface SpiPacket;
   provides interface Resource[uint8_t id];
+
+  provides interface Atm128Spi;
 }
 implementation {
   components new Atm128SpiP(), HplAtm1284Usart1SpiC;
@@ -50,6 +52,9 @@ implementation {
   FastSpiByte = Atm128SpiP;
   SpiPacket   = Atm128SpiP;
   Resource    = Atm128SpiP;
+
+  // expose the underlying SPI
+  Atm128Spi   = HplAtm1284Usart1SpiC;
 
   Atm128SpiP.ArbiterInfo -> Arbiter;
   Atm128SpiP.ResourceArbiter -> Arbiter;
