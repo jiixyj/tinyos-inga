@@ -47,35 +47,18 @@
 
 generic configuration ADXL345C() {
   provides interface SplitControl;
-  provides interface Read<uint16_t> as X;
-  provides interface Read<uint16_t> as Y;
-  provides interface Read<uint16_t> as Z;
   provides interface Read<adxl345_readxyt_t> as XYZ;
-  provides interface Read<uint8_t> as IntSource;
-  provides interface Read<uint8_t> as Register;
-  provides interface ADXL345Control;
 }
 implementation {
   components ADXL345P;
-  X = ADXL345P.X;
-  Y = ADXL345P.Y;
-  Z = ADXL345P.Z;
   XYZ = ADXL345P.XYZ;
-  IntSource = ADXL345P.IntSource;
   SplitControl = ADXL345P;
-  ADXL345Control = ADXL345P;
-  Register = ADXL345P.Register;
 
   components HplADXL345C;
-
   ADXL345P.Resource  -> HplADXL345C.Resource;
   ADXL345P.SpiByte   -> HplADXL345C.SpiByte;
-  ADXL345P.SpiPacket -> HplADXL345C.SpiPacket;
-
-  components new TimerMilliC() as TimeoutAlarm;
-  ADXL345P.TimeoutAlarm -> TimeoutAlarm;
+  ADXL345P.SPI       -> HplADXL345C.SPI;
 
   components ChipSelectC;
   ADXL345P.ChipSelect -> ChipSelectC;
-
 }

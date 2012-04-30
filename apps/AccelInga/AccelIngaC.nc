@@ -32,39 +32,32 @@ implementation
 
   event void AccelControl.startDone(error_t error)
   {
-    call Timer0.startPeriodic( 1000 );
+    if (error != SUCCESS) {
+        call AccelControl.start();
+    }
+    call Timer0.startPeriodic( 100 );
     call UserButtonNotify.enable( );
   }
 
   event void Timer0.fired()
   {
-    // call AccelSensor.readTemperature();
-    call Leds.led0Toggle();
+    call XYZ.read();
   }
 
   error_t errcode;
 
   event void UserButtonNotify.notify(button_state_t state) {
-    // if (state) {
-    //   errcode = call AccelSensor.readTemperature();
-    //   printf("temp errcode: %d", (int) errcode);
-    //   errcode = call AccelSensor.readAccel();
-    //   printf(", pres errcode: %d\n", (int) errcode);
-    //   printfflush();
-    // }
+    if (state) {
+      call Leds.led0Toggle();
+    }
   }
 
   event void XYZ.readDone(error_t result, adxl345_readxyt_t data) {
-    // printf("got temp %"PRIi16"\n", data);
-    // printfflush();
+    printf("got xyz %"PRIi16" %"PRIi16" %"PRIi16"\n",
+           (int16_t) data.x_axis, (int16_t) data.y_axis, (int16_t) data.z_axis);
+    printfflush();
   }
 
-  // event void AccelSensor.pressAvailable(int32_t data) {
-  //   printf("got press %"PRIi32"\n", data);
-  //   printfflush();
-  // }
-
   event void AccelControl.stopDone(error_t error) { }
-
 }
 

@@ -46,6 +46,7 @@ configuration HplADXL345C {
   provides interface Resource;
   provides interface SpiByte;
   provides interface SpiPacket;
+  provides interface Atm128Spi as SPI;
 }
 
 implementation {
@@ -58,4 +59,5 @@ implementation {
   Resource  = Atm1284Usart1SpiC.Resource[CLIENT_ID];
   SpiByte   = Atm1284Usart1SpiC;
   SpiPacket = Atm1284Usart1SpiC;
+  SPI       = Atm1284Usart1SpiC;
 }
