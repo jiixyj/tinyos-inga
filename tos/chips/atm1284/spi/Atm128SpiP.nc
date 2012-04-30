@@ -128,7 +128,7 @@ implementation {
       call Spi.setClock(0);
       call Spi.enableSpi(TRUE);
     }
-    call McuPowerState.update();
+    // call McuPowerState.update();
   }
 
   void stopSpi() {
@@ -136,7 +136,7 @@ implementation {
     atomic {
       call Spi.sleep();
     }
-    call McuPowerState.update();
+    // call McuPowerState.update();
   }
 
   async command uint8_t SpiByte.write( uint8_t tx ) {

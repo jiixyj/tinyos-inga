@@ -48,7 +48,7 @@ implementation {
 
   async command void SPI.initMaster() {
     call SPI.setClock(0);
-    call SCK.makeOutput();    
+    call SCK.makeOutput();
     call SS.makeOutput();
     call SS.set();
     call MOSI.makeOutput();
@@ -62,7 +62,7 @@ implementation {
   }
 
   async command void SPI.sleep() {
-  //    call SS.set();	// why was this needed?
+    call SS.set();	// why was this needed?
   }
 
   async command uint8_t SPI.read()        { return UDR1; }
@@ -77,34 +77,28 @@ implementation {
     return READ_BIT(UCSR1A, RXC1);
   }
 
-  async command bool SPI.isInterruptEnabled () {                
+  async command bool SPI.isInterruptEnabled () {
     return READ_BIT(UCSR1B, UDRIE1); // FIXME: not sure about UDRIE1
   }
 
   async command void SPI.enableInterrupt(bool enabled) {
     if (enabled) {
       SET_BIT(UCSR1B, UDRIE1);
-      call Mcu.update();
     }
     else {
       CLR_BIT(UCSR1B, UDRIE1);
-      call Mcu.update();
     }
   }
 
   async command bool SPI.isSpiEnabled() {
     return (UCSR1B & (1 << RXEN1 | 1 << TXEN1))?TRUE:FALSE;
   }
-  
+
   async command void SPI.enableSpi(bool enabled) {
     if (enabled) {
       UCSR1B |= (1 << RXEN1) | (1 << TXEN1) /*| (1<<RXCIE0)*/;
-      call SPI.setClock(3); 
-      call Mcu.update();
-    }
-    else {
+    } else {
       UCSR1B &= ~((1 << RXEN1) | (1 << TXEN1) /*| (1<<RXCIE0)*/);
-      call Mcu.update();
     }
   }
 
@@ -124,7 +118,7 @@ implementation {
       CLR_BIT(UCSR1C, UDORD1);
     }
   }
-  
+
   async command bool SPI.isOrderLsbFirst() {
     return READ_BIT(UCSR1C, UDORD1);
   }
@@ -140,35 +134,23 @@ implementation {
 
  /* UCPOL bit */
   async command void SPI.setClockPolarity(bool highWhenIdle) {
-    uint8_t tail;
-    (UCSR1C & (1 << UCPHA1)?(tail=(1<<UCPHA1)):(tail=(0<<UCPHA1) ));
     if (highWhenIdle) {
-      //SET_BIT(UCSR0C, UCPOL0);
-      UCSR1C |= (1 << UCPOL1) | (1 << UMSEL11) | (1 << UMSEL10);
-    }
-    else {
-      //CLR_BIT(UCSR0C, UCPOL0);
-      UCSR1C = 0;
-      UCSR1C |= (1 << UMSEL11) | (1 << UMSEL10) | tail;
+      SET_BIT(UCSR1C, UCPOL1);
+    } else {
+      CLR_BIT(UCSR1C, UCPOL1);
     }
   }
-  
+
    async command bool SPI.getClockPolarity() {
     return READ_BIT(UCSR1C, UCPOL1);
   }
 
    /* UCPHA bit */
   async command void SPI.setClockPhase(bool sampleOnTrailing) {
-    uint8_t tail;
-    (UCSR1C & (1 << UCPOL1)?(tail=(1<<UCPOL1)):(tail=(0<<UCPOL1) ));
     if (sampleOnTrailing) {
-      //SET_BIT(UCSR0C, UCPHA0);
-      UCSR1C |= (1 << UCPHA1) | (1 << UMSEL11) | (1 << UMSEL10);
-    }
-    else {call SCK.makeOutput();
-      //CLR_BIT(UCSR0C, UCPHA0);
-      UCSR1C = 0;
-      UCSR1C |= (1 << UMSEL11) | (1 << UMSEL10) | tail;
+      SET_BIT(UCSR1C, UCPHA1);
+    } else {
+      CLR_BIT(UCSR1C, UCPHA1);
     }
   }
   async command bool SPI.getClockPhase() {
