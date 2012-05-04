@@ -1,5 +1,5 @@
 #
-# FILE: raven/.platform
+# FILE: inga/.platform
 #
 # Includes that should take precedence come first.  Platforms come before
 # chips because they may override files.  These must be specified as
@@ -14,6 +14,9 @@ push( @includes, qw(
   %T/platforms/inga/chips/rf230
   %T/platforms/inga/chips/bmp085
   %T/platforms/inga/chips/adxl345
+  %T/platforms/iris
+  %T/platforms/mica
+  %T/platforms/telosb  # for user button
   %T/chips/rf2xx/rf230
   %T/chips/rf2xx/layers
   %T/chips/rf2xx/util
