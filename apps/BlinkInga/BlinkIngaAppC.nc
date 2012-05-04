@@ -47,10 +47,9 @@ configuration BlinkIngaAppC
 }
 implementation
 {
-  components MainC, BlinkIngaC, LedsC, IngaC;
+  components MainC, BlinkIngaC, LedsC;
   components new TimerMilliC() as Timer0;
   components new TimerMilliC() as Timer1;
-  components LocalIeeeEui64C as Eui64;
 
   components PrintfC, SerialStartC;
 
@@ -63,7 +62,5 @@ implementation
   BlinkIngaC.Timer0 -> Timer0;
   BlinkIngaC.Timer1 -> Timer1;
   BlinkIngaC.Leds -> LedsC;
-  BlinkIngaC.Inga -> IngaC;
-  BlinkIngaC.Eui64 -> Eui64;
 }
 
