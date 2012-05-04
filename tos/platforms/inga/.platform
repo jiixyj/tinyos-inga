@@ -15,8 +15,9 @@ push( @includes, qw(
   %T/platforms/iris/chips/rf230  # for RadioConfig.h
   %T/platforms/inga/chips/bmp085
   %T/platforms/inga/chips/adxl345
-  %T/platforms/iris
-  %T/platforms/mica
+  %T/platforms/iris    # for message/platform related files
+  %T/platforms/mica    # for timer related files
+  %T/platforms/micaz   # for MotePlatformC.h
   %T/platforms/telosb  # for user button
   %T/chips/rf2xx/rf230
   %T/chips/rf2xx/layers
