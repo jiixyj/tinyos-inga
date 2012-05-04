@@ -12,6 +12,7 @@ push( @includes, qw(
 
   %T/platforms/inga
   %T/platforms/inga/chips/rf230
+  %T/platforms/iris/chips/rf230  # for RadioConfig.h
   %T/platforms/inga/chips/bmp085
   %T/platforms/inga/chips/adxl345
   %T/platforms/iris
