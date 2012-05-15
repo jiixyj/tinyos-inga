@@ -20,6 +20,10 @@ endif
 #   JTAGICEMKII ?= usb:3fc4
 # endif
 
+PFLAGS += -I$(TOSDIR)/lib/net/blip
+PFLAGS += -I$(TOSDIR)/lib/net/blip/interfaces
+PFLAGS += -I$(TOSDIR)/lib/net/blip/platform
+
 ifdef RF230_CHANNEL
 PFLAGS += -DRF230_DEF_CHANNEL=$(RF230_CHANNEL)
 endif
