@@ -91,7 +91,7 @@ implementation {
    * based on their active components, NOT on their values.
    * Look at atm1284hardware.h and the ATmega1284
    * manual (Table 10-2, page 47).*/
-  const_uint8_t atm128PowerBits[ATM128_POWER_DOWN + 1] = {
+  const uint8_t atm128PowerBits[ATM128_POWER_DOWN + 1] = {
     0,
     (1 << SM0),
     (1 << SM2) | (1 << SM1) | (1 << SM0),
